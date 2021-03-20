@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MyGUI type="Layout" version="3.2.0">
+    <Widget type="Widget" skin="BackgroundInteractableWide" position_real="0 0 0.546875 0.694444" name="BackPanel">
+        <Widget type="TextBox" skin="TextBox" position_real="0 0.06 0.647619 0.1" align="HStretch Top">
+            <Property key="Caption" value="#ffff00S M A R T   C A N N O N "/>
+            <Property key="FontName" value="SM_HeaderLarge_Medium"/>
+            <Property key="TextAlign" value="Center"/>
+            <Property key="TextShadow" value="true"/>
+        </Widget>
+        <Widget type="Button" skin="InventoryTab" position_real="0.0133333 0.22 0.166667 0.08" align="Left Top" name="NumLogic_Tab">
+            <Property key="Caption" value="Number Logic"/>
+            <Property key="TextAlign" value="Center"/>
+            <Property key="FontName" value="InventoryTabLabel"/>
+            <Property key="Visible" value="false"/>
+        </Widget>
+        <Widget type="Button" skin="InventoryTab" position_real="0.209524 0.22 0.166667 0.08" align="Left Top" name="Logic_Tab">
+            <Property key="Caption" value="Logic"/>
+            <Property key="TextAlign" value="Center"/>
+            <Property key="FontName" value="InventoryTabLabel"/>
+            <Property key="Visible" value="false"/>
+        </Widget>
+        <Widget type="Button" skin="PrimaryButton" position_real="0.675238 0.206667 0.275238 0.072" align="Right Top" name="SaveChanges">
+            <Property key="Caption" value="Save Changes"/>
+            <Property key="FontName" value="SM_ItemTitle"/>
+            <Property key="TextAlign" value="Center"/>
+            <Property key="Visible" value="false"/>
+        </Widget>
+        <Widget type="Button" skin="InventoryTab" position_real="0.404762 0.22 0.166667 0.08" align="Left Top" name="Effects_Tab">
+            <Property key="Caption" value="Effects"/>
+            <Property key="TextAlign" value="Center"/>
+            <Property key="FontName" value="InventoryTabLabel"/>
+            <Property key="Visible" value="false"/>
+        </Widget>
+        <Widget type="Widget" skin="BackgroundPopup" position_real="0 0.3 1.00095 0.701333" align="HCenter Top" name="NumLogicPage">
+            <Property key="Visible" value="false"/>
+            <Widget type="TextBox" skin="TextBox" position_real="0.0475737 0.0760456 0.333016 0.114068" align="Left Top" name="NumName1">
+                <Property key="Caption" value="Variable Name 1"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="TextShadow" value="true"/>
+            </Widget>
+            <Widget type="TextBox" skin="TextBox" position_real="0.0475737 0.323194 0.333016 0.114068" align="Left Top" name="NumName2">
+                <Property key="Caption" value="Variable Name 2"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="TextShadow" value="true"/>
+            </Widget>
+            <Widget type="TextBox" skin="TextBox" position_real="0.0475737 0.570342 0.333016 0.114068" align="Left Top" name="NumName3">
+                <Property key="Caption" value="Variable Name 3"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="TextShadow" value="true"/>
+            </Widget>
+            <Widget type="TextBox" skin="TextBox" position_real="0.618459 0.570342 0.333016 0.114068" align="Right Top" name="NumName6">
+                <Property key="Caption" value="Variable Name 6"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="TextShadow" value="true"/>
+            </Widget>
+            <Widget type="TextBox" skin="TextBox" position_real="0.618459 0.323194 0.333016 0.114068" align="Right Top" name="NumName5">
+                <Property key="Caption" value="Variable Name 5"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="TextShadow" value="true"/>
+            </Widget>
+            <Widget type="TextBox" skin="TextBox" position_real="0.618459 0.0760456 0.333016 0.114068" align="Right Top" name="NumName4">
+                <Property key="Caption" value="Variable Name 4"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="TextShadow" value="true"/>
+            </Widget>
+            <Widget type="Button" skin="DressbotArrowLeft" position_real="0.0475737 0.190114 0.0570885 0.114068" align="Left Top" name="LB_Val1"/>
+            <Widget type="Button" skin="DressbotArrowRight" position_real="0.323501 0.190114 0.0570885 0.114068" align="Left Top" name="RB_Val1"/>
+            <Widget type="Button" skin="DressbotArrowLeft" position_real="0.0475737 0.437262 0.0570885 0.114068" align="Left Top" name="LB_Val2"/>
+            <Widget type="Button" skin="DressbotArrowLeft" position_real="0.0475737 0.684411 0.0570885 0.114068" align="Left Top" name="LB_Val3"/>
+            <Widget type="Button" skin="DressbotArrowLeft" position_real="0.618459 0.190114 0.0570885 0.114068" align="Right Top" name="LB_Val4"/>
+            <Widget type="Button" skin="DressbotArrowLeft" position_real="0.618459 0.437262 0.0570885 0.114068" align="Right Top" name="LB_Val5"/>
+            <Widget type="Button" skin="DressbotArrowLeft" position_real="0.618459 0.684411 0.0570885 0.114068" align="Right Top" name="LB_Val6"/>
+            <Widget type="Button" skin="DressbotArrowRight" position_real="0.323501 0.437262 0.0570885 0.114068" align="Left Top" name="RB_Val2"/>
+            <Widget type="Button" skin="DressbotArrowRight" position_real="0.323501 0.684411 0.0570885 0.114068" align="Left Top" name="RB_Val3"/>
+            <Widget type="Button" skin="DressbotArrowRight" position_real="0.894386 0.190114 0.0570885 0.114068" align="Right Top" name="RB_Val4"/>
+            <Widget type="Button" skin="DressbotArrowRight" position_real="0.894386 0.437262 0.0570885 0.114068" align="Right Top" name="RB_Val5"/>
+            <Widget type="Button" skin="DressbotArrowRight" position_real="0.894386 0.684411 0.0570885 0.114068" align="Right Top" name="RB_Val6"/>
+            <Widget type="TextBox" skin="TextBox" position_real="0.104662 0.190114 0.218839 0.114068" align="Left Top" name="NumVal1">
+                <Property key="Caption" value="0"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="TextShadow" value="true"/>
+            </Widget>
+            <Widget type="TextBox" skin="TextBox" position_real="0.104662 0.437262 0.218839 0.114068" align="Left Top" name="NumVal2">
+                <Property key="Caption" value="0"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="TextShadow" value="true"/>
+            </Widget>
+            <Widget type="TextBox" skin="TextBox" position_real="0.104662 0.684411 0.218839 0.114068" align="Left Top" name="NumVal3">
+                <Property key="Caption" value="0"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="TextShadow" value="true"/>
+            </Widget>
+            <Widget type="TextBox" skin="TextBox" position_real="0.675547 0.190114 0.218839 0.114068" align="Right Top" name="NumVal4">
+                <Property key="Caption" value="0"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="TextShadow" value="true"/>
+            </Widget>
+            <Widget type="TextBox" skin="TextBox" position_real="0.675547 0.437262 0.218839 0.114068" align="Right Top" name="NumVal5">
+                <Property key="Caption" value="0"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="TextShadow" value="true"/>
+            </Widget>
+            <Widget type="TextBox" skin="TextBox" position_real="0.675547 0.684411 0.218839 0.114068" align="Right Top" name="NumVal6">
+                <Property key="Caption" value="0"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="TextShadow" value="true"/>
+            </Widget>
+            <Widget type="Button" skin="DressbotArrowLeft" position_real="0.0475737 0.836502 0.0570885 0.114068" align="Right Bottom" name="PageLeft"/>
+            <Widget type="Button" skin="DressbotArrowRight" position_real="0.275928 0.836502 0.0570885 0.114068" align="Right Bottom" name="PageRight"/>
+            <Widget type="TextBox" skin="TextBox" position_real="0.104662 0.836502 0.171265 0.114068" align="Right Bottom" name="PageValue">
+                <Property key="Caption" value="Page: 0 / 0"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextShadow" value="true"/>
+            </Widget>
+        </Widget>
+        <Widget type="Widget" skin="BackgroundPopup" position_real="0 0.3 1.00095 0.701333" align="HCenter Top" name="LogicPage">
+            <Property key="Visible" value="false"/>
+            <Widget type="Button" skin="PrimaryButton" position_real="0.0475737 0.095057 0.38059 0.152091" align="Left Top" name="LogicBTN1">
+                <Property key="Caption" value="Logic Button 1"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+            </Widget>
+            <Widget type="Button" skin="PrimaryButton" position_real="0.570885 0.095057 0.38059 0.152091" align="Right Top" name="LogicBTN5">
+                <Property key="Caption" value="Logic Button 5"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+            </Widget>
+            <Widget type="Button" skin="PrimaryButton" position_real="0.0475737 0.304182 0.38059 0.152091" align="Left Top" name="LogicBTN2">
+                <Property key="Caption" value="Logic Button 2"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+            </Widget>
+            <Widget type="Button" skin="PrimaryButton" position_real="0.0475737 0.513308 0.38059 0.152091" align="Left Top" name="LogicBTN3">
+                <Property key="Caption" value="Logic Button 3"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+            </Widget>
+            <Widget type="Button" skin="PrimaryButton" position_real="0.570885 0.304182 0.38059 0.152091" align="Right Top" name="LogicBTN6">
+                <Property key="Caption" value="Logic Button 6"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+            </Widget>
+            <Widget type="Button" skin="PrimaryButton" position_real="0.570885 0.513308 0.38059 0.152091" align="Right Top" name="LogicBTN7">
+                <Property key="Caption" value="Logic Button 7"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+            </Widget>
+            <Widget type="Button" skin="PrimaryButton" position_real="0.0475737 0.722433 0.38059 0.152091" align="Left Top" name="LogicBTN4">
+                <Property key="Caption" value="Logic Button 4"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+            </Widget>
+            <Widget type="Button" skin="PrimaryButton" position_real="0.570885 0.722433 0.38059 0.152091" align="Right Top" name="LogicBTN8">
+                <Property key="Caption" value="Logic Button 8"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+            </Widget>
+        </Widget>
+        <Widget type="Widget" skin="BackgroundPopup" position_real="0 0.3 1.00095 0.701333" align="HCenter Top" name="EffectsPage">
+            <Property key="Visible" value="false"/>
+            <Widget type="Button" skin="DressbotArrowLeft" position_real="0.0570885 0.228137 0.0570885 0.114068" align="Left Top" name="LB_MFlash"/>
+            <Widget type="Button" skin="DressbotArrowRight" position_real="0.38059 0.228137 0.0570885 0.114068" align="Left Top" name="RB_MFlash"/>
+            <Widget type="Button" skin="DressbotArrowLeft" position_real="0.0570885 0.760456 0.0570885 0.114068" name="LB_Reload"/>
+            <Widget type="Button" skin="DressbotArrowLeft" position_real="0.0570885 0.494297 0.0570885 0.114068" align="Left Top" name="LB_ExplEffect"/>
+            <Widget type="Button" skin="DressbotArrowRight" position_real="0.38059 0.760456 0.0570885 0.114068" name="RB_Reload"/>
+            <Widget type="Button" skin="DressbotArrowRight" position_real="0.38059 0.494297 0.0570885 0.114068" align="Left Top" name="RB_ExplEffect"/>
+            <Widget type="TextBox" skin="TextBox" position_real="0.114177 0.228137 0.266413 0.114068" align="Left Top" name="MFlashValue">
+                <Property key="Caption" value="Muzzle Flash Eff Value"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextShadow" value="true"/>
+                <Property key="TextAlign" value="Center"/>
+            </Widget>
+            <Widget type="TextBox" skin="TextBox" position_real="0.114177 0.760456 0.266413 0.114068" name="ReloadValue">
+                <Property key="Caption" value="Reload Effect Value"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="TextShadow" value="true"/>
+            </Widget>
+            <Widget type="TextBox" skin="TextBox" position_real="0.114177 0.494297 0.266413 0.114068" align="Left Top" name="ExplEffectValue">
+                <Property key="Caption" value="Projectile Explosion Eff Value"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextShadow" value="true"/>
+                <Property key="TextAlign" value="Center"/>
+            </Widget>
+            <Widget type="TextBox" skin="TextBox" position_real="0.0570885 0.114068 0.38059 0.114068" align="Left Top" name="MuzzleFlashLabel">
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="Caption" value="Muzzle Flash Effect"/>
+                <Property key="TextShadow" value="true"/>
+            </Widget>
+            <Widget type="TextBox" skin="TextBox" position_real="0.0570885 0.380228 0.38059 0.114068" align="Left Top" name="ExplEffectLabel">
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="Caption" value="Projectile Explosion Effect"/>
+                <Property key="TextShadow" value="true"/>
+            </Widget>
+            <Widget type="TextBox" skin="TextBox" position_real="0.0570885 0.646388 0.38059 0.114068" name="ReloadEffLabel">
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="Caption" value="Reload Effect"/>
+                <Property key="TextShadow" value="true"/>
+            </Widget>
+            <Widget type="TextBox" skin="TextBox" position_real="0.56137 0.114068 0.38059 0.114068" align="Right Top" name="ShtSoundLabel">
+                <Property key="Caption" value="Shooting Sound Effect"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="TextShadow" value="true"/>
+            </Widget>
+            <Widget type="Button" skin="DressbotArrowLeft" position_real="0.56137 0.228137 0.0570885 0.114068" align="Right Top" name="LB_ShtSound"/>
+            <Widget type="Button" skin="DressbotArrowRight" position_real="0.884872 0.228137 0.0570885 0.114068" align="Right Top" name="RB_ShtSound"/>
+            <Widget type="TextBox" skin="TextBox" position_real="0.618459 0.228137 0.266413 0.114068" align="Right Top" name="ShtSoundValue">
+                <Property key="Caption" value="Shoot Sound Value"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="TextShadow" value="true"/>
+                <Property key="FontName" value="SM_ItemTitle"/>
+            </Widget>
+        </Widget>
+        <Widget type="Button" skin="PrimaryButton" position_real="0.675238 0.032 0.275238 0.072" align="Right Top" name="GetValues">
+            <Property key="Caption" value="Get Input Values"/>
+            <Property key="TextAlign" value="Center"/>
+            <Property key="FontName" value="SM_ItemTitle"/>
+            <Property key="Visible" value="false"/>
+        </Widget>
+        <Widget type="Button" skin="DressbotArrowLeft" position_real="0.675238 0.12 0.052381 0.072" name="LB_Mul">
+            <Property key="Visible" value="false"/>
+        </Widget>
+        <Widget type="Button" skin="DressbotArrowRight" position_real="0.9 0.12 0.052381 0.072" name="RB_Mul">
+            <Property key="Visible" value="false"/>
+        </Widget>
+        <Widget type="TextBox" skin="TextBox" position_real="0.727619 0.12 0.171429 0.072" name="MultiplierVal">
+            <Property key="Caption" value="Mul: 1"/>
+            <Property key="TextAlign" value="Center"/>
+            <Property key="TextShadow" value="true"/>
+            <Property key="FontName" value="SM_ItemTitle"/>
+            <Property key="Visible" value="false"/>
+        </Widget>
+        <Widget type="TextBox" skin="TextBox" position_real="0.119048 0.326667 0.761905 0.553333" align="Left Top" name="LoadingScreen">
+            <Property key="Caption" value="#ff6f00GETTING DATA FROM SERVER#ffffff"/>
+            <Property key="FontName" value="SM_ItemTitle"/>
+            <Property key="TextAlign" value="Center"/>
+            <Property key="TextShadow" value="true"/>
+            <Property key="Visible" value="true"/>
+        </Widget>
+    </Widget>
+</MyGUI>

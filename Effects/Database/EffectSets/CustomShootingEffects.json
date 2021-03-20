@@ -1,0 +1,456 @@
+{
+    "NavalCannon - Shoot":{
+		"maxInstances":32,"parameterList":{"size":256.0,"color":"ffff00","radius":0.0,"intensity":0.0,"shakeStrength":1,"shakeRadius":50.0},
+		"parameterCurves":{
+			"radius":{"timeline":[{"time":0.03,"value":15.0},{"time":0.6,"value":0.0}]},
+			"intensity":{"timeline":[{"time":0.03,"value":3.0},{"time":0.6,"value":0.0}]},
+			"shakeStrength":{"timeline":[{"time":0.03,"value":1.0},{"time":0.6,"value":0.0}]},
+			"shakeRadius":{"timeline":[{"time":0.03,"value":50.0},{"time":0.6,"value":0.0}]}
+		},
+		"effectList":[
+			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":2.0},"parameters":["size"],"delay":0.0},
+			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":2.0},"parameters":["shakeStrength","shakeRadius"],"duration":0.6,"delay":0.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":2.0},"parameters":["color","radius","intensity"],"duration":0.6,"delay":0.0},
+			{"type":"particle","name":"Explosion_small_01","offset":{"x":0.0,"y":0.0,"z":2.0},"delay":0.0}
+		]
+	},
+	"TankCannon - Shoot":{
+		"maxInstances":32,"parameterList":{"color":"ffff00","radius":0.0,"intensity":0.0,"shakeStrength":0.5,"shakeRadius":20.0},
+		"parameterCurves":{
+			"radius":{"timeline":[{"time":0.03,"value":10.0},{"time":0.6,"value":0.0}]},
+			"intensity":{"timeline":[{"time":0.03,"value":3.0},{"time":0.6,"value":0.0}]},
+			"shakeStrength":{"timeline":[{"time":0.03,"value":0.5},{"time":0.6,"value":0.0}]},
+			"shakeRadius":{"timeline":[{"time":0.03,"value":20.0},{"time":0.6,"value":0.0}]}
+		},
+		"effectList":[
+			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":0.6},"delay":0.0},
+			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":0.6},"parameters":["shakeStrength","shakeRadius"],"duration":0.6,"delay":0.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.6},"parameters":["color","radius","intensity"],"duration":0.6,"delay":0.0},
+			{"type":"particle","name":"Explosion_small_01","offset":{"x":0.0,"y":0.0,"z":1.0},"delay":0.0}
+		]
+	},
+	"FlakCannon - Shoot":{
+		"maxInstances":64,"parameterList":{"color":"ffff00","radius":0.0,"intensity":0.0,"shakeStrength":0.1,"shakeRadius":2.0},
+		"parameterCurves":{
+			"radius":{"timeline":[{"time":0.02,"value":2.0},{"time":0.3,"value":0.0}]},
+			"intensity":{"timeline":[{"time":0.02,"value":2.0},{"time":0.3,"value":0.0}]},
+			"shakeStrength":{"timeline":[{"time":0.02,"value":0.3},{"time":0.3,"value":0.0}]},
+			"shakeRadius":{"timeline":[{"time":0.02,"value":2.0},{"time":0.3,"value":0.0}]}
+		},
+		"effectList":[
+			{"type":"audio","name":"PotatoRifle - Shoot","offset":{"x":0.0,"y":0.0,"z":1.0},"delay":0.0},
+			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":1.0},"parameters":["shakeStrength","shakeRadius"],"duration":0.3,"delay":0.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":1.0},"parameters":["color","radius","intensity"],"duration":0.3,"delay":0.0},
+			{"type":"particle","name":"p_spudgun_basic_muzzel","offset":{"x":0.0,"y":0.0,"z":1.0},"attached":true,"delay":0.0}
+		]
+	},
+	"M1AbramsCannon - Shoot":{
+		"maxInstances":32,"parameterList":{"size":32.0,"color":"ffff00","radius":0.0,"intensity":0.0,"shakeStrength":0.0,"shakeRadius":0.0},
+		"parameterCurves":{
+			"radius":{"timeline":[{"time":0.05,"value":10.0},{"time":0.6,"value":0.0}]},
+			"intensity":{"timeline":[{"time":0.05,"value":3.0},{"time":0.6,"value":0.0}]},
+			"shakeStrength":{"timeline":[{"time":0.05,"value":0.5},{"time":0.6,"value":0.0}]},
+			"shakeRadius":{"timeline":[{"time":0.05,"value":30.0},{"time":0.6,"value":0.0}]}
+		},
+		"effectList":[
+			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":2.0},"parameters":["size"],"delay":0.0},
+			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":2.0},"parameters":["shakeStrength","shakeRadius"],"duration":0.6,"delay":0.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":2.0},"parameters":["color","radius","intensity"],"duration":0.6,"delay":0.0},
+			{"type":"particle","name":"Explosion_small_01","offset":{"x":0.0,"y":0.0,"z":2.0},"attached":true,"delay":0.0}
+		]
+	},
+	"DoraCannon - Shoot":{
+		"maxInstances":16,"parameterList":{"size":512.0,"color":"ffff00","radius":0.0,"intensity":0.0,"shakeStrength":0.0,"shakeRadius":0.0},
+		"parameterCurves":{
+			"radius":{"timeline":[{"time":0.0,"value":35.0},{"time":1.0,"value":0.0}]},
+			"intensity":{"timeline":[{"time":0.0,"value":3.0},{"time":1.0,"value":0.0}]},
+			"shakeStrength":{"timeline":[{"time":0.0,"value":1.5},{"time":1.0,"value":0.0}]},
+			"shakeRadius":{"timeline":[{"time":0.0,"value":70.0},{"time":1.0,"value":0.0}]}
+		},
+		"effectList":[
+			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":4.0},"parameters":["size"],"delay":0.0},
+			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":4.0},"parameters":["shakeStrength","shakeRadius"],"duration":1.0,"delay":0.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":4.0},"parameters":["color","radius","intensity"],"duration":1.0,"delay":0.0},
+			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":0.0,"z":4.0},"attached":true,"delay":0.0}
+		]
+	},
+	"AircraftCannon - Shoot":{
+		"maxInstances":64,"parameterList":{"color":"ffff00","radius":0.0,"intensity":0.0,"shakeStrength":0.0,"shakeRadius":0.0},
+		"parameterCurves":{
+			"radius":{"timeline":[{"time":0.02,"value":1.0},{"time":0.3,"value":0.0}]},
+			"intensity":{"timeline":[{"time":0.02,"value":2.0},{"time":0.3,"value":0.0}]},
+			"shakeStrength":{"timeline":[{"time":0.02,"value":0.05},{"time":0.3,"value":0.0}]},
+			"shakeRadius":{"timeline":[{"time":0.02,"value":1.0},{"time":0.3,"value":0.0}]}
+		},
+		"effectList":[
+			{"type":"audio","name":"event:/char/npc/bots/enemies/farmbot/farmbot_shoot","offset":{"x":0.0,"y":0.0,"z":0.4},"delay":0.0,"duration":0.35},
+			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":0.4},"parameters":["shakeStrength","shakeRadius"],"duration":0.3,"delay":0.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.35},"parameters":["color","radius","intensity"],"duration":0.3,"delay":0.0},
+			{"type":"particle","name":"p_spudgun_basic_muzzel","offset":{"x":0.0,"y":0.0,"z":0.4},"attached":true,"delay":0.0,"duration":0.5}
+		]
+	},
+	"NavalCannon2 - Shoot":{
+		"maxInstances":32,"parameterList":{"size":64.0,"color":"ffff00","radius":3.0,"intensity":3.0,"shakeStrength":0.5,"shakeRadius":40.0},
+		"parameterCurves":{
+			"radius":{"timeline":[{"time":0.05,"value":10.0},{"time":0.6,"value":0.0}]},
+			"intensity":{"timeline":[{"time":0.05,"value":3.0},{"time":0.6,"value":0.0}]},
+			"shakeStrength":{"timeline":[{"time":0.05,"value":0.5},{"time":0.6,"value":0.0}]},
+			"shakeRadius":{"timeline":[{"time":0.05,"value":40.0},{"time":0.6,"value":0.0}]}
+		},
+		"effectList":[
+			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":1.8},"parameters":["size"],"delay":0.0},
+			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":1.8},"parameters":["shakeStrength","shakeRadius"],"duration":0.6,"delay":0.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":1.8},"parameters":["color","radius","intensity"],"duration":0.6,"delay":0.0},
+			{"type":"particle","name":"Explosion_small_01","offset":{"x":0.0,"y":0.0,"z":1.8},"attached":true,"delay":0.0}
+		]
+	},
+	"Railgun - Charge":{
+		"parameterList":{"velocity":0.0,"power":0.0},
+		"effectList":[
+			{"type":"audio","name":"event:/vehicle/thrusters/thruster05","offset":{"x":0.0,"y":0.0,"z":0.0},"parameters":["velocity","power"],"delay": 0.0}
+		]
+	},
+	"Railgun2 - Charge":{
+		"parameterList":{"velocity":0.0,"power":0.0},
+		"effectList":[
+			{"type":"audio","name":"event:/vehicle/thrusters/thruster04","offset":{"x":0.0,"y":0.0,"z":0.0},"parameters":["velocity","power"],"delay": 0.0}
+		]
+	},
+	"Railgun - Shoot":{
+		"maxInstances":16,"parameterList":{"color":"00eaff","radius":3.0,"intensity":0.3,"shakeStrength":1,"shakeRadius":50.0},
+		"parameterCurves":{
+			"radius":{"timeline":[{"time":0.05,"value":8.0},{"time":0.6,"value":0.0}]},
+			"intensity":{"timeline":[{"time":0.05,"value":2.0},{"time":0.6,"value":0.0}]},
+			"shakeStrength":{"timeline":[{"time":0.05,"value":1.0},{"time":0.6,"value":0.0}]},
+			"shakeRadius":{"timeline":[{"time":0.05,"value":50.0},{"time":0.6,"value":0.0}]}
+		},
+		"effectList":[
+			{"type":"audio","name":"WeldTool - Sparks","offset":{"x":0.0,"y":0.0,"z":0.0},"delay":0.1},
+			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":2.0},"parameters":["shakeStrength","shakeRadius"],"duration":0.6,"delay":0.0},
+			{"type":"particle","name":"construct_welding","offset":{"x":0.0,"y":0.0,"z":-0.7},"attached":true,"delay":0.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":-0.7},"parameters":["color","radius","intensity"],"duration":0.6,"delay":0.0},
+			{"type":"particle","name":"construct_welding","offset":{"x":0.0,"y":0.0,"z":-0.6},"attached":true,"delay":0.001},
+			{"type":"particle","name":"construct_welding","offset":{"x":0.0,"y":0.0,"z":-0.5},"attached":true,"delay":0.004},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":-0.5},"parameters":["color","radius","intensity"],"duration":0.6,"delay":0.004},
+			{"type":"particle","name":"construct_welding","offset":{"x":0.0,"y":0.0,"z":-0.4},"attached":true,"delay":0.008},
+			{"type":"particle","name":"construct_welding","offset":{"x":0.0,"y":0.0,"z":-0.3},"attached":true,"delay":0.012},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":-0.3},"parameters":["color","radius","intensity"],"duration":0.6,"delay":0.012},
+			{"type":"particle","name":"construct_welding","offset":{"x":0.0,"y":0.0,"z":-0.2},"attached":true,"delay":0.016},
+			{"type":"particle","name":"construct_welding","offset":{"x":0.0,"y":0.0,"z":-0.1},"attached":true,"delay":0.02},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":-0.1},"parameters":["color","radius","intensity"],"duration":0.6,"delay":0.02},
+			{"type":"particle","name":"construct_welding","offset":{"x":0.0,"y":0.0,"z":0.0},"attached":true,"delay":0.024},
+			{"type":"particle","name":"construct_welding","offset":{"x":0.0,"y":0.0,"z":0.1},"attached":true,"delay":0.028},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.1},"parameters":["color","radius","intensity"],"duration":0.6,"delay":0.028},
+			{"type":"particle","name":"construct_welding","offset":{"x":0.0,"y":0.0,"z":0.2},"attached":true,"delay":0.032},
+			{"type":"particle","name":"construct_welding","offset":{"x":0.0,"y":0.0,"z":0.3},"attached":true,"delay":0.36},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.3},"parameters":["color","radius","intensity"],"duration":0.6,"delay":0.036},
+			{"type":"particle","name":"construct_welding","offset":{"x":0.0,"y":0.0,"z":0.4},"attached":true,"delay":0.04},
+			{"type":"particle","name":"construct_welding","offset":{"x":0.0,"y":0.0,"z":0.5},"attached":true,"delay":0.044},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.5},"parameters":["color","radius","intensity"],"duration":0.6,"delay":0.044},
+			{"type":"particle","name":"construct_welding","offset":{"x":0.0,"y":0.0,"z":0.6},"attached":true,"delay":0.048},
+			{"type":"particle","name":"construct_welding","offset":{"x":0.0,"y":0.0,"z":0.7},"attached":true,"delay":0.052},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.7},"parameters":["color","radius","intensity"],"duration":0.6,"delay":0.052},
+			{"type":"particle","name":"construct_welding","offset":{"x":0.0,"y":0.0,"z":0.8},"attached":true,"delay":0.056},
+			{"type":"particle","name":"construct_welding","offset":{"x":0.0,"y":0.0,"z":0.9},"attached":true,"delay":0.06},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.9},"parameters":["color","radius","intensity"],"duration":0.6,"delay":0.06},
+			{"type":"particle","name":"construct_welding","offset":{"x":0.0,"y":0.0,"z":1.0},"attached":true,"delay":0.064},
+			{"type":"particle","name":"construct_welding","offset":{"x":0.0,"y":0.0,"z":1.1},"attached":true,"delay":0.068},
+			{"type":"pointLight","name":"","offset":{"x": 0.0,"y":0.0,"z":1.1},"parameters":["color","radius","intensity"],"duration":0.6,"delay":0.068},
+			{"type":"particle","name":"construct_welding","offset":{"x":0.0,"y":0.0,"z":1.2},"attached":true,"delay":0.072},
+			{"type":"particle","name":"construct_welding","offset":{"x":0.0,"y":0.0,"z":1.3},"attached":true,"delay":0.076},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":1.3},"parameters":["color","radius","intensity"],"duration":0.6,"delay":0.076},
+			{"type":"particle","name":"construct_welding","offset":{"x":0.0,"y":0.0,"z":1.4},"attached":true,"delay":0.08},
+			{"type":"particle","name":"construct_welding","offset":{"x":0.0,"y":0.0,"z":1.5},"attached":true,"delay":0.084},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":1.5},"parameters":["color","radius","intensity"],"duration":0.6,"delay":0.084}
+		]
+	},
+	"TankCannon3 - Shoot":{
+		"maxInstances":32,"parameterList":{"size":32.0,"color":"ffff00","radius":10.0,"intensity":3.0,"shakeStrength":0.50,"shakeRadius":40.0},
+		"parameterCurves":{
+			"radius":{"timeline":[{"time":0.05,"value":10.0},{"time":0.6,"value":0.0}]},
+			"intensity":{"timeline":[{"time":0.05,"value":3.0},{"time":0.6,"value":0.0}]},
+			"shakeStrength":{"timeline":[{"time":0.05,"value":0.7},{"time":0.6,"value":0.0}]},
+			"shakeRadius":{"timeline":[{"time":0.05,"value":40.0},{"time":0.6,"value":0.0}]}
+		},
+		"effectList":[
+			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":1.5},"parameters":["size"],"delay":0.0},
+			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":1.5},"parameters":["shakeStrength","shakeRadius"],"duration":0.6,"delay":0.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":1.5},"parameters":["color","radius","intensity"],"duration":0.6,"delay":0.0},
+			{"type":"particle","name":"Explosion_small_01","offset":{"x":0.0,"y":0.0,"z":1.5},"attached":true,"delay":0.0}
+		]
+	},
+	"HowitzerCannon - Shoot":{
+		"maxInstances":16,"parameterList":{"size":512.0,"color":"ffff00","radius":10.0,"intensity":5.0,"shakeStrength":1.0,"shakeRadius":60.0},
+		"parameterCurves":{
+			"radius":{"timeline":[{"time":0.05,"value":20.0},{"time":0.8,"value":0.0}]},
+			"intensity":{"timeline":[{"time":0.05,"value":5.0},{"time":0.8,"value":0.0}]},
+			"shakeStrength":{"timeline":[{"time":0.05,"value":1.0},{"time":0.8,"value":0.0}]},
+			"shakeRadius":{"timeline":[{"time":0.05,"value":60.0},{"time":0.8,"value":0.0}]}
+		},
+		"effectList":[
+			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":3.8},"parameters":["size"],"delay":0.0},
+			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":3.8},"parameters":["shakeStrength","shakeRadius"],"duration":0.8,"delay":0.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":3.8},"parameters":["color","radius","intensity"],"duration":0.8,"delay":0.0},
+			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":0.0,"z":3.8},"attached":true,"delay":0.0}
+		]
+	},
+	"Railgun2Cannon - Shoot":{
+		"maxInstances":16,"parameterList":{"color":"00ff00","size":128.0,"radius":1.4,"intensity":0.5,"shakeStrength":1.0,"shakeRadius":50.0,"coneAngle":25.0,"coneFade":15.0,"luminance":5.0},
+		"parameterCurves":{
+			"radius":{"timeline":[{"time":0.0,"value":1.5},{"time":0.6,"value":1.5},{"time":1.5,"value":0.0}]},
+			"luminance":{"timeline":[{"time":0.0,"value":4.0},{"time":0.6,"value":4.0},{"time":1.5,"value":0.0}]},
+			"shakeStrength":{"timeline":[{"time":0.0,"value":1.0},{"time":0.6,"value":1.0},{"time":1.5,"value":0.0}]},
+			"shakeRadius":{"timeline":[{"time":0.0,"value":50.0},{"time":0.6,"value":50.0},{"time":1.5,"value":0.0}]}
+		},
+		"effectList":[
+			{"type":"particle","name":"RailgunBeam","offset":{"x":0.0,"y":0.0,"z":-1.15},"attached":true},
+			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":0.0},"parameters":["shakeStrength","shakeRadius"],"duration":0.6},
+			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":1.0},"parameters":["size"]},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":-0.5},"parameters":["color","radius","intensity"],"duration":5.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":-0.3},"parameters":["color","radius","intensity"],"duration":5.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":-0.1},"parameters":["color","radius","intensity"],"duration":5.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.0},"parameters":["color","radius","intensity"],"duration":5.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.1},"parameters":["color","radius","intensity"],"duration":5.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.3},"parameters":["color","radius","intensity"],"duration":5.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.5},"parameters":["color","radius","intensity"],"duration":5.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.7},"parameters":["color","radius","intensity"],"duration":5.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.9},"parameters":["color","radius","intensity"],"duration":5.0},
+			{"type":"spotLight","name":"","offset":{"x":0.0,"y":0.0,"z":-1.15},"direction":{"x":0,"y":0,"z":1},"parameters":["color","coneAngle","coneFade","luminance"],"duration":5.0}
+		]
+	},
+	"Railgun - Shoot2":{
+		"maxInstances":16,"parameterList":{"size":128.0},
+		"effectList":[{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":1.0},"parameters":["size"],"delay":0.0}]
+	},
+	"RocketLauncher - Shoot":{
+		"maxInstances":64,"parameterList":{"velocity":0.0,"power":0.0,"color":"ffff00","radius":3.0,"intensity":1.5,"shakeStrength":0.1,"shakeRadius":3.0},
+		"parameterCurves":{
+			"radius":{"timeline":[{"time":0.03,"value":3.0},{"time":0.3,"value":0.0}]},
+			"intensity":{"timeline":[{"time":0.03,"value":1.5},{"time":0.3,"value":0.0}]},
+			"shakeStrength":{"timeline":[{"time":0.03,"value":0.1},{"time":0.3,"value":0.0}]},
+			"shakeRadius":{"timeline":[{"time":0.03,"value":3.0},{"time":0.3,"value":0.0}]},
+			"velocity":{"timeline":[{"time":0.03,"value":60.0},{"time":0.5,"value":0.0}]},
+			"power":{"timeline":[{"time":0.03,"value":200.0},{"time":0.5,"value":0.0}]}
+		},
+		"effectList":[
+			{"type":"audio","name":"PotatoRifle - Shoot","offset":{"x":0.0,"y":0.0,"z":0.65},"delay":0.0},
+			{"type":"audio","name":"event:/vehicle/thrusters/thruster01","offset":{"x":0.0,"y":0.0,"z":0.65},"parameters":["velocity","power"],"duration":0.5,"delay":0.0},
+			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":0.65},"parameters":["shakeStrength","shakeRadius"],"duration":0.3,"delay":0.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.65},"parameters":["color","radius","intensity"],"duration":0.3,"delay":0.0},
+			{"type":"particle","name":"hammer_metal","offset":{"x":0.0,"y":0.0,"z":0.65},"attached":true,"delay":0.0},
+			{"type":"particle","name":"p_spudgun_basic_muzzel","offset":{"x":0.0,"y":0.0,"z":0.65},"attached":true,"delay":0.0}
+		]
+	},
+	"NumberLogicCannon - Shoot":{
+		"maxInstances":128,"parameterList":{"sound":0},
+		"effectList":[
+			{
+				"type":"audio",
+				"name":"",
+				"parameters":{
+					"sound":[
+						{"condition":"equal","value":1,"name":"PotatoRifle - Shoot"},
+						{"condition":"equal","value":2,"name":"event:/char/npc/bots/enemies/farmbot/farmbot_shoot"},
+						{"condition":"equal","value":3,"name":"event:/weapons/spudgun/frier_fire"},
+						{"condition":"equal","value":4,"name":"event:/weapons/spudgun/spinner_fire"},
+						{"condition":"equal","value":5,"name":"Gas Explosion"}
+					]
+				},
+				"offset":{"x":0.0,"y":0.0,"z":0.3},
+				"duration":0.5,
+				"delay":0.0
+			}
+		]
+	},
+	"SmartCannon - MuzzleFlash1": {
+		"maxInstances":128,"parameterList":{"color":"ffff00","radius":3.0,"intensity":1.0,"shakeStrength":0.1,"shakeRadius":1.0},
+		"parameterCurves":{
+			"radius":{"timeline":[{"time":0.02,"value":1.5},{"time":0.3,"value":0.0}]},
+			"intensity":{"timeline":[{"time":0.02,"value":2.0},{"time":0.3,"value":0.0}]},
+			"shakeStrength":{"timeline":[{"time":0.02,"value":0.1},{"time":0.3,"value":0.0}]},
+			"shakeRadius":{"timeline":[{"time":0.02,"value":1.0},{"time":0.3,"value":0.0}]}
+		},
+		"effectList": [
+			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":0.3},"parameters":["shakeStrength","shakeRadius"],"duration":0.3,"delay":0.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.25},"parameters":["color","radius","intensity"],"duration":0.3,"delay":0.0},
+			{"type":"particle","name":"p_spudgun_basic_muzzel","offset":{"x":0.0,"y":0.0,"z":0.28},"attached":true,"delay":0.0}
+		]
+	},
+	"SmartCannon - MuzzleFlash2": {
+		"maxInstances": 32,"parameterList":{"color":"ffff00","radius":0.0,"intensity":0.0,"shakeStrength":1,"shakeRadius":50.0},
+		"parameterCurves":{
+			"radius":{"timeline":[{"time":0.03,"value":15.0},{"time":0.6,"value":0.0}]},
+			"intensity":{"timeline":[{"time":0.03,"value":3.0},{"time":0.6,"value":0.0}]},
+			"shakeStrength":{"timeline":[{"time":0.03,"value":1.0},{"time":0.6,"value":0.0}]},
+			"shakeRadius":{"timeline":[{"time":0.03,"value":50.0},{"time":0.6,"value":0.0}]}
+		},
+		"effectList":[
+			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":0.5},"parameters":["shakeStrength","shakeRadius"],"duration":0.6,"delay":0.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.5},"parameters":["color","radius","intensity"],"duration":0.6,"delay":0.0},
+			{"type":"particle","name":"Explosion_small_01","offset":{"x":0.0,"y":0.0,"z":0.5},"delay":0.0}
+		]
+	},
+	"SmartCannon - MuzzleFlash3": {
+		"maxInstances":16,"parameterList":{"color":"ffff00","radius":10.0,"intensity":5.0,"shakeStrength":1.0,"shakeRadius":60.0},
+		"parameterCurves":{
+			"radius":{"timeline":[{"time":0.05,"value":20.0},{"time":0.8,"value":0.0}]},
+			"intensity":{"timeline":[{"time":0.05,"value":5.0},{"time":0.8,"value":0.0}]},
+			"shakeStrength":{"timeline":[{"time":0.05,"value":1.0},{"time":0.8,"value":0.0}]},
+			"shakeRadius":{"timeline":[{"time":0.05,"value":60.0},{"time":0.8,"value":0.0}]}
+		},
+		"effectList":[
+			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":0.5},"parameters":["shakeStrength","shakeRadius"],"duration":0.8,"delay":0.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.5},"parameters":["color","radius","intensity"],"duration":0.8,"delay":0.0},
+			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":0.0,"z":0.5},"attached":true,"delay":0.0}
+		]
+	},
+	"SmartCannon - MuzzleFlash4": {
+		"maxInstances":64,"parameterList":{"color":"ffff00","radius":3.0,"intensity":1.0,"shakeStrength":0.1,"shakeRadius":1.5},
+		"parameterCurves":{
+			"radius":{"timeline":[{"time":0.02,"value":1.5},{"time":0.3,"value":0.0}]},
+			"intensity":{"timeline":[{"time":0.02,"value":2.0},{"time":0.3,"value":0.0}]},
+			"shakeStrength":{"timeline":[{"time":0.02,"value":0.1},{"time":0.3,"value":0.0}]},
+			"shakeRadius":{"timeline":[{"time":0.02,"value":1.5},{"time":0.3,"value":0.0}]}
+		},
+		"effectList":[
+			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":0.3},"parameters":["shakeStrength","shakeRadius"],"duration":0.3,"delay":0.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.3},"parameters":["color","radius","intensity"],"duration":0.3,"delay":0.0},
+			{"type":"particle","name":"frier_muzzle_effect","offset":{"x":0.0,"y":0.0,"z":0.3},"attached":true,"delay":0.0}
+		]
+	},
+	"SmartCannon - MuzzleFlash5": {
+		"maxInstances": 64,"parameterList":{"color":"ffff00","radius":2.0,"intensity":0.7,"shakeStrength":0.1,"shakeRadius":0.8},
+		"parameterCurves":{
+			"radius":{"timeline":[{"time":0.02,"value":1.0},{"time":0.3,"value":0.0}]},
+			"intensity":{"timeline":[{"time":0.02,"value":1.5},{"time":0.3,"value":0.0}]},
+			"shakeStrength":{"timeline":[{"time":0.02,"value":0.1},{"time":0.3,"value":0.0}]},
+			"shakeRadius":{"timeline":[{"time":0.02,"value":1.2},{"time":0.3,"value":0.0}]}
+		},
+		"effectList":[
+			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":0.25},"parameters":["shakeStrength","shakeRadius"],"duration":0.3,"delay":0.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.25},"parameters":["color","radius","intensity"],"duration":0.3,"delay":0.0},
+			{"type":"particle","name":"spudling_muzzle_effect","offset":{"x":0.0,"y":0.0,"z":0.25},"attached":true,"delay":0.0}
+		]
+	},
+	"OrbitalCannon - Point":{
+		"maxInstances":128,"parameterList":{"color":"00ffe5","radius":3.0,"intensity":2.0},
+		"parameterCurves":{
+			"radius":{"timeline":[{"time":0.03,"value":3.0},{"time":1.7,"value":0.0}]},
+			"intensity":{"timeline":[{"time":0.03,"value":2.0},{"time":1.7,"value":0.0}]}
+		},
+		"effectList":[
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.2},"parameters":["color","radius","intensity"],"duration":2.0,"delay":0.0},
+			{"type":"particle","name":"OrbitalCannonPointer","offset":{"x":0.0,"y":0.0,"z":-0.5},"attached":false,"delay":0.0,"duration":2.0},
+			{"type":"audio","name":"Challenge - Start","offset":{"x":0.0,"y":0.0,"z":0.0},"delay":0.0,"duration":2.0}
+		]
+	},
+	"OrbitalCannon - OrdinaryShot":{
+		"parameterList":{"size":512.0,"color":"ffff00","radius":30.0,"intensity":8.0,"shakeStrength":2.0,"shakeRadius":90.0},
+		"parameterCurves":{"radius":{"timeline":[{"time":0.1,"value":30.0},{"time":0.6,"value":0.0}]}},
+		"effectList":[
+			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":0.0},"parameters":["size"],"delay":0.0,"duration":2.0},
+			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":0.0},"parameters":["shakeStrength","shakeRadius"],"duration":0.1,"delay":0.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.5},"parameters":["color","radius","intensity"],"duration":1.0,"delay":0.0},
+			{"type":"particle","name":"OrbitalBeam","offset":{"x":0.0,"y":0.0,"z":0.0},"direction":{"x":0,"y":0,"z":-1},"attached":true,"delay":0.0,"duration":2.0},
+			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":0.0,"z":0.0},"attached":true,"delay":0.0,"duration":2.0},
+			{"type":"particle","name":"Explosion_01","offset":{"x":-5.0,"y":0.0,"z":0.0},"attached":true,"delay":0.0,"duration":2.0},
+			{"type":"particle","name":"Explosion_01","offset":{"x":5.0,"y":0.0,"z":0.0},"attached":true,"delay":0.0,"duration":2.0},
+			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":0.0,"z":2.5},"attached":true,"delay":0.0,"duration":2.0},
+			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":0.0,"z":-2.5},"attached":true,"delay":0.0,"duration":2.0},
+			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":0.0},"parameters":["size"],"delay":0.0,"duration":2.0},
+			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":0.0,"z":5.0},"attached":true,"delay":0.0,"duration":2.0},
+			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":0.0,"z":-5.0},"attached":true,"delay":0.0,"duration":2.0},
+			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":0.0},"parameters":["size"],"delay":0.0,"duration":2.0},
+			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":5.0,"z":0.0},"attached":true,"delay":0.0,"duration":2.0},
+			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":-5.0,"z":0.0},"attached":true,"delay":0.0,"duration":2.0}
+		]
+	},
+	"OrbitalCannon - PowerfulShot":{
+		"parameterList":{"size":512.0,"color":"ffff00","radius":30.0,"intensity":8.0,"shakeStrength":2.0,"shakeRadius":90.0},
+		"parameterCurves":{"radius":{"timeline":[{"time":0.1,"value":30.0},{"time":0.6,"value":0.0}]}},
+		"effectList":[
+			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":0.0},"parameters":["size"],"delay":0.0,"duration":2.0},
+			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":0.0},"parameters":["shakeStrength","shakeRadius"],"duration":0.1,"delay":0.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.5},"parameters":["color","radius","intensity"],"duration":1.0,"delay":0.0},
+			{"type":"particle","name":"RedOrbitalBeam","offset":{"x":0.0,"y":0.0,"z":0.0},"direction":{"x":0,"y":0,"z":-1},"attached":true,"delay":0.0,"duration":2.0},
+			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":0.0,"z":0.0},"attached":true,"delay":0.0,"duration":2.0},
+			{"type":"particle","name":"Explosion_01","offset":{"x":-5.0,"y":0.0,"z":0.0},"attached":true,"delay":0.0,"duration":2.0},
+			{"type":"particle","name":"Explosion_01","offset":{"x":5.0,"y":0.0,"z":0.0},"attached":true,"delay":0.0,"duration":2.0},
+			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":0.0,"z":2.5},"attached":true,"delay":0.0,"duration":2.0},
+			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":0.0,"z":-2.5},"attached":true,"delay":0.0,"duration":2.0},
+			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":0.0},"parameters":["size"],"delay":0.0,"duration":2.0},
+			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":0.0,"z":5.0},"attached":true,"delay":0.0,"duration":2.0},
+			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":0.0,"z":-5.0},"attached":true,"delay":0.0,"duration":2.0},
+			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":0.0},"parameters":["size"],"delay":0.0,"duration":2.0},
+			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":5.0,"z":0.0},"attached":true,"delay":0.0,"duration":2.0},
+			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":-5.0,"z":0.0},"attached":true,"delay":0.0,"duration":2.0}
+		]
+	},
+	"SmartRocketLauncher - Fumes":{
+		"effectList":[
+			{"type":"particle","name":"fumes","offset":{"x":0.0,"y":0.0,"z":-0.5},"direction":{"x":0,"y":0,"z":1},"attached":true,"delay":0.0,"duration":2.0}
+		]
+	},
+	"RocketLauncher2 - Shoot":{
+		"maxInstances":64,"parameterList":{"velocity":0.0,"power":0.0,"color":"ffff00","radius":3.0,"intensity":1.5,"shakeStrength":0.1,"shakeRadius":3.0},
+		"parameterCurves":{
+			"radius":{"timeline":[{"time":0.05,"value":3.0},{"time":0.3,"value":0.0}]},
+			"intensity":{"timeline":[{"time":0.05,"value":1.5},{"time":0.3,"value":0.0}]},
+			"shakeStrength":{"timeline":[{"time":0.05,"value":0.1},{"time":0.3,"value":0.0}]},
+			"shakeRadius":{"timeline":[{"time":0.05,"value":3.0},{"time":0.3,"value":0.0}]},
+			"velocity":{"timeline":[{"time":0.05,"value":60.0},{"time":0.5,"value":0.0}]},
+			"power":{"timeline":[{"time":0.05,"value":200.0},{"time":0.5,"value":0.0}]}
+		},
+		"effectList":[
+			{"type":"audio","name":"PotatoRifle - Shoot","offset":{"x":0.0,"y":0.0,"z":0.65},"delay":0.0},
+			{"type":"audio","name":"event:/vehicle/thrusters/thruster01","offset":{"x":0.0,"y":0.0,"z":0.65},"parameters":["velocity","power"],"duration":0.5,"delay":0.0},
+			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":0.65},"parameters":["shakeStrength","shakeRadius"],"duration":0.3,"delay":0.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.65},"parameters":["color","radius","intensity"],"duration":0.3,"delay":0.0},
+			{"type":"particle","name":"hammer_metal","offset":{"x":0.0,"y":0.0,"z":0.65},"attached":true,"delay":0.0},
+			{"type":"particle","name":"p_spudgun_basic_muzzel","offset":{"x":0.0,"y":0.0,"z":0.65},"attached":true,"delay":0.0}
+		]
+	},
+	"FlareCannon - Shoot":{
+		"maxInstances":64,"parameterList":{"color":"ffff00","radius":1.0,"intensity":1.0,"shakeStrength":0.1,"shakeRadius":1.0},
+		"parameterCurves":{
+			"radius":{"timeline":[{"time":0.05,"value":2.0},{"time":0.3,"value":0.0}]},
+			"intensity":{"timeline":[{"time":0.05,"value":1.0},{"time":0.3,"value":0.0}]},
+			"shakeStrength":{"timeline":[{"time":0.05,"value":0.1},{"time":0.3,"value":0.0}]},
+			"shakeRadius":{"timeline":[{"time":0.05,"value":1.0},{"time":0.3,"value":0.0}]}
+		},
+		"effectList":[
+			{"type":"audio","name":"PotatoRifle - Shoot","offset":{"x":0.0,"y":0.0,"z":0.1},"delay":0.0},
+			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":0.1},"parameters":["shakeStrength","shakeRadius"],"duration":0.3,"delay":0.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.1},"parameters":["color","radius","intensity"],"duration":0.3,"delay":0.0},
+			{"type":"particle","name":"p_spudgun_basic_muzzel","offset":{"x":0.0,"y":0.0,"z":0.1},"attached":true,"delay":0.0}
+		]
+	},
+	"EMPCannon - Shoot":{
+		"maxInstances":64,"parameterList":{"color":"00ffff","radius":1.0,"intensity":2.0,"shakeStrength":0.2,"shakeRadius":4.0},
+		"parameterCurves":{
+			"radius":{"timeline":[{"time":0.05,"value":2.0},{"time":0.8,"value":0.0}]},
+			"intensity":{"timeline":[{"time":0.05,"value":2.0},{"time":0.8,"value":0.0}]},
+			"shakeStrength":{"timeline":[{"time":0.05,"value":0.2},{"time":0.8,"value":0.0}]},
+			"shakeRadius":{"timeline":[{"time":0.05,"value":4.0},{"time":0.8,"value":0.0}]}
+		},
+		"effectList":[
+			{"type":"audio","name":"event:/char/npc/bots/enemies/farmbot/farmbot_shoot","offset":{"x":0.0,"y":0.0,"z":0.9},"delay":0.0,"duration":0.35},
+			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":0.9},"parameters":["shakeStrength","shakeRadius"],"duration":0.8,"delay":0.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.9},"parameters":["color","radius","intensity"],"duration":0.8,"delay":0.0},
+			{"type":"particle","name":"EMPCannonShoot","offset":{"x":0.0,"y":0.0,"z":0.9},"attached":true,"delay":0.0},
+			{"type":"particle","name":"EMPCannonShoot2","offset":{"x":0.0,"y":0.0,"z":0.9},"direction":{"x":0.0,"y":0.0,"z":1.0},"attached":true,"delay":0.0}
+		]
+	},
+	"EMPCannon - Charge":{
+		"parameterList":{"rpm":0.0,"load":0.5},
+		"effectList":[
+			{"type":"audio","name":"event:/vehicle/elengines/elengine03","offset":{"x":0.0,"y":0.0,"z":0.0},"parameters":["rpm","load"],"delay":0.0}
+		]
+	},
+	"EMPCannon - Light":{
+		"maxInstances":64,"parameterList":{"color":"00ffff","radius":1.0,"intensity":0.0},
+		"effectList":[
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.25},"parameters":["color","radius","intensity"],"delay":0.0}
+		]
+	}
+}

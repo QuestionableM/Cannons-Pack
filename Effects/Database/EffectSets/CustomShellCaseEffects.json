@@ -1,0 +1,20 @@
+{
+    "AircraftCannon - Case":{
+		"maxInstances":512,"parameterList":{},
+		"effectList":[
+			{"type":"particle","name":"AircraftCannonCase","offset":{"x":0.0,"y":0.0,"z":0.0},"direction":{"x":0.0,"y":0.0,"z":1.0},"duration":8.0,"delay":0.0}
+		]
+	},
+	"BigCannonCase":{
+		"maxInstances":512,"parameterList":{},
+		"effectList":[
+			{"type":"particle","name":"BigCannonCase","offset":{"x":0.0,"y":0.0,"z":0.0},"direction":{"x":0.0,"y":0.0,"z":1.0},"duration":8.0,"delay":0.0}
+		]
+	},
+	"GiantCannonCase":{
+		"maxInstances":512,"parameterList":{},
+		"effectList":[
+			{"type":"particle","name":"GiantCannonCase","offset":{"x":0.0,"y":0.0,"z":0.0},"direction":{"x":0.0,"y":0.0,"z":1.0},"duration":8.0,"delay":0.0}
+		]
+	}
+}

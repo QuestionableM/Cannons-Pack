@@ -1,0 +1,22 @@
+What are u doing here? you little thief
+
+Cannons Pack version 4.01 changelog:
+1. Fixed Cannons Pack for the newest test branch version.
+
+Made by:
+Questionable Mark - creator of all the textures, UV maps and also some scripts and cannon models.
+Gratiskatze - beta-tester, translator of the most german descriptions and creator of the most cannon models.
+Brent Batch - creator of the original global script.
+
+Other contributors:
+Kein Anderer - translator of some german descriptions and beta-tester.
+Driver - creator of the EMP Cannon model and polish language translator.
+Seemomster - creator of the 2nd tank cannon model.
+
+Links:
+Questionable Mark - https://steamcommunity.com/id/QuestionMarko/
+Gratiskatze - https://steamcommunity.com/id/Gratis_katze
+Brent Batch - https://steamcommunity.com/id/BrentBatch/
+Driver - https://steamcommunity.com/profiles/76561198280635682
+Kein Anderer - https://steamcommunity.com/profiles/76561198350208505/
+Seemomster - https://steamcommunity.com/profiles/76561198196145217/

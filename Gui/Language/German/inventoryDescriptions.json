@@ -1,0 +1,112 @@
+{
+	"86b45499-9a8f-45ce-b9f9-80b6912fcc06": {
+		"title": "Flugzeugkanone",
+		"description": "#ffffffVerschießt sehr schwache Hochexplosivgranaten, perfekt für Flugzeuge!\n\n#ffff00Kann nichts zerstören was stärker als Karton-Blöcke.#ffffff\n\nTyp - Kleinkaliber\nläd automatisch nach - ja\nNachladezeit: 8 ticks.",
+		"keywords": ["Cannons Pack","Flugzeug","auto","Nachladen","klein","Kaliber","schwach","Kanone","Waffe"]
+	},
+	"49de462c-2f36-4ad5-802c-c4add235dc53": {
+		"title": "Flugabwehrkanone",
+		"description": "#ffffffVerschießt schwache Hochexplosivgranaten.\n\n#ffff00Kann nichts zerstören was stärker als Beton-Blöcke.#ffffff\n\nTyp - Flak\nläd automatisch nach - ja\nNachladezeit: 10 ticks.",
+		"keywords": ["Cannons Pack","flak","auto","Nachladen","klein","schwach","Kanone","Waffe"]
+	},
+	"bc8178a9-8a38-4c43-a0d0-8a0f242a59c7": {
+		"title": "Panzerkanone",
+		"description": "#ffffffVerschießt starke Hochexplosivgranaten.\n\nTyp - Kanone\nläd automatisch nach - no\nNachladezeit: 4 Sekunden.",
+		"keywords": ["Cannons Pack","Kanone","medium","Waffe"]
+	},
+	"4295196d-cbd6-40c6-badc-ff9011208ad5": {
+		"title": "Panzerkanone 2",
+		"description": "#ffffffVerschießt starke Hochexplosivgranaten.\n\nTyp - Kanone\nläd automatisch nach - nein\nNachladezeit: 4 Sekunden.",
+		"keywords": ["Cannons Pack","Kanone","medium","Waffe"]
+	},
+	"04c1c87f-da87-4f5e-8d70-1ca452314728": {
+		"title": "Raketenwerfer",
+		"description": "#ffffffVerschießt starke aber langsame Raketen.\n\nType - Raketenwerfer\nläd automatisch nach - ja\nNachladezeit: 3 Sekunden.",
+		"keywords": ["Cannons Pack","Raketenwerfer","medium","Waffe","langsam"]
+	},
+	"e8a8a8ce-7b00-4e2b-b417-75e8995a02d8": {
+		"title": "Lenkraketenwerfer",
+		"description": "#ffffffEine starke Waffe, die den Gegner fast immer trifft! Funktioniert am besten mit 'The Modpack'.\n\nType - Raketenwerfer\nläd automatisch nach - ja\nNachladezeit: 7 Sekunden.",
+		"keywords": ["Cannons Pack","The Modpack","smart","zielsuchend","langsam","number logic"]
+	},
+	"388ccd57-1be9-40cc-b96b-69dd16eb4f32": {
+		"title": "Panzerkanone 3",
+		"description": "#ffffffVerschießt starke Hochexplosivgranaten.\n\nTyp - Kanone\nläd automatisch nach - nein\nNachladezeit: 7 Sekunden.",
+		"keywords": ["Cannons Pack","Kanone","medium","Waffe"]
+	},
+	"03e1ecbd-17ee-4045-a5d8-366f6e656555": {
+		"title": "M1 Abrams Kanone",
+		"description": "#ffffffVerschießt starke Hochexplosivgranaten.\n\nTyp - Kanone\nläd automatisch nach - nein\nNachladezeit: 7 Sekunden.",
+		"keywords": ["Cannons Pack","Kanone","medium","Waffe"]
+	},
+	"6c0bbf06-364f-4d51-98c2-1631b2d09cd5": {
+		"title": "Schiffsartilleriekanone",
+		"description": "#ffffffVerschießt sehr starke Hochexplosivgranaten.\n\nTyp - Kanone\nläd automatisch nach - nein\nNachladezeit: 10 Sekunden.",
+		"keywords": ["Cannons Pack","Kanone","groß","stark","Schiff","Waffe"]
+	},
+	"d0352961-c071-4278-8f23-99fcb8a7a377": {
+		"title": "Schiffsartilleriekanone 2",
+		"description": "#ffffffVerschießt starke Hochexplosivgranaten.\n\nTyp - Kanone\nläd automatisch nach - nein\nNachladezeit: 8 Sekunden.",
+		"keywords": ["Cannons Pack","Kanone","medium","stark","Schiff","Waffe"]
+	},
+	"fac1f66a-a01c-4d8d-a838-e887455c38ae": {
+		"title": "Schienenkanone",
+		"description": "#ffffffVerschießt sehr schnelle Wuchtgeschosse, die bis zu 6 Wände durchschlagen. Die Durchschlagskraft ist abhängig von der Entfernung zum Ziel.\n\nTyp - Kanone\nläd automatisch nach - nein\nNachladezeit: 6 Sekunden.",
+		"keywords": ["Cannons Pack","Kanone","medium","Waffe","elektrisch","elektromagnetisch","super","stark"]
+	},
+	"75e1e5a3-acc5-48cf-b4c1-bb8795940002": {
+		"title": "Schienenkanone 2",
+		"description": "#ffffffVerschießt sehr schnelle Wuchtgeschosse, die bis zu 6 Wände durchschlagen. Die Durchschlagskraft ist abhängig von der Entfernung zum Ziel.\n\nTyp - Kanone\nläd automatisch nach - nein\nNachladezeit: 9 Sekunden.",
+		"keywords": ["Cannons Pack","Kanone","medium","Waffe","elektrisch","elektromagnetisch","super","stark"]
+	},
+	"e442535e-e75e-4079-9acc-9005e5ba0c08": {
+		"title": "EMP Kanone",
+		"description": "#ffffffDiese Kanone schießt elektromagnetische \"Bomben\" welche die Logik deines Gegners trennen kann!\n\ntippe - EMP\nAuto-nachladen - ja\nNachladezeit: kommt darauf an wie lange der Knopf gedrückt gehalten wurde\n\nTrennradius hängt davon ab wie lange der Knopf gedrückt gehalten wurde.",
+		"keywords": ["Cannons Pack","elektro","magnetisch","Impuls","trennen","logik"]
+	},
+	"bd428d5e-c519-43fe-a75f-76cfddb5b700": {
+		"title": "M109 Kanone",
+		"description": "#ffffffVerschießt starke Hochexplosivgranaten, kann als Mörser verwendet werden.\n\nTyp - Haubitze\nläd automatisch nach - nein\nNachladezeit: 9 Sekunden.",
+		"keywords": ["Cannons Pack","Kanone","groß","Waffe","hotwizer","artillery","super","stark"]
+	},
+	"f85af057-f779-4eca-ad1c-58d2828d3404": {
+		"title": "Schwerer Gustav Kanone",
+		"description": "#ffffffVerschießt extrem starke Hochexplosivgranaten, kann als Mörser verwendet werden.\n\nTyp - Artillerie\nläd automatisch nach - nein\nNachladezeit: 20 Sekunden.",
+		"keywords": ["Cannons Pack","Kanone","groß","Waffe","artillery","super","stark"]
+	},
+	"fd6130e4-261d-4875-a418-96fe33bb2714": {
+		"title": "Kleine Smart Cannon",
+		"description": "#ffffffMit dieser Kanone ist alles Möglich! Mithilfe von 'number logic' aus 'The Modpack' kann man alle möglichen Parameter der Kanone ändern.\n\nStandarteinstellung:\nForce = #ffff00700#ffffff\nSpread = #ffff000.2#ffffff\nReload time = #ffff008 ticks#ffffff\nShell gravity = #ffff0010#ffffff",
+		"keywords": ["Cannons Pack","The Modpack","smart","number","logic"]
+	},
+	"35203ea3-8cc8-4ec9-9a26-c62c6eb5544d": {
+		"title": "Smart Cannon",
+		"description": "#ffffffMit dieser Kanone ist alles Möglich! Mithilfe von 'number logic' aus 'The Modpack' kann man alle möglichen Parameter der Kanone ändern.\n\nStandarteinstellung:\nForce = #ffff00700#ffffff\nSpread = #ffff000.2#ffffff\nReload time = #ffff008 ticks#ffffff\nShell gravity = #ffff0010#ffffff",
+		"keywords": ["Cannons Pack","The Modpack","smart","number","logic"]
+	},
+	"d7070a10-403a-4f5f-9d4f-8bb321c6b562": {
+		"title": "Lenkraketenwerfer Detektor",
+		"description": "#ffffffDieses Teil erkennt Lenkraketenwerfer in seinem Wahrnehmungsbereich und gibt ein Logik Signal aus wenn diese in diesem Bereich und in seine Richtung fliegen.\n\nSchaue dir die Workshop Seite vom #ffff00Cannons Pack#ffffff an, um mehr Info zu bekommen.",
+		"keywords": ["Cannons Pack","erkennen","detektor","rakete"]
+	},
+	"2bcd658f-6344-4e37-9fb5-ced1e2249c7b": {
+		"title": "Orbitalkanone",
+		"description": "#ffffffBefehle einen Luftschlag auf das Ziel, auf das du zielst! Funktioniert überall, außer am Rand der Welt. Durch längeres drücken des Knopfes wird der Luftschlag stärker.",
+		"keywords": ["Cannons Pack","laserpointer","orbit","lazer"]
+	},
+	"b86bc11c-8922-47c2-b5bc-e184d3378a81": {
+		"title": "Täuschkörperwerfer",
+		"description": "#ffffffDieser kleine Gegenstand kann deine Kreationen vor zielsuchenden Raketen schützen.\n\nTyp - Anderes\nläd automatisch nach - ja\nNachladezeit: 7.5 Sekunden.",
+		"keywords": ["Cannons Pack","Täuschkörper","ablenken","Rakete","Anderes"]
+	},
+	"5164495e-b681-4647-b622-031317e6f6b4": {
+        "title": "Hülsenauswurf",
+        "description": "#ffffffWirft leere Hochexplosiv Granathülsen aus, wenn die verbundene Kanone feuert!\n\nDas Aussehen und die Größe sind abhängig von der verbundenen Kanone.",
+        "keywords": ["Cannons Pack","shell","auswurf","Kanone","Hülse"]
+	},
+	"7396cead-3624-49d7-8201-0b24ad3c4fcc": {
+		"title": "Kanonenrohr",
+		"description": "#ffffffVerlängerung für kurze Kanonen",
+		"keywords": ["Cannons Pack","Rohr","Kanone"]
+	}
+}

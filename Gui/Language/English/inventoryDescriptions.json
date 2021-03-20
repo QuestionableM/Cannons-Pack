@@ -1,0 +1,112 @@
+{
+	"86b45499-9a8f-45ce-b9f9-80b6912fcc06": {
+		"title": "Aircraft Cannon",
+		"description": "#ffffffShoots super weak shells, great for planes!\n\n#ffff00Can't destroy materials stronger than cardboard.#ffffff\n\nType - Small caliber\nAuto-reloading - yes\nReload time: 8 ticks.",
+		"keywords": ["Cannons Pack","aircraft","auto","reloading","small","caliber","weak","cannon","weapon"]
+	},
+	"49de462c-2f36-4ad5-802c-c4add235dc53": {
+		"title": "Flak Cannon",
+		"description": "#ffffffShoots weak shells.\n\n#ffff00Can't destroy materials stronger than concrete.#ffffff\n\nType - Flak\nAuto-reloading - yes\nReload time: 10 ticks.",
+		"keywords": ["Cannons Pack","flak","auto","reloading","small","weak","cannon","weapon"]
+	},
+    "bc8178a9-8a38-4c43-a0d0-8a0f242a59c7": {
+		"title":"Tank Cannon",
+		"description": "#ffffffShoots powerful shells.\n\nType - Cannon\nAuto-reloading - no\nReload time: 4 seconds.",
+		"keywords": ["Cannons Pack","cannon","medium","weapon"]
+	},
+    "4295196d-cbd6-40c6-badc-ff9011208ad5": {
+		"title": "Tank Cannon 2",
+		"description": "#ffffffShoots powerful shells.\n\nType - Cannon\nAuto-reloading - no\nReload time: 4 seconds.",
+		"keywords": ["Cannons Pack","cannon","medium","weapon"]
+	},
+	"04c1c87f-da87-4f5e-8d70-1ca452314728": {
+		"title": "Rocket Launcher",
+		"description": "#ffffffShoots powerful but slow rockets.\n\nType - Rocket launcher\nAuto-reloading - yes\nReload time: 3 seconds.",
+		"keywords": ["Cannons Pack","rocket launcher","medium","weapon","slow"]
+	},
+	"e8a8a8ce-7b00-4e2b-b417-75e8995a02d8": {
+		"title": "Smart Rocket Launcher",
+		"description": "#ffffffA really mighty weapon that could get your enemy almost anywhere! Can be used with 'The Modpack' number logic.\n\nType - Rocket launcher\nAuto-reloading - yes\nReload time: 7 seconds.",
+		"keywords": ["Cannons Pack","The Modpack","smart","homing missile","slow","number logic"]
+	},
+	"388ccd57-1be9-40cc-b96b-69dd16eb4f32": {
+		"title": "Tank Cannon 3",
+		"description": "#ffffffShoots powerful shells.\n\nType - Cannon\nAuto-reloading - no\nReload time: 7 seconds.",
+		"keywords": ["Cannons Pack","cannon","medium","weapon"]
+	},
+	"03e1ecbd-17ee-4045-a5d8-366f6e656555": {
+		"title": "M1 Abrams Cannon",
+		"description": "#ffffffShoots powerful shells.\n\nType - Cannon\nAuto-reloading - no\nReload time: 7 seconds.",
+		"keywords": ["Cannons Pack","cannon","medium","weapon"]
+	},
+    "6c0bbf06-364f-4d51-98c2-1631b2d09cd5": {
+		"title": "Naval Cannon",
+		"description": "#ffffffShoots very powerful shells.\n\nType - Cannon\nAuto-reloading - no\nReload time: 10 seconds.",
+		"keywords": ["Cannons Pack","cannon","big","strong","naval","ship","weapon","powerful"]
+	},
+    "d0352961-c071-4278-8f23-99fcb8a7a377": {
+		"title": "Naval Cannon 2",
+		"description": "#ffffffShoots powerful shells.\n\nType - Cannon\nAuto-reloading - no\nReload time: 8 seconds.",
+		"keywords": ["Cannons Pack","cannon","medium","strong","naval","ship","weapon","powerful"]
+	},
+	"fac1f66a-a01c-4d8d-a838-e887455c38ae": {
+		"title": "Railgun",
+		"description": "#ffffffShoots super fast shells, it can penetrate up to 6 walls, penetration depends on the distance.\n\nType - Cannon\nAuto-reloading - no\nReload time: 6 seconds.",
+		"keywords": ["Cannons Pack","cannon","medium","weapon","electro","electromagnetic","super","strong","powerful"]
+	},
+	"75e1e5a3-acc5-48cf-b4c1-bb8795940002": {
+		"title": "Railgun 2",
+		"description": "#ffffffShoots super fast shells, it can penetrate up to 6 walls, penetration depends on the distance.\n\nType - Cannon\nAuto-reloading - no\nReload time: 9 seconds.",
+		"keywords": ["Cannons Pack","cannon","medium","weapon","electro","electromagnetic","super","strong","powerful"]
+	},
+	"e442535e-e75e-4079-9acc-9005e5ba0c08": {
+		"title": "EMP Cannon",
+		"description": "#ffffffThis cannon shoots electromagnetic \"bombs\" which can disconnect the logic of your enemy!\n\nType - EMP\nAuto-reloading - yes\nReload time: depends on how much time the button was held\n\n Disconnect radius depends on how much time the button was held.",
+		"keywords": ["Cannons Pack","electro","magnetic","impulse","disconnect","logic"]
+	},
+	"bd428d5e-c519-43fe-a75f-76cfddb5b700": {
+		"title": "M109 Cannon",
+		"description": "#ffffffShoots powerful shells, can be used as mortar.\n\nType - Howitzer\nAuto-reloading - no\nReload time: 9 seconds.",
+		"keywords": ["Cannons Pack","cannon","big","weapon","Howitzer","artillery","super","strong","powerful"]
+	},
+	"f85af057-f779-4eca-ad1c-58d2828d3404": {
+		"title": "Schwerer Gustav Cannon",
+		"description": "#ffffffShoots super powerful shells, can be used as mortar.\n\nType - Artillery\nAuto-reloading - no\nReload time: 20 seconds.",
+		"keywords": ["Cannons Pack","cannon","big","weapon","artillery","super","strong","powerful","dora"]
+	},
+	"fd6130e4-261d-4875-a418-96fe33bb2714": {
+		"title": "Small Smart Cannon",
+		"description": "#ffffffEverything is possible with this cannon! You can change everything you want by using number logic from The Modpack\n\nProperties by default:\nForce = #ffff00700#ffffff\nSpread = #ffff000.2#ffffff\nReload time = #ffff008 ticks#ffffff\nShell gravity = #ffff0010#ffffff",
+		"keywords": ["Cannons Pack","The Modpack","smart","number","logic"]
+	},
+	"35203ea3-8cc8-4ec9-9a26-c62c6eb5544d": {
+		"title": "Smart Cannon",
+		"description": "#ffffffEverything is possible with this cannon! You can change everything you want by using number logic from The Modpack\n\nProperties by default:\nForce = #ffff00700#ffffff\nSpread = #ffff000.2#ffffff\nReload time = #ffff008 ticks#ffffff\nShell gravity = #ffff0010#ffffff",
+		"keywords": ["Cannons Pack","The Modpack","smart","number","logic"]
+	},
+	"d7070a10-403a-4f5f-9d4f-8bb321c6b562": {
+		"title": "Smart Rocket Detector",
+		"description": "#ffffffThis part detects Smart Rockets in its visibility range!\n\nOutputs a logic signal when Smart Rockets are being in visibility range and flying towards this sensor.\n\nCheck the workshop page of #ffff00Cannons Pack#ffffff to see more info about this item.",
+		"keywords": ["Cannons Pack","detect","detector","missile"]
+	},
+	"2bcd658f-6344-4e37-9fb5-ced1e2249c7b": {
+		"title": "Orbital Cannon",
+		"description": "#ffffffCalls an orbital strike from the air at the pointed target! You can point it anywhere except the walls of the world, hold the button to call a really powerful orbital strike",
+		"keywords": ["Cannons Pack","laser pointer","orbit","lazer"]
+	},
+	"b86bc11c-8922-47c2-b5bc-e184d3378a81": {
+		"title": "Flare (heat decoy) Launcher",
+		"description": "#ffffffThis little item can save your flying creations from homing missiles!\n\nType - other\nAuto-reloading - yes\nReload time: 7.5 seconds",
+		"keywords": ["Cannons Pack","flare","deflector","deflect","missile","utility","other"]
+	},
+	"5164495e-b681-4647-b622-031317e6f6b4": {
+		"title": "Shell Ejector",
+		"description": "#ffffffThis part ejects shells when the connected cannon shoots!\n\nThe model of the shell depends on the connected cannon.",
+		"keywords": ["Cannons Pack","shell","eject","cannon"]
+	},
+	"7396cead-3624-49d7-8201-0b24ad3c4fcc": {
+		"title": "Pipe for Cannons",
+		"description": "#ffffffit will help you with making longer cannons",
+		"keywords": ["Cannons Pack","tube","pipe","cannon"]
+	}
+}

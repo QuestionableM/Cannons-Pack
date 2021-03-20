@@ -1,0 +1,23 @@
+{
+    "OrbitalCannon - PointSound":{
+		"effectList":[
+			{"type":"audio","name":"Blueprint - Camera","offset":{"x":0.0,"y":0.0,"z":0.0},"delay":0.0,"duration":2.0}
+		]
+    },
+    "OrbitalCannon - Error":{
+		"effectList":[
+			{"type":"audio","name":"WeldTool - Error","offset":{"x":0.0,"y":0.0,"z":0.0},"delay":0.0,"duration":2.0}
+		]
+	},
+	"Reloading":{
+		"effectList":[
+			{"type":"audio","name":"WeldTool - Weld","offset":{"x":0.0,"y":0.0,"z":0.0},"delay":0.0,"duration":2.0}
+		]
+	},
+	"HeavyReloading":{
+		"effectList":[
+			{"type":"audio","name":"event:/props/installations/packingstation/ps_pack","offset":{"x":0.0,"y":0.0,"z":0.0},"delay":0.0,"duration":4.1},
+			{"type":"audio","name":"event:/props/installations/packingstation/ps_throw","offset":{"x":0.0,"y":0.0,"z":0.0},"delay":0.0,"duration":4.5}
+		]
+	}
+}

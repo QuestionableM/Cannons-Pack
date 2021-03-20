@@ -1,0 +1,112 @@
+{
+	"86b45499-9a8f-45ce-b9f9-80b6912fcc06": {
+		"title": "Działko Lotnicze",
+		"description": "#ffffffStrzela słabymi pociskami, idealnymi przeciw samolotom!\n\n#ffff00Nie może zniszczyć materiałów bardziej wytrzymałych niż kartonu.#ffffff\n\nTyp - Mały kaliber\nAutomatyczne przeładowanie - tak\nCzas przeładowania: 8 ticks.",
+		"keywords": ["Cannons Pack","samolot","automatyczny","przeładowanie","mały","kaliber","słaby","działo","broń"]
+	},
+	"49de462c-2f36-4ad5-802c-c4add235dc53": {
+		"title": "Działo Przeciwlotnicze",
+		"description": "#ffffffStrzela słabymi pociskami.\n\n#ffff00Nie może zniszczyć materiałów bardziej wytrzymałych niż cement.#ffffff\n\nTyp - Działo przeciwlotnicze\nAutomatyczne przeładowanie - tak\nCzas przeładowania: 10 ticks.",
+		"keywords": ["Cannons Pack","dezaprobata","automatyczny","przeładować","mały","słaby","działo"]
+	},
+    "bc8178a9-8a38-4c43-a0d0-8a0f242a59c7": {
+		"title": "Armata Czołgowa",
+		"description": "#ffffffStrzela mocnymi pociskami.\n\nTyp - Armata\nAutomatyczne przeładowanie - nie\nCzas przeładowania: 4 sekundy.",
+		"keywords": ["Cannons Pack","działo","średni","broń"]
+	},
+    "4295196d-cbd6-40c6-badc-ff9011208ad5": {
+		"title": "Armata Czołgowa 2",
+		"description": "#ffffffStrzela mocnymi pociskami.\n\nTyp - Armata\nAutomatyczne przeładowanie - nie\nCzas przeładowania: 4 sekundy.",
+		"keywords": ["Cannons Pack","działo","średni","broń"]
+	},
+	"04c1c87f-da87-4f5e-8d70-1ca452314728": {
+		"title": "Wyrzutnia Rakiet",
+		"description": "#fffffStrzela mocnymi ale powolnymi rakietami.\n\nTyp - Wyrzutnia rakiet\nAutomatyczne przeładowanie - tak\nCzas przeładowania: 3 sekundy.",
+		"keywords": ["Cannons Pack","wyrzutnia rakiet","średni","broń","powolny"]
+	},
+	"e8a8a8ce-7b00-4e2b-b417-75e8995a02d8": {
+		"title": "Inteligentna Wyrzutnia Rakiet",
+		"description": "#ffffffPotężna broń która jest w stanie dorwać twojego przeciwnika w zasadzie wszędzie! Może być użyte z logiką numerową z 'The Modpack'.\n\nTyp - Wyrzutnia rakiet\nAutomatyczne przeładowanie - tak\nCzas przeładowania: 7 sekundy.",
+		"keywords": ["Cannons Pack","The Modpack","mądry","pocisk naprowadzający","powolny","logika liczbowa"]
+	},
+	"388ccd57-1be9-40cc-b96b-69dd16eb4f32": {
+		"title": "Armata Czołgowa 3",
+		"description": "#ffffffStrzela mocnymi pociskami.\n\nTyp - Armata\nAutomatyczne przeładowanie - nie\nCzas przeładowania: 7 sekund.",
+		"keywords":["Cannons Pack","działo","średni","broń"]
+	},
+	"03e1ecbd-17ee-4045-a5d8-366f6e656555": {
+		"title": "Armata Czołgu M1 Abrams",
+		"description": "#ffffffStrzela mocnymi pociskami.\n\nTyp - Armata\nAutomatyczne przeładowanie - nie\nCzas przeładowania: 7 sekund.",
+		"keywords": ["Cannons Pack","działo","średni","broń"]
+	},
+    "6c0bbf06-364f-4d51-98c2-1631b2d09cd5": {
+		"title": "Działo Okrętowe",
+		"description": "#ffffffStrzela mocnymi pociskami.\n\nTyp - Armata\nAutomatyczne przeładowanie - nie\nCzas przeładowania: 10 sekund.",
+		"keywords": ["Cannons Pack","działo","duży","silny","morski","statek","broń","potężny"]
+	},
+    "d0352961-c071-4278-8f23-99fcb8a7a377": {
+		"title":"Działo Okrętowe 2",
+		"description": "#ffffffStrzela mocnymi pociskami.\n\nTyp - Armata\nAutomatyczne przeładowanie - nie\nCzas przeładowania: 8 sekund.",
+		"keywords": ["Cannons Pack","działo","średni","silny","morski","statek","broń","potężny"]
+	},
+	"fac1f66a-a01c-4d8d-a838-e887455c38ae": {
+		"title": "Railgun",
+		"description": "#ffffffStrzela bardzo szybkimi pociskami, może sie przebić przez 6 ścian, przebicie zależy od odległości od celu.\n\nTyp - Armata\nAutomatyczne przeładowanie - nie\nCzas przeładowania: 6 sekund.",
+		"keywords": ["Cannons Pack","działo","średni","broń","elektro","elektromagnetyczny","wspaniały","silny","potężny"]
+	},
+	"75e1e5a3-acc5-48cf-b4c1-bb8795940002": {
+		"title": "Railgun 2",
+		"description": "#ffffffStrzela bardzo szybkimi pociskami, może sie przebić przez 6 ścian, przebicie zależy od odległości od celu.\n\nTyp - Armata\nAutomatyczne przeładowanie - nie\nCzas przeładowania: 9 sekund.",
+		"keywords": ["Cannons Pack","działo","średni","broń","elektro","elektromagnetyczny","wspaniały","silny","potężny"]
+	},
+	"e442535e-e75e-4079-9acc-9005e5ba0c08": {
+		"title": "Działo Elektromagnetyczne",
+		"description": "#ffffffTo działo strzela elektromagnetycznymi \"bombami\" które niszczą połączenia w pojeździe twojego przeciwnika!\n\nTyp - Działo elektromagnetyczne\nAutomatyczne przeładowanie - tak\nCzas przeładowania: Zależy od tego jak długo był wciśnięty przycisk\n\n Promień rażenia zależy od tego jak długo był wciśnięty przycisk.",
+		"keywords": ["Cannons Pack","elektro","magnetyczny","impuls","odłączyć","logika"]
+	},
+	"bd428d5e-c519-43fe-a75f-76cfddb5b700": {
+		"title": "Działo Czołgu M109",
+		"description": "#ffffffStrzela mocnymi pociskami, może być użyte jako moździeż.\n\nTyp - Haubica\nAutomatyczne przeładowanie - nie\nCzas przeładowania: 9 sekund.",
+		"keywords": ["Cannons Pack","działo","duży","broń","haubica","artyleria","wspaniały","silny","potężny"]
+	},
+	"f85af057-f779-4eca-ad1c-58d2828d3404": {
+		"title": "Działo Schwerer Gustav",
+		"description": "#ffffffStrzela bardzo mocnymi pociskami, może być użyte jako moździeż.\n\nTyp - Artyleria\nAutomatyczne przeładowanie - nie\nCzas przeładowania: 20 sekund.",
+		"keywords": ["Cannons Pack","działo","duży","broń","artyleria","wspaniały","silny","potężny","dora"]
+	},
+	"fd6130e4-261d-4875-a418-96fe33bb2714": {
+		"title": "Małe Inteligentne Działo",
+		"description": "#ffffffWszystko jest możliwe przy użyciu tego działa! Możesz ustawić wszystkie parametry jak tylko chcesz przy pomocy logiki numerowej z The Modpack\n\nUstawienia bazowe:\nForce (moc) = #ffff00700#ffffff\nSpread (rozrzut) = #ffff000.2#ffffff\nReload time (czas przeładowania) = #ffff008 ticks#ffffff\nShell gravity (grawitacja pocisku) = #ffff0010#ffffff",
+		"keywords": ["Cannons Pack","The Modpack","mądry","numer","logika"]
+	},
+	"35203ea3-8cc8-4ec9-9a26-c62c6eb5544d": {
+		"title": "Inteligentne Działo",
+		"description": "#ffffffWszystko jest możliwe przy użyciu tego działa! Możesz ustawić wszystkie parametry jak tylko chcesz przy pomocy logiki numerowej z The Modpack\n\nUstawienia bazowe:\nForce (moc) = #ffff00700#ffffff\nSpread (rozrzut) = #ffff000.2#ffffff\nReload time (czas przeładowania) = #ffff008 ticks#ffffff\nShell gravity (grawitacja pocisku) = #ffff0010#ffffff",
+		"keywords": ["Cannons Pack","The Modpack","mądry","numer","logika"]
+	},
+	"d7070a10-403a-4f5f-9d4f-8bb321c6b562": {
+        "title": "Inteligentny Detektor Rakiet",
+        "description": "#ffffffTo urządzenie wykrywa pociski rakietowe w zasięgu pola widzenia!\n\nWysyła ono sygnał, gdy inteligentna rakieta jast w polu widzenia i leci w kierunku czujnika\n\nWejdź na strone w Warsztacie #ffff00Cannons Pack#ffffff aby dowiedzieć się więcej",
+        "keywords": ["Cannons Pack","detektor","wykrywacz","czujnik","pocisk","rakieta"]
+    },
+	"2bcd658f-6344-4e37-9fb5-ced1e2249c7b": {
+		"title": "Działo Orbitalne",
+		"description": "#ffffffWzywa atak orbitalny z powietrza w cel na który wskazujesz. Mozesz go wycelować wszędzie poza granicami świata aby wezwać ten potężny atak!",
+		"keywords": ["Cannons Pack","wskaźnik laserowy","orbita","laser"]
+	},
+	"b86bc11c-8922-47c2-b5bc-e184d3378a81": {
+		"title": "Wyrzutnia Flar",
+		"description": "#ffffffTen mały przedmiot może uratować twoją maszyne latającą przed wrogimi rakietami!\n\nTyp - inne\nAutomatyczne przeładowanie - tak\nCzas przeładowania: 7.5 sekund",
+		"keywords": ["Cannons Pack","migotać","deflektor","odwracać","pocisk","użyteczność","inny"]
+	},
+	"5164495e-b681-4647-b622-031317e6f6b4": {
+		"title": "Wyrzutnia łusek",
+		"description": "#ffffffTa część wyrzuca łuski, gdy połączone do niej działo strzela!!\n\nModel łuski zależy od rodzaju działa.",
+		"keywords": ["Cannons Pack","działo","łuski"]
+	},
+	"7396cead-3624-49d7-8201-0b24ad3c4fcc": {
+		"title": "Fragment Lufy",
+		"description": "#ffffffPozwoli ci na tworzenie dłuższej lufy",
+		"keywords": ["Cannons Pack","rura","działo"]
+	}
+}
