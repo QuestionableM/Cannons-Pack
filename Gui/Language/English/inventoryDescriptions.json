@@ -19,6 +19,11 @@
 		"description": "#ffffffShoots powerful shells.\n\nType - Cannon\nAuto-reloading - no\nReload time: 4 seconds.",
 		"keywords": ["Cannons Pack","cannon","medium","weapon"]
 	},
+	"0d30954b-4f81-4e4b-99c6-cbdef5eb6c76": {
+		"title": "Laser Cannon",
+		"description": "#ffffffShoots very powerful lasers that can break any block / part.\n\nType - Laser\nAuto-reloading - yes\nReload time: 4 ticks",
+		"keywords": ["Cannons Pack","cannon","laser","weapon"]
+	},
 	"04c1c87f-da87-4f5e-8d70-1ca452314728": {
 		"title": "Rocket Launcher",
 		"description": "#ffffffShoots powerful but slow rockets.\n\nType - Rocket launcher\nAuto-reloading - yes\nReload time: 3 seconds.",

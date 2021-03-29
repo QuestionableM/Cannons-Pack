@@ -452,5 +452,20 @@
 		"effectList":[
 			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.25},"parameters":["color","radius","intensity"],"delay":0.0}
 		]
+	},
+	"LaserCannon - Shoot":{
+		"maxInstances":64,"parameterList":{"color":"ffff00","radius":0.0,"intensity":0.0,"shakeStrength":0.0,"shakeRadius":0.0},
+		"parameterCurves":{
+			"radius":{"timeline":[{"time":0.02,"value":1.0},{"time":0.3,"value":0.0}]},
+			"intensity":{"timeline":[{"time":0.02,"value":2.0},{"time":0.3,"value":0.0}]},
+			"shakeStrength":{"timeline":[{"time":0.02,"value":0.05},{"time":0.3,"value":0.0}]},
+			"shakeRadius":{"timeline":[{"time":0.02,"value":1.0},{"time":0.3,"value":0.0}]}
+		},
+		"effectList":[
+			{"type":"audio","name":"PotatoRifle - Shoot","offset":{"x":0.0,"y":0.0,"z":0.6},"delay":0.0,"duration":0.35},
+			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":0.6},"parameters":["shakeStrength","shakeRadius"],"duration":0.3,"delay":0.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.6},"parameters":["color","radius","intensity"],"duration":0.3,"delay":0.0},
+			{"type":"particle","name":"LaserCannonMuzzleFlash","offset":{"x":0.0,"y":0.0,"z":0.75},"attached":true,"delay":0.0,"duration":0.5}
+		]
 	}
 }

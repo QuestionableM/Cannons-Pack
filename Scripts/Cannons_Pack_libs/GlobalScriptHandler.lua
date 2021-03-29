@@ -27,13 +27,13 @@ end
 function GLOBAL_SCRIPT.client_injectScript(scriptClass, script)
     if script then
         if GLOBAL_SCRIPT_TABLE.SCRIPTS[script] == nil then
-            if _G[script] then
-                GLOBAL_SCRIPT_TABLE.SCRIPTS[script] = _G[script]
-                _G[script].scriptType = script
-                _G[script].network = scriptClass.network
-                print("[CannonsPack] Script class \""..script.."\" has been added!")
+            if CP.g_script[script] then
+                GLOBAL_SCRIPT_TABLE.SCRIPTS[script] = CP.g_script[script]
+                CP.g_script[script].scriptType = script
+                CP.g_script[script].network = scriptClass.network
+                CP.print("Script class \""..script.."\" has been added!")
             else
-                print("[CannonsPack] Script class \""..script.."\" doesn't exist!")
+                CP.print("Script class \""..script.."\" doesn't exist!")
                 return
             end
         end
@@ -81,7 +81,7 @@ function GLOBAL_SCRIPT.client_injectScript(scriptClass, script)
         end
 
         if GLOBAL_SCRIPT_TABLE.GLOBAL_INFO.executors == 0 and GLOBAL_SCRIPT_TABLE.GLOBAL_INFO.GS_ready then
-            print("[CannonsPack] Global Script: shutting down...")
+            CP.print("Global Script: shutting down...")
             for k, script in pairs(GLOBAL_SCRIPT_TABLE.SCRIPTS) do
                 if script.client_onDestroy then script:client_onDestroy() end
             end
@@ -90,21 +90,25 @@ function GLOBAL_SCRIPT.client_injectScript(scriptClass, script)
     end
 
     function scriptClass.client_networkCallBack(self, data)
-        if _G[data.script] then
-            if _G[data.script][data.location] then
-                _G[data.script][data.location](_G[data.script], self, data.data)
+        local _CurScript = CP.g_script[data.script]
+        if _CurScript then
+            local _CurCallback = _CurScript[data.location]
+            if _CurCallback then
+                _CurCallback(_CurScript, self, data.data)
             else
-                print("[CannonsPack] Callback \""..data.location.."\" doesn't exist!")
+                CP.print("Callback \""..data.location.."\" doesn't exist!")
             end
         end
     end
 
     function scriptClass.server_networkCallBack(self, data)
-        if _G[data.script] then
-            if _G[data.script][data.location] then
-                _G[data.script][data.location](_G[data.script], self, data.data)
+        local _CurScript = CP.g_script[data.script]
+        if _CurScript then
+            local _CurCallback = _CurScript[data.location]
+            if _CurCallback then
+                _CurCallback(_CurScript, self, data.data)
             else
-                print("[CannonsPack] Callback \""..data.location.."\" doesn't exist!")
+                CP.print("Callback \""..data.location.."\" doesn't exist!")
             end
         end
     end
@@ -121,22 +125,22 @@ end
 function GLOBAL_SCRIPT.GS_sendToServer(self, location, data)
     if self.network and self.scriptType then
         local success, error = pcall(self.network.sendToServer, self.network, "server_networkCallBack", {script = self.scriptType, location = location, data = data})
-        if success == false then
+        if not success then
             DISPLAY_NETWORK_ERROR(self.scriptType, location, error, "CLIENT")
         end
     else
-        print("[CannonsPack] couldn't send the data to server\nDebug info: network =",self.network,"script type =",self.scriptType)
+        CP.print("Couldn't send the data to server\nDebug info: network =",self.network,"script type =",self.scriptType)
     end
 end
 
 function GLOBAL_SCRIPT.GS_sendToClients(self, location, data)
     if self.network and self.scriptType then
         local success, error = pcall(self.network.sendToClients, self.network, "client_networkCallBack", {script = self.scriptType, location = location, data = data})
-        if success == false then
+        if not success then
             DISPLAY_NETWORK_ERROR(self.scriptType, location, error, "SERVER")
         end
     else
-        print("[CannonsPack] couldn't send the data to clients\nDebug info: network =",self.network,"script type =",self.scriptType)
+        CP.print("Couldn't send the data to clients\nDebug info: network =",self.network,"script type =",self.scriptType)
     end
 end
 
@@ -146,14 +150,16 @@ function GLOBAL_SCRIPT.GS_init(instance)
     if position.x ~= 0 and position.y ~= 0 and position.z ~= 10000 then
         sm.shape.createPart(instance.shape.uuid, sm.vec3.new(0, 0, 10000), sm.quat.identity(), false, false)
     end
-    print("[CannonsPack] Global Script initialized")
+    CP.print("Global Script initialized")
     GLOBAL_SCRIPT_TABLE.GLOBAL_INFO.GS_ready = true
 end
 
 function GLOBAL_SCRIPT.updateScript(script)
-    if GLOBAL_SCRIPT_TABLE.SCRIPTS[script] ~= nil then
-        GLOBAL_SCRIPT_TABLE.SCRIPTS[script] = _G[script]
-        _G[script].scriptType = script
+    if GLOBAL_SCRIPT_TABLE.SCRIPTS[script] then
+        GLOBAL_SCRIPT_TABLE.SCRIPTS[script] = CP.g_script[script]
+        CP.g_script[script].scriptType = script
+        CP.print(script..": update")
     end
 end
+
 print("[CannonsPack] Global Script has been loaded!")

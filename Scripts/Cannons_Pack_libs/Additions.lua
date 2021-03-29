@@ -371,7 +371,6 @@ local cannon_settings = {
             dot_highlight = 0xf5f500ff,
             effect_distance = 150
         }
-        
     },
     ["388ccd57-1be9-40cc-b96b-69dd16eb4f32"] = { --TankCannon3
         server_settings = {
@@ -401,7 +400,6 @@ local cannon_settings = {
             dot_highlight = 0xff6700ff,
             effect_distance = 150
         }
-        
     },
     ["5164495e-b681-4647-b622-031317e6f6b4"] = { --ShellEjector
         proj_config = {
@@ -429,6 +427,31 @@ local cannon_settings = {
             ["BigCannonCase"] = {collision = 4},
             ["AircraftCannon - Case"] = {collision = 2}
         }
+    },
+    ["0d30954b-4f81-4e4b-99c6-cbdef5eb6c76"] = { --LaserCannon
+        script_type = "LaserProjectile",
+        server_settings = {
+            proj_config = {
+                position = sm.vec3.new(0, 0, 0.6),
+                velocity = sm.vec3.new(0, 0, 250),
+                shellEffect = "LaserCannon - Shell",
+                lifetime = 10
+            },
+            cannon_config = {
+                impulse_dir = sm.vec3.new(0, 0, -1),
+                auto_reload = true,
+                impulse_str = 6000,
+                velocity = 250,
+                spread = 3,
+                reload = 4,
+                rld_sound = 30
+            }
+        },
+        client_settings = {
+            dot_normal = 0xcc5200ff,
+            dot_highlight = 0xff6700ff,
+            effect_distance = 150
+        }
     }
 }
 
@@ -442,7 +465,7 @@ function CP_Cannons.load_cannon_info(self)
 
         return _ConstructedTable
     else
-        CP.console_print(("Cannon \"%s\" doesn't exist in the database!"):format(obj_uuid))
+        CP.print(("Cannon \"%s\" doesn't exist in the database!"):format(obj_uuid))
     end
 end
 
@@ -453,10 +476,11 @@ function CP_Cannons.server_load_CannonInfo(self)
     if _CSettings and _CSettings.server_settings then
         local _ConstructedTable = {}
         for k, v in pairs(_CSettings.server_settings) do _ConstructedTable[k] = v end
+        _ConstructedTable.t_script = _CSettings.script_type or "CPProjectile"
 
         return _ConstructedTable
     else
-        CP.console_print(("Cannon \"%s\" doesn't have any server info!"):format(obj_uuid))
+        CP.print(("Cannon \"%s\" doesn't have any server info!"):format(obj_uuid))
     end
 end
 
@@ -467,10 +491,11 @@ function CP_Cannons.client_load_CannonInfo(self)
     if _CSettings and _CSettings.client_settings then
         local _ConstructedTable = {}
         for k, v in pairs(_CSettings.client_settings) do _ConstructedTable[k] = v end
+        _ConstructedTable.t_script = _CSettings.script_type or "CPProjectile"
 
         return _ConstructedTable
     else
-        CP.console_print(("Cannon \"%s\" doesn't have any client info!"):format(obj_uuid))
+        CP.print(("Cannon \"%s\" doesn't have any client info!"):format(obj_uuid))
     end
 end
 
@@ -496,6 +521,7 @@ local cannon_effects = {
     ["35203ea3-8cc8-4ec9-9a26-c62c6eb5544d"] = {rld = "Reloading", sht_snd = "NumberLogicCannon - Shoot", sht = "SmartCannon - MuzzleFlash1"}, --SmartCannon
     ["2bcd658f-6344-4e37-9fb5-ced1e2249c7b"] = {rld = "Reloading", pnt = "OrbitalCannon - Point", err = "OrbitalCannon - Error"}, --OrbitalCannon
     ["b86bc11c-8922-47c2-b5bc-e184d3378a81"] = {sht = "FlareCannon - Shoot", rld = "Reloading"}, --FlareLauncher
+    ["0d30954b-4f81-4e4b-99c6-cbdef5eb6c76"] = {sht = "LaserCannon - Shoot"}
 }
 
 function CP_Effects.client_loadEffect(self)
@@ -510,7 +536,7 @@ function CP_Effects.client_loadEffect(self)
                 if success then
                     effect_set[id] = eff
                 else
-                    CP.console_print("Couldn't load an effect. Error message: "..eff)
+                    CP.print("Couldn't load an effect. Error message: "..eff)
                 end
             end
             return effect_set
@@ -519,15 +545,20 @@ function CP_Effects.client_loadEffect(self)
             if success then
                 return eff
             else
-                CP.console_print("Couldn't load an effect. Error message: "..eff)
+                CP.print("Couldn't load an effect. Error message: "..eff)
             end
         end
     else
-        CP.console_print(("A set of effects for object \"%s\" doesn't exist!"):format(self.shape.uuid))
+        CP.print(("A set of effects for object \"%s\" doesn't exist!"):format(self.shape.uuid))
     end
 end
 
-CP = class()
+if not CP then
+    CP = class()
+    CP.g_script = {}
+end
+
+function CP.print(...) print("[CannonsPack]", ...) end
 
 local _pi = math.pi
 local _2pi = math.pi * 2
@@ -625,18 +656,13 @@ function CP.info_output(sound, globalSound, text, duration)
 	if text then sm.gui.displayAlertText(text,duration or 3) end
 end
 
-function CP.console_print(text) print(("[CannonsPack] %s"):format(text)) end
-
-local _GETALLUNITS_FUNCTION = function() return {} end
+function CP.get_all_units() return {} end
 if sm.unit then
     if sm.unit.getAllUnits then
-        _GETALLUNITS_FUNCTION = sm.unit.getAllUnits
+        CP.get_all_units = sm.unit.getAllUnits
     elseif sm.unit.HACK_getAllUnits_HACK then
-        _GETALLUNITS_FUNCTION = sm.unit.HACK_getAllUnits_HACK
+        CP.get_all_units = sm.unit.HACK_getAllUnits_HACK
     end
-end
-function CP.get_all_units()
-    return _GETALLUNITS_FUNCTION()
 end
 
 CP_Projectile = class()

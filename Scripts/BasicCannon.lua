@@ -15,13 +15,14 @@ BasicCannon.colorHighlight = sm.color.new(0xff6e00ff)
 function BasicCannon:client_onCreate()
     self.client_settings = CP_Cannons.client_load_CannonInfo(self)
     self.effects = CP_Effects.client_loadEffect(self)
-    self:client_injectScript("CPProjectile")
+    self:client_injectScript(self.client_settings.t_script)
 end
 function BasicCannon:server_onCreate()
     self:GS_init()
     local settings = CP_Cannons.server_load_CannonInfo(self)
     self.projectileConfig = settings.proj_config
     self.settings = settings.cannon_config
+    self.settings.t_script = settings.t_script
 end
 function BasicCannon:server_onFixedUpdate()
     if not sm.exists(self.interactable) then return end
@@ -34,7 +35,7 @@ function BasicCannon:server_onFixedUpdate()
     if active and not self.reload then
         self.reload = CP.Shoot(self, self.settings.reload, "client_shoot", "sht", self.settings.impulse_dir, self.settings.impulse_str)
         self.projectileConfig.velocity = CP.calculate_spread(self, self.settings.spread, self.settings.velocity)
-        CPProjectile:server_sendProjectile(self, self.projectileConfig)
+        CP.g_script[self.settings.t_script]:server_sendProjectile(self, self.projectileConfig)
         if child then child:setActive(true) end
     end
     if self.reload then

@@ -30,6 +30,10 @@
 		"ShellCaseParticleEffects/GiantCannonCase.json",
 		"ParticleEffects/SmallSmartCannonShell.json",
 		"ParticleEffects/frier_muzzle_effect.json",
-		"ParticleEffects/spudling_muzzle_effect.json"
+		"ParticleEffects/spudling_muzzle_effect.json",
+		"ParticleEffects/LaserCannon/LaserCannonShell.json",
+		"ParticleEffects/LaserCannon/LaserExplosion01.json",
+		"ParticleEffects/LaserCannon/LaserExplosion02.json",
+		"ParticleEffects/LaserCannon/LaserCannonMuzzleFlash.json"
 	]
 }

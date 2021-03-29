@@ -5,11 +5,8 @@
 
 if CPProjectile then return end
 CPProjectile = class(GLOBAL_SCRIPT)
-
 CPProjectile.projectiles = {}
 CPProjectile.proj_queue = {}
-
-if GLOBAL_SCRIPT.updateScript then GLOBAL_SCRIPT.updateScript("CPProjectile") end
 
 function CPProjectile.server_sendProjectile(self, shapeScript, data)
     local localPosition = data.localPosition or false
@@ -35,13 +32,12 @@ end
 
 function CPProjectile.client_loadProjectile(self, shapeScript, data)
     local shape,localPosition,localVelocity,syncEffect,position,velocity,rotationAxis,friction,gravity,shellEffect,explosionEffect,lifetime,explosionLevel,explosionRadius,explosionImpulseRadius,explosionImpulseStrength,proxFuze,ignored_players,keep_effect=unpack(data)
-    if (localPosition or localVelocity) and (shape == nil or not sm.exists(shape)) then CP.console_print("CPProjectile: NO SHAPE") return end
+    if (localPosition or localVelocity) and (shape == nil or not sm.exists(shape)) then CP.print("CPProjectile: NO SHAPE") return end
     if localVelocity then velocity = shape.worldRotation * velocity end
     if localPosition then position = shape.worldPosition + shape.worldRotation * position end
     local success, shellEffect = pcall(sm.effect.createEffect, shellEffect)
     if not success then sm.log.error(shellEffect) return end
     shellEffect:setPosition(position)
-    shellEffect:setVelocity(velocity)
     shellEffect:start()
     local CPProj = {
         effect = shellEffect,
@@ -100,5 +96,8 @@ function CPProjectile.client_onDestroy(self)
     local deleted_projectiles = CP_Projectile.client_destroyProjectiles(self.projectiles)
     self.projectiles = {}
     self.proj_queue = {}
-    CP.console_print(("CPProjectile: Deleted %s projectiles"):format(deleted_projectiles))
+    CP.print(("CPProjectile: Deleted %s projectiles"):format(deleted_projectiles))
 end
+
+CP.g_script.CPProjectile = CPProjectile
+if GLOBAL_SCRIPT.updateScript then GLOBAL_SCRIPT.updateScript("CPProjectile") end

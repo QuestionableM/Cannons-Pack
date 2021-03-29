@@ -5,11 +5,8 @@
 
 if FlareProjectile then return end
 FlareProjectile = class(GLOBAL_SCRIPT)
-
 FlareProjectile.projectiles = {}
 FlareProjectile.proj_queue = {}
-
-if GLOBAL_SCRIPT.updateScript then GLOBAL_SCRIPT.updateScript("FlareProjectile") end
 
 function FlareProjectile.server_sendProjectile(self, shapeScript, data)
     local lifetime = data.lifetime
@@ -19,11 +16,10 @@ end
 
 function FlareProjectile.client_loadProjectile(self, shapeScript, data)
     local shape, lifetime, dir = unpack(data)
-    if shape == nil or not sm.exists(shape) then CP.console_print("FlareProjectile: NO SHAPE") return end
+    if shape == nil or not sm.exists(shape) then CP.print("FlareProjectile: NO SHAPE") return end
     local pos = shape.worldPosition + shape.worldRotation * sm.vec3.new(0, 0, 0.2)
     eff = sm.effect.createEffect("FlareLauncher - Shell")
     eff:setPosition(pos)
-    eff:setVelocity(dir)
     eff:start()
     local FlareProj = {effect = eff, pos = pos, dir = dir, alive = lifetime, grav = 5}
     self.projectiles[#self.projectiles + 1] = FlareProj
@@ -61,5 +57,8 @@ function FlareProjectile.client_onDestroy(self)
     local deleted_projectiles = CP_Projectile.client_destroyProjectiles(self.projectiles)
     self.projectiles = {}
     self.proj_queue = {}
-    CP.console_print(("FlareProjectile: Deleted %s projectiles"):format(deleted_projectiles))
+    CP.print(("FlareProjectile: Deleted %s projectiles"):format(deleted_projectiles))
 end
+
+CP.g_script.FlareProjectile = FlareProjectile
+if GLOBAL_SCRIPT.updateScript then GLOBAL_SCRIPT.updateScript("FlareProjectile") end

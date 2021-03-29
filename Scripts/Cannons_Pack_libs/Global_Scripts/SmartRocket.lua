@@ -5,11 +5,8 @@
 
 if SmartRocket then return end
 SmartRocket = class(GLOBAL_SCRIPT)
-
 SmartRocket.projectiles = {}
 SmartRocket.proj_queue = {}
-
-if GLOBAL_SCRIPT.updateScript then GLOBAL_SCRIPT.updateScript("SmartRocket") end
 
 function SmartRocket.server_sendProjectile(self, shapeScript, data)
     local position = data.position
@@ -23,7 +20,7 @@ end
 
 function SmartRocket.client_loadProjectile(self, shapeScript, data)
     local shape, position, direction, rocketSettings, velocity, proxFuze, ignored_players = unpack(data)
-    if (shape == nil or not sm.exists(shape)) then print("[CannonsPack] SmartRocket: NO SHAPE") return end
+    if (shape == nil or not sm.exists(shape)) then CP.print("SmartRocket: NO SHAPE") return end
     local effect = sm.effect.createEffect("RocketLauncher - Shell")
     effect:setPosition(position)
     effect:start()
@@ -205,5 +202,8 @@ function SmartRocket.client_onDestroy(self)
     local deleted_projectiles = CP_Projectile.client_destroyProjectiles(self.projectiles)
     self.projectiles = {}
     self.proj_queue = {}
-    CP.console_print(("SmartRocket: Deleted %s projectiles"):format(deleted_projectiles))
+    CP.print(("SmartRocket: Deleted %s projectiles"):format(deleted_projectiles))
 end
+
+CP.g_script.SmartRocket = SmartRocket
+if GLOBAL_SCRIPT.updateScript then GLOBAL_SCRIPT.updateScript("SmartRocket") end

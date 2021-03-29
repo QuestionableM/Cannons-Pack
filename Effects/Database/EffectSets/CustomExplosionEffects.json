@@ -121,5 +121,19 @@
 			{"type":"audio","name":"event:/amb/3D/electric_spark","delay":0.0},
 			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.5},"parameters":["color","radius","intensity"],"duration":1.0,"delay":0.0}
 		]
+	},
+	"LaserCannon - Explosion":{
+		"maxInstances":64,"parameterList":{},
+		"effectList":[
+			{"type": "audio","name": "event:/char/npc/bots/enemies/farmbot/farmbot_takedamage","delay": 0.0},
+			{"type": "particle","name": "LaserExplosion01","delay": 0.0}
+		]
+	},
+	"LaserCannon - Explosion2":{
+		"maxInstances":64,"parameterList":{},
+		"effectList":[
+			{"type": "audio","name": "event:/char/npc/bots/enemies/tapebot/tapebot_takedamage","delay": 0.0},
+			{"type": "particle","name": "LaserExplosion02","delay": 0.0}
+		]
 	}
 }

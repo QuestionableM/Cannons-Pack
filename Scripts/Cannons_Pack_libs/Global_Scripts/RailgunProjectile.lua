@@ -5,11 +5,8 @@
 
 if RailgunProjectile then return end
 RailgunProjectile = class(GLOBAL_SCRIPT)
-
 RailgunProjectile.projectiles = {}
 RailgunProjectile.proj_queue = {}
-
-if GLOBAL_SCRIPT.updateScript then GLOBAL_SCRIPT.updateScript("RailgunProjectile") end
 
 function RailgunProjectile.server_sendProjectile(self, shapeScript, data)
     local position = data.position
@@ -30,7 +27,6 @@ function RailgunProjectile.client_loadProjectile(self, shapeScript, data)
     local success,shellEffect = pcall(sm.effect.createEffect,shellEffect)
     if not success then sm.log.error(shellEffect) return end
     shellEffect:setPosition(position)
-    shellEffect:setVelocity(velocity)
     shellEffect:start()
     local RlgProj = {
         effect = shellEffect,
@@ -98,5 +94,8 @@ function RailgunProjectile.client_onDestroy(self)
     local deleted_projectiles = CP_Projectile.client_destroyProjectiles(self.projectiles)
     self.projectiles = {}
     self.proj_queue = {}
-    CP.console_print(("RailgunProjectile: Deleted %s projectiles"):format(deleted_projectiles))
+    CP.print(("RailgunProjectile: Deleted %s projectiles"):format(deleted_projectiles))
 end
+
+CP.g_script.RailgunProjectile = RailgunProjectile
+if GLOBAL_SCRIPT.updateScript then GLOBAL_SCRIPT.updateScript("RailgunProjectile") end

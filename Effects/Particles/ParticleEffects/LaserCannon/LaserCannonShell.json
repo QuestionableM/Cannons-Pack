@@ -1,0 +1,35 @@
+{//Credit & Copyright: Brent Batch  /  DO NOT COPY without permission from Brent Batch#9261 (discord)
+	"system":{
+		"emitters":[
+			{
+				"default_mesh_depth":2.0,
+				"default_mesh_height":2.0,
+				"default_mesh_width":2.0,
+				"direction_type":"object",
+				"emission_mode":"loop",
+				"emission_rate":6,
+				"color":{"a":1.0,"b":0.0,"g":0.0,"r":1.0},
+				"glow":false,
+				"guid":0,
+				"hidden":false,
+				"keep_local":true,
+				"material_name":"DifAsgNorNoShadows",
+				"mesh":"Mesh/LaserCannonShell.obj",
+				"mesh_diffuse":"../../Objects/Textures/CP_default_dif.tga",
+				"ASG_map":"../../Objects/Textures/CP_default_asg.tga",
+				"normal_map":"../../Objects/Textures/nonor_nor.tga",
+				"name":"",
+				"particle":"mesh",
+				"rotation_axis":{"x":1.0,"y":-1.0,"z":1.0},
+				"scene_blend":"alpha_blend",
+				"shadows":true,
+				"soft_particles_bias":1024,
+				"time_to_live_delta":0.0,
+				"time_to_live_max":0.30,
+				"time_to_live_min":0.30,
+				"time_to_live_val":0.30,
+				"visual_particle_quota":1001
+		   	}
+		],"scale":1,"scale_time":4,"scale_velocity":0.0,"system_type":"stream","min_quality":"low"
+	}
+}

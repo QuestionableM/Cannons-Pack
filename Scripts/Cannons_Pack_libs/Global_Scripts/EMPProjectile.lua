@@ -5,19 +5,15 @@
 
 if EMPProjectile then return end
 EMPProjectile = class(GLOBAL_SCRIPT)
-
 EMPProjectile.projectiles = {}
 EMPProjectile.proj_queue = {}
 
-if GLOBAL_SCRIPT.updateScript then GLOBAL_SCRIPT.updateScript("EMPProjectile") end
-
 function EMPProjectile.client_loadProjectile(self, shapeScript, data)
     local shape,position,velocity,disconnectRadius = unpack(data)
-    if shape == nil or not sm.exists(shape) then CP.console_print("EMPProjectile: NO SHAPE") return end
+    if shape == nil or not sm.exists(shape) then CP.print("EMPProjectile: NO SHAPE") return end
     local realPos = shape.worldPosition + shape.worldRotation * position
     local eff = sm.effect.createEffect("EMPCannon - Shell")
     eff:setPosition(realPos)
-    eff:setVelocity(velocity)
     eff:start()
     local EMPProj = {effect = eff, pos = realPos, dir = velocity, alive = 10, disconnectRadius = disconnectRadius}
     self.projectiles[#self.projectiles + 1] = EMPProj
@@ -73,5 +69,8 @@ function EMPProjectile.client_onDestroy(self)
     local deleted_projectiles = CP_Projectile.client_destroyProjectiles(self.projectiles)
     self.projectiles = {}
     self.proj_queue = {}
-    CP.console_print(("EMPProjectile: Deleted %s projectiles"):format(deleted_projectiles))
+    CP.print(("EMPProjectile: Deleted %s projectiles"):format(deleted_projectiles))
 end
+
+CP.g_script.EMPProjectile = EMPProjectile
+if GLOBAL_SCRIPT.updateScript then GLOBAL_SCRIPT.updateScript("EMPProjectile") end

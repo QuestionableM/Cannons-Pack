@@ -149,6 +149,39 @@
 			"qualityLevel":5
 		},
 		{
+			"uuid":"0d30954b-4f81-4e4b-99c6-cbdef5eb6c76",
+			"renderable":{
+                "lodList":[
+                    {
+                        "subMeshList":[
+                            {
+                                "textureList":[
+                                    "$MOD_DATA/Objects/Textures/CP_default_dif.tga",
+									"$MOD_DATA/Objects/Textures/CP_default_asg.tga",
+									"$MOD_DATA/Objects/Textures/nonor_nor.tga"
+								],
+								"material":"DifAsgNor"
+                            }
+						],
+						"mesh":"$MOD_DATA/Objects/Mesh/LaserCannon.obj"
+                    }
+                ]
+			},
+			"scripted":{
+				"filename":"$MOD_DATA/Scripts/BasicCannon.lua",
+				"classname":"BasicCannon"
+			},
+			"rotationSet":"PropZ",
+			"color":"375000",
+			"sticky":"-Z",
+			"cylinder":{"diameter":1,"depth":5,"axis":"Z"},
+			"ratings":{"density":2,"durability":5,"friction":5,"buoyancy":0},
+			"flammable":false,
+			"density":500.0,
+			"physicsMaterial":"Metal",
+			"qualityLevel":5
+		},
+		{
 			"uuid":"04c1c87f-da87-4f5e-8d70-1ca452314728",
 			"renderable":{
                 "lodList":[

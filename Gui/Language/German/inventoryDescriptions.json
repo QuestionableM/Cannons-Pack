@@ -11,13 +11,18 @@
 	},
 	"bc8178a9-8a38-4c43-a0d0-8a0f242a59c7": {
 		"title": "Panzerkanone",
-		"description": "#ffffffVerschießt starke Hochexplosivgranaten.\n\nTyp - Kanone\nläd automatisch nach - no\nNachladezeit: 4 Sekunden.",
+		"description": "#ffffffVerschießt starke Hochexplosivgranaten.\n\nTyp - Kanone\nläd automatisch nach - nein\nNachladezeit: 4 Sekunden.",
 		"keywords": ["Cannons Pack","Kanone","medium","Waffe"]
 	},
 	"4295196d-cbd6-40c6-badc-ff9011208ad5": {
 		"title": "Panzerkanone 2",
 		"description": "#ffffffVerschießt starke Hochexplosivgranaten.\n\nTyp - Kanone\nläd automatisch nach - nein\nNachladezeit: 4 Sekunden.",
 		"keywords": ["Cannons Pack","Kanone","medium","Waffe"]
+	},
+	"0d30954b-4f81-4e4b-99c6-cbdef5eb6c76": {
+		"title": "Laserkanone",
+		"description": "#ffffffSchießt sehr starke Laserstrahlen, welche jede Art von Blöcken zerstören kann.\n\nTyp - Laser\nAuto-Nachladung - ja\nNachladezeit: 4 Ticks",
+		"keywords": ["Cannons Pack","Kanone","Laser","Waffe"]
 	},
 	"04c1c87f-da87-4f5e-8d70-1ca452314728": {
 		"title": "Raketenwerfer",

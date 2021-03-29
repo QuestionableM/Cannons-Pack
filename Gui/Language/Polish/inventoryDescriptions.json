@@ -19,6 +19,11 @@
 		"description": "#ffffffStrzela mocnymi pociskami.\n\nTyp - Armata\nAutomatyczne przeładowanie - nie\nCzas przeładowania: 4 sekundy.",
 		"keywords": ["Cannons Pack","działo","średni","broń"]
 	},
+	"0d30954b-4f81-4e4b-99c6-cbdef5eb6c76": {
+		"title": "Działko Laserowe",
+		"description": "#ffffffStrzela potężnym laserem który niszczy KAŻDY blok.\n\nTyp - Laser\nAutomatyczne przeładowanie - tak\nCzas przeładowania: 4 ticki",
+		"keywords": ["Cannons Pack","działo","laser","broń"]
+	},
 	"04c1c87f-da87-4f5e-8d70-1ca452314728": {
 		"title": "Wyrzutnia Rakiet",
 		"description": "#fffffStrzela mocnymi ale powolnymi rakietami.\n\nTyp - Wyrzutnia rakiet\nAutomatyczne przeładowanie - tak\nCzas przeładowania: 3 sekundy.",

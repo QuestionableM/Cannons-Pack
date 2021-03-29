@@ -8,8 +8,6 @@ BulletShell = class(GLOBAL_SCRIPT)
 BulletShell.projectiles = {}
 BulletShell.proj_queue = {}
 
-if GLOBAL_SCRIPT.updateScript then GLOBAL_SCRIPT.updateScript("BulletShell") end
-
 function BulletShell.server_sendProjectile(self, shapeScript, data)
     local position = data.position or sm.vec3.new(0, 0, 0)
     local velocity = data.velocity or sm.vec3.new(0, 0, 1)
@@ -23,7 +21,7 @@ end
 
 function BulletShell.client_loadProjectile(self, shapeScript, data)
     local shape, position, velocity, friction, gravity, lifetime, shellEffect, collision_size = unpack(data)
-    if (shape == nil or not sm.exists(shape)) then CP.console_print("BulletShell: NO SHAPE") return end
+    if (shape == nil or not sm.exists(shape)) then CP.print("BulletShell: NO SHAPE") return end
     local success, effect = pcall(sm.effect.createEffect, shellEffect)
     if not success then sm.log.error("[CannonsPack] ERROR:\n"..effect) return end
     local offset_position = shape.worldPosition + shape.worldRotation * position
@@ -113,5 +111,8 @@ function BulletShell.client_onDestroy(self)
     local deleted_projectiles = CP_Projectile.client_destroyProjectiles(self.projectiles)
     self.projectiles = {}
     self.proj_queue = {}
-    CP.console_print(("BulletShell: Deleted %s shells"):format(deleted_projectiles))
+    CP.print(("BulletShell: Deleted %s shells"):format(deleted_projectiles))
 end
+
+CP.g_script.BulletShell = BulletShell
+if GLOBAL_SCRIPT.updateScript then GLOBAL_SCRIPT.updateScript("BulletShell") end
