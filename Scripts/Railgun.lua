@@ -19,7 +19,6 @@ function Railgun:client_onCreate()
 	self.constant = 0.4285714285714286
 end
 function Railgun:server_onCreate()
-	self:GS_init()
 	self.projectileConfiguration = CP_Cannons.load_cannon_info(self)
 end
 function Railgun:client_uvAnim(data)

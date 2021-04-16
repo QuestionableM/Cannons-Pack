@@ -30,7 +30,7 @@ function CPProjectile.server_sendProjectile(self, shapeScript, data)
     table.insert(self.proj_queue,{shapeScript.shape,localPosition,localVelocity,syncEffect,position,velocity,rotationAxis,friction,gravity,shellEffect,explosionEffect,lifetime,explosionLevel,explosionRadius,explosionImpulseRadius,explosionImpulseStrength,proxFuze,ignored_players,keep_effect})
 end
 
-function CPProjectile.client_loadProjectile(self, shapeScript, data)
+function CPProjectile.client_loadProjectile(self, data)
     local shape,localPosition,localVelocity,syncEffect,position,velocity,rotationAxis,friction,gravity,shellEffect,explosionEffect,lifetime,explosionLevel,explosionRadius,explosionImpulseRadius,explosionImpulseStrength,proxFuze,ignored_players,keep_effect=unpack(data)
     if (localPosition or localVelocity) and (shape == nil or not sm.exists(shape)) then CP.print("CPProjectile: NO SHAPE") return end
     if localVelocity then velocity = shape.worldRotation * velocity end
@@ -60,9 +60,9 @@ function CPProjectile.client_loadProjectile(self, shapeScript, data)
     self.projectiles[#self.projectiles + 1] = CPProj
 end
 
-function CPProjectile.server_updateProjectile(self, dt)
+function CPProjectile.server_onScriptUpdate(self, dt)
     for b, data in pairs(self.proj_queue) do
-        self:GS_sendToClients("client_loadProjectile", data)
+        self.network:sendToClients("client_loadProjectile", data)
         self.proj_queue[b] = nil
     end
     for k,CPProj in pairs(self.projectiles) do
@@ -72,32 +72,36 @@ function CPProjectile.server_updateProjectile(self, dt)
     end
 end
 
-function CPProjectile.client_updateProjectile(self, dt)
+local _PhysicsRaycast = sm.physics.raycast
+local _Vec3Zero = sm.vec3.zero
+local _ProxFuze = CP_Projectile.client_proximity_fuze
+local _Vec3GetRotation = sm.vec3.getRotation
+
+function CPProjectile.client_onScriptUpdate(self, dt)
     for k, CPProj in pairs(self.projectiles) do
         if CPProj and CPProj.hit then self.projectiles[k] = nil end
         if CPProj and not CPProj.hit then
             CPProj.alive = CPProj.alive - dt
             CPProj.dir = CPProj.dir * (1 - CPProj.friction) - sm.vec3.new(0, 0, CPProj.grav * dt)
-            local hit, result = sm.physics.raycast(CPProj.pos, CPProj.pos + CPProj.dir * dt * 1.2)
-            if hit or CPProj.alive <= 0 or CP_Projectile.client_proximity_fuze(CPProj.proxFuze, CPProj.pos, CPProj.ignored_players) then
-                CPProj.hit = (result.pointWorld ~= sm.vec3.zero() and result.pointWorld) or CPProj.pos
+            local hit, result = _PhysicsRaycast(CPProj.pos, CPProj.pos + CPProj.dir * dt * 1.2)
+            if hit or CPProj.alive <= 0 or _ProxFuze(CPProj.proxFuze, CPProj.pos, CPProj.ignored_players) then
+                CPProj.hit = (result.pointWorld ~= _Vec3Zero() and result.pointWorld) or CPProj.pos
                 CP_Projectile.client_onProjHit(CPProj.effect, CPProj.keep_effect)
             end
             if CPProj.syncEffect then CPProj.effect:setPosition(CPProj.pos) end
             CPProj.pos = CPProj.pos + CPProj.dir * dt
             if CPProj.dir:length() > 0.0001 then
-                CPProj.effect:setRotation(sm.vec3.getRotation(CPProj.rotationAxis, CPProj.dir))
+                CPProj.effect:setRotation(_Vec3GetRotation(CPProj.rotationAxis, CPProj.dir))
             end
         end
     end
 end
 
-function CPProjectile.client_onDestroy(self)
+function CPProjectile.client_onScriptDestroy(self)
     local deleted_projectiles = CP_Projectile.client_destroyProjectiles(self.projectiles)
-    self.projectiles = {}
-    self.proj_queue = {}
+    CPProjectile.projectiles = {}
+    CPProjectile.proj_queue = {}
     CP.print(("CPProjectile: Deleted %s projectiles"):format(deleted_projectiles))
 end
 
 CP.g_script.CPProjectile = CPProjectile
-if GLOBAL_SCRIPT.updateScript then GLOBAL_SCRIPT.updateScript("CPProjectile") end

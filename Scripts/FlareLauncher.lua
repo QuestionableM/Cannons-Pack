@@ -13,7 +13,6 @@ flare.connectionOutput = sm.interactable.connectionType.none
 flare.colorNormal = sm.color.new(0x000396ff)
 flare.colorHighlight = sm.color.new(0x0004c7ff)
 function flare:server_onCreate()
-    self:GS_init()
     self.o = {bulPerShot = 6}
     self.projectileConfiguration = CP_Cannons.load_cannon_info(self)
 end

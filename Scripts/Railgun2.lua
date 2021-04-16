@@ -18,7 +18,6 @@ function Railgun2:client_onCreate()
 	self.uv = {pitch = 0, speed = 0, anim = 0}
 end
 function Railgun2:server_onCreate()
-	self:GS_init()
 	self.projectileConfiguration = CP_Cannons.load_cannon_info(self)
 end
 function Railgun2:client_uvAnim(data) self.uv.fdp = data end

@@ -8,7 +8,7 @@ EMPProjectile = class(GLOBAL_SCRIPT)
 EMPProjectile.projectiles = {}
 EMPProjectile.proj_queue = {}
 
-function EMPProjectile.client_loadProjectile(self, shapeScript, data)
+function EMPProjectile.client_loadProjectile(self, data)
     local shape,position,velocity,disconnectRadius = unpack(data)
     if shape == nil or not sm.exists(shape) then CP.print("EMPProjectile: NO SHAPE") return end
     local realPos = shape.worldPosition + shape.worldRotation * position
@@ -26,9 +26,9 @@ function EMPProjectile.server_sendProjectile(self, shapeScript, data)
     table.insert(self.proj_queue, {shapeScript.shape, position, velocity, disconnectRadius})
 end
 
-function EMPProjectile.server_updateProjectile(self, dt)
+function EMPProjectile.server_onScriptUpdate(self, dt)
     for b, data in pairs(self.proj_queue) do
-        self:GS_sendToClients("client_loadProjectile", data)
+        self.network:sendToClients("client_loadProjectile", data)
         self.proj_queue[b] = nil
     end
     for k,EMPProjectile in pairs(self.projectiles) do
@@ -46,14 +46,17 @@ function EMPProjectile.server_updateProjectile(self, dt)
     end
 end
 
-function EMPProjectile.client_updateProjectile(self, dt)
+local _PhysicsRaycast = sm.physics.raycast
+local _Vec3Zero = sm.vec3.zero
+
+function EMPProjectile.client_onScriptUpdate(self, dt)
     for k,EMPProj in pairs(self.projectiles) do
         if EMPProj and EMPProj.hit then self.projectiles[k] = nil end
         if EMPProj and not EMPProj.hit then
             EMPProj.alive = EMPProj.alive - dt
-            local hit,result = sm.physics.raycast(EMPProj.pos, EMPProj.pos + EMPProj.dir * dt * 1.2)
+            local hit,result = _PhysicsRaycast(EMPProj.pos, EMPProj.pos + EMPProj.dir * dt * 1.2)
             if hit or EMPProj.alive <= 0 then
-                EMPProj.hit = (result.pointWorld ~= sm.vec3.zero() and result.pointWorld) or EMPProj.pos
+                EMPProj.hit = (result.pointWorld ~= _Vec3Zero() and result.pointWorld) or EMPProj.pos
                 CP_Projectile.client_onProjHit(EMPProj.effect)
             end
             EMPProj.pos = EMPProj.pos + EMPProj.dir * dt
@@ -65,12 +68,11 @@ function EMPProjectile.client_updateProjectile(self, dt)
     end
 end
 
-function EMPProjectile.client_onDestroy(self)
+function EMPProjectile.client_onScriptDestroy(self)
     local deleted_projectiles = CP_Projectile.client_destroyProjectiles(self.projectiles)
-    self.projectiles = {}
-    self.proj_queue = {}
+    EMPProjectile.projectiles = {}
+    EMPProjectile.proj_queue = {}
     CP.print(("EMPProjectile: Deleted %s projectiles"):format(deleted_projectiles))
 end
 
 CP.g_script.EMPProjectile = EMPProjectile
-if GLOBAL_SCRIPT.updateScript then GLOBAL_SCRIPT.updateScript("EMPProjectile") end

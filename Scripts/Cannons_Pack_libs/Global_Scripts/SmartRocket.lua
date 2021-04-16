@@ -18,7 +18,7 @@ function SmartRocket.server_sendProjectile(self, shapeScript, data)
     table.insert(self.proj_queue,{shapeScript.shape,position,direction,rocketSettings,velocity,proxFuze,ignored_players})
 end
 
-function SmartRocket.client_loadProjectile(self, shapeScript, data)
+function SmartRocket.client_loadProjectile(self, data)
     local shape, position, direction, rocketSettings, velocity, proxFuze, ignored_players = unpack(data)
     if (shape == nil or not sm.exists(shape)) then CP.print("SmartRocket: NO SHAPE") return end
     local effect = sm.effect.createEffect("RocketLauncher - Shell")
@@ -39,9 +39,9 @@ function SmartRocket.client_loadProjectile(self, shapeScript, data)
     self.projectiles[#self.projectiles + 1] = rocket
 end
 
-function SmartRocket.server_updateProjectile(self, dt)
+function SmartRocket.server_onScriptUpdate(self, dt)
     for k, data in pairs(self.proj_queue) do
-        self:GS_sendToClients("client_loadProjectile", data)
+        self.network:sendToClients("client_loadProjectile", data)
         self.proj_queue[k] = nil
     end
     for b, proj in pairs(self.projectiles) do
@@ -86,7 +86,14 @@ local function pickATarget(rocket_pos, player, flare, playerVisible)
     end
 end
 
-function SmartRocket.client_updateProjectile(self, dt)
+local _Vec3Lerp = sm.vec3.lerp
+local _GetCurTick = sm.game.getCurrentTick
+local _Vec3GetRotation = sm.vec3.getRotation
+local _QuatAngleAxis = sm.quat.angleAxis
+local _PhysicsRaycast = sm.physics.raycast
+local _Random = math.random
+
+function SmartRocket.client_onScriptUpdate(self, dt)
     for k, rocket in pairs(self.projectiles) do
         if rocket and rocket.hit then self.projectiles[k] = nil end
         if rocket and not rocket.hit then
@@ -121,7 +128,7 @@ function SmartRocket.client_updateProjectile(self, dt)
                                         end
                                     end
                                 else
-                                    local bool, cam = sm.physics.raycast(player.character.worldPosition + sm.vec3.new(0, 0, player.character:isCrouching() and 0.277 or 0.569) + player.character.direction, player.character.worldPosition + player.character.direction * 2500)
+                                    local bool, cam = _PhysicsRaycast(player.character.worldPosition + sm.vec3.new(0, 0, player.character:isCrouching() and 0.277 or 0.569) + player.character.direction, player.character.worldPosition + player.character.direction * 2500)
                                     if rocket.options.mode ~= "dirCam" then
                                         if ((valid and valid2) and cam:getBody() ~= rocket.shape.body) and cam:getCharacter() ~= player.id then
                                             position = cam.pointWorld
@@ -161,29 +168,29 @@ function SmartRocket.client_updateProjectile(self, dt)
                 local _NewDir = (position - rocket.pos):normalize()
                 local _DirNorm = rocket.dir:normalize()
                 if not camera then
-                    local hit1, result1 = sm.physics.raycast(rocket.pos, rocket.pos + (rocket.dir / 1.5))
+                    local hit1, result1 = _PhysicsRaycast(rocket.pos, rocket.pos + (rocket.dir / 1.5))
                     if hit1 and result1.type == "terrainAsset" or result1.type == "terrainSurface" or ((valid and valid2) and result1.type == "body" and result1:getBody() == rocket.shape.body) then
                         local _normal = result1.normalWorld
                         local _dotP = rocket.dir:dot(_normal)
                         local reflected_vector = rocket.dir - (_normal * _dotP)
-                        rocket.dir = sm.vec3.lerp(_DirNorm, reflected_vector, 0.01):normalize() * rocket.vel
+                        rocket.dir = _Vec3Lerp(_DirNorm, reflected_vector, 0.01):normalize() * rocket.vel
                     else
-                        rocket.dir = sm.vec3.lerp(_DirNorm, _NewDir, _Accuracy):normalize() * rocket.vel
+                        rocket.dir = _Vec3Lerp(_DirNorm, _NewDir, _Accuracy):normalize() * rocket.vel
                     end
                 else
-                    rocket.dir = sm.vec3.lerp(_DirNorm, _NewDir, 0.08):normalize() * rocket.vel
+                    rocket.dir = _Vec3Lerp(_DirNorm, _NewDir, 0.08):normalize() * rocket.vel
                 end
             end
             if rocket.dir:length() > rocket.vel and camera then
                 rocket.vel = rocket.vel * 0.998
             end
             if rocket.dir:length() > 0.0001 then
-                local _RocketDir = sm.vec3.getRotation(sm.vec3.new(1, 0, 0), rocket.dir)
-                local _RotSpeed = (sm.game.getCurrentTick() * 5) % 360
-                local _RocketRot = sm.quat.angleAxis(math.rad(_RotSpeed), sm.vec3.new(1, 0, 0))
+                local _RocketDir = _Vec3GetRotation(sm.vec3.new(1, 0, 0), rocket.dir)
+                local _RotSpeed = (_GetCurTick() * 5) % 360
+                local _RocketRot = _QuatAngleAxis(math.rad(_RotSpeed), sm.vec3.new(1, 0, 0))
                 rocket.effect:setRotation(_RocketDir * _RocketRot)
             end
-            local hit, result = sm.physics.raycast(rocket.pos, rocket.pos + rocket.dir * dt * 1.2)
+            local hit, result = _PhysicsRaycast(rocket.pos, rocket.pos + rocket.dir * dt * 1.2)
             if hit or rocket.alive <= 0 or (rocket.flar == "char" and distance < 1) or (rocket.flar == "flare" and distance < 8) or (camera and distance < 1) or CP_Projectile.client_proximity_fuze(rocket.proxFuze, rocket.pos, rocket.ignored_players) then
                 rocket.hit = (result.pointWorld ~= sm.vec3.zero() and result.pointWorld) or rocket.pos
                 
@@ -192,18 +199,17 @@ function SmartRocket.client_updateProjectile(self, dt)
             end
             rocket.pos = rocket.pos + rocket.dir * dt
             rocket.effect:setPosition(rocket.pos)
-            rocket.effect:setParameter("intensity", math.random(150, 230) / 100)
+            rocket.effect:setParameter("intensity", _Random(150, 230) / 100)
             rocket.effect:setParameter("velocity", rocket.dir:length())
         end
     end
 end
 
-function SmartRocket.client_onDestroy(self)
+function SmartRocket.client_onScriptDestroy(self)
     local deleted_projectiles = CP_Projectile.client_destroyProjectiles(self.projectiles)
-    self.projectiles = {}
-    self.proj_queue = {}
+    SmartRocket.projectiles = {}
+    SmartRocket.proj_queue = {}
     CP.print(("SmartRocket: Deleted %s projectiles"):format(deleted_projectiles))
 end
 
 CP.g_script.SmartRocket = SmartRocket
-if GLOBAL_SCRIPT.updateScript then GLOBAL_SCRIPT.updateScript("SmartRocket") end

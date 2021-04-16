@@ -18,18 +18,20 @@ SmartCannonGUI.NumTable = {
     [9] = 100000
 }
 local _TabCallbacks = {
-    {button = "NumLogic_Tab", state = 0},
-    {button = "Logic_Tab", state = 1},
-    {button = "Effects_Tab", state = 2}
+    NumLogic_Tab = 0,
+    Logic_Tab = 1,
+    Effects_Tab = 2
 }
 
 function SmartCannonGUI.SetupTabCallbacks(self)
+    self.gui_tab_switch_callback = function(self, btn)
+        local _TabIdx = _TabCallbacks[btn]
+
+        SmartCannonGUI.SwitchTab(self, _TabIdx)
+    end
+
     for k, v in pairs(_TabCallbacks) do
-        local _CallbackName = (v.button.."_clickCallback")
-        self[_CallbackName] = function(self)
-            SmartCannonGUI.SwitchTab(self, v.state)
-        end
-        self.c_gui:setButtonCallback(v.button, _CallbackName)
+        self.c_gui:setButtonCallback(k, "gui_tab_switch_callback")
     end
 end
 
@@ -136,11 +138,14 @@ function SmartCannonGUI.LoadLogicPage(self, page)
 end
 
 function SmartCannonGUI.SetupPageCallbacks(self)
-    self.PageRight_Callback = function(self) SmartCannonGUI.SwitchPages(self, 1) end
-    self.c_gui:setButtonCallback("PageRight", "PageRight_Callback")
-
-    self.PageLeft_Callback = function(self) SmartCannonGUI.SwitchPages(self, -1) end
-    self.c_gui:setButtonCallback("PageLeft", "PageLeft_Callback")
+    self.gui_switch_nlogic_page = function(self, btn)
+        local _IsLeft = string.sub(btn, 5) == "Left"
+        local _Value = (_IsLeft and -1 or 1)
+        
+        SmartCannonGUI.SwitchPages(self, _Value)
+    end
+    self.c_gui:setButtonCallback("PageRight", "gui_switch_nlogic_page")
+    self.c_gui:setButtonCallback("PageLeft", "gui_switch_nlogic_page")
 end
 
 function SmartCannonGUI.SwitchPages(self, page)
@@ -153,26 +158,25 @@ function SmartCannonGUI.SwitchPages(self, page)
 end
 
 function SmartCannonGUI.CreateButtonCallbacks(self)
-    for i = 1, 6 do
-        local _LeftCallback = "LeftButton_callback"..i
-        local _RightCallback = "RightButton_callback"..i
-        self[_LeftCallback] = function(self)
-            SmartCannonGUI.ChangeNumberValue(self, i, -1)
-        end
-        self.c_gui:setButtonCallback("LB_Val"..i, _LeftCallback)
+    self.client_onGuiValueChange = function(self, btn)
+        local _IsLeft = string.sub(btn, 0, 2) == "LB"
+        local _BtnIdx = tonumber(string.sub(btn, 7))
+        local _Value = (_IsLeft and -1 or 1)
 
-        self[_RightCallback] = function(self)
-            SmartCannonGUI.ChangeNumberValue(self, i, 1)
-        end
-        self.c_gui:setButtonCallback("RB_Val"..i, _RightCallback)
+        SmartCannonGUI.ChangeNumberValue(self, _BtnIdx, _Value)
+    end
+    for i = 1, 6 do
+        self.c_gui:setButtonCallback("RB_Val"..i, "client_onGuiValueChange")
+        self.c_gui:setButtonCallback("LB_Val"..i, "client_onGuiValueChange")
     end
 
+    self.client_onGuiBooleanChange = function(self, btn)
+        local _BtnIdx = tonumber(string.sub(btn, 9))
+
+        SmartCannonGUI.ChangeBooleanValue(self, _BtnIdx)
+    end
     for i = 1, 8 do
-        local _ButtonCallback = "LogicButton_callback"..i
-        self[_ButtonCallback] = function(self)
-            SmartCannonGUI.ChangeBooleanValue(self, i)
-        end
-        self.c_gui:setButtonCallback("LogicBTN"..i, _ButtonCallback)
+        self.c_gui:setButtonCallback("LogicBTN"..i, "client_onGuiBooleanChange")
     end
 end
 
@@ -263,17 +267,21 @@ function SmartCannonGUI.UpdateGuiText(self)
 end
 
 function SmartCannonGUI.SetupMultiplierCallbacks(self)
-    self.multiplier_callback_left = function(self) SmartCannonGUI.OnMultiplierChange(self, -1) end
-    self.multiplier_callback_right = function(self) SmartCannonGUI.OnMultiplierChange(self, 1) end
-    self.c_gui:setButtonCallback("RB_Mul", "multiplier_callback_right")
-    self.c_gui:setButtonCallback("LB_Mul", "multiplier_callback_left")
+    self.gui_multiplier_callback = function(self, btn)
+        local _IsLeft = string.sub(btn, 0, 2) == "LB"
+        local _Value = (_IsLeft and -1 or 1)
+
+        SmartCannonGUI.OnMultiplierChange(self, _Value)
+    end
+    self.c_gui:setButtonCallback("RB_Mul", "gui_multiplier_callback")
+    self.c_gui:setButtonCallback("LB_Mul", "gui_multiplier_callback")
 end
 
 local _EffectCallbackTable = {
-    [1] = {val = 1, name = "muzzle_flash", id = "MFlash"},
-    [2] = {val = 2, name = "expl_effect", id = "ExplEffect"},
-    [3] = {val = 3, name = "reload_effect", id = "Reload"},
-    [4] = {val = 4, name = "shoot_sound", id = "ShtSound"}
+    MFlash = {val = 1, name = "muzzle_flash"},
+    ExplEffect = {val = 2, name = "expl_effect"},
+    Reload = {val = 3, name = "reload_effect"},
+    ShtSound = {val = 4, name = "shoot_sound"}
 }
 
 function SmartCannonGUI.ChangeEffectValue(self, label, index, changer)
@@ -286,26 +294,29 @@ function SmartCannonGUI.ChangeEffectValue(self, label, index, changer)
 end
 
 function SmartCannonGUI.SetupEffectTabCallbacks(self)
+    self.gui_effect_values_callback = function(self, btn)
+        local _OrigButton = string.sub(btn, 4)
+        local _IsLeft = string.sub(btn, 0, 2) == "LB"
+        local _Value = (_IsLeft and -1 or 1)
+        local _Idx = _EffectCallbackTable[_OrigButton].val
+        local _TextName = _OrigButton.."Value"
+
+        SmartCannonGUI.ChangeEffectValue(self, _TextName, _Idx, _Value)
+    end
+
     for k, v in pairs(_EffectCallbackTable) do
-        local _RCallbackName = "R"..v.name.."_callback_func"
-        local _LCallbackName = "L"..v.name.."_callback_func"
-        
-        local _LabelVal = (v.id.."Value")
-        self[_RCallbackName] = function(self) SmartCannonGUI.ChangeEffectValue(self, _LabelVal, k, 1) end
-        self[_LCallbackName] = function(self) SmartCannonGUI.ChangeEffectValue(self, _LabelVal, k, -1) end
+        self.c_gui:setButtonCallback("RB_"..k, "gui_effect_values_callback")
+        self.c_gui:setButtonCallback("LB_"..k, "gui_effect_values_callback")
 
-        self.c_gui:setButtonCallback("RB_"..v.id, _RCallbackName)
-        self.c_gui:setButtonCallback("LB_"..v.id, _LCallbackName)
-
-        local _CurList = self.gui_temp_effect_values[k]
-        self.c_gui:setText(_LabelVal, _CurList.list[_CurList.value + 1])
+        local _CurList = self.gui_temp_effect_values[v.val]
+        self.c_gui:setText(k.."Value", _CurList.list[_CurList.value + 1])
     end
 end
 
 function SmartCannonGUI.UpdateEffectsPage(self)
     for k, v in pairs(_EffectCallbackTable) do
-        local _CurList = self.gui_temp_effect_values[k]
-        self.c_gui:setText(v.id.."Value", _CurList.list[_CurList.value + 1])
+        local _CurList = self.gui_temp_effect_values[v.val]
+        self.c_gui:setText(k.."Value", _CurList.list[_CurList.value + 1])
     end
 end
 
@@ -357,23 +368,19 @@ local _SwitchFunctions = {
 }
 
 function SmartCannonGUI.SwitchTab(self, state)
-    if self.current_tab ~= state then
-        self.current_tab = state
+    if self.current_tab == state then return end
 
-        local _ActiveIndex = state + 1
-        local _ActivePage = _SwitchFunctions[_ActiveIndex]
+    self.current_tab = state
 
-        for k, v in pairs(_SwitchFunctions) do
-            if _ActiveIndex ~= k then
-                self.c_gui:setVisible(v.page, false)
-                self.c_gui:setButtonState(v.btn, false)
-            end
-        end
-        self.c_gui:setVisible(_ActivePage.page, true)
-        self.c_gui:setButtonState(_ActivePage.btn, true)
+    local _ActiveIndex = state + 1
+    for k, v in pairs(_SwitchFunctions) do
+        local _IsTab = (_ActiveIndex == k)
 
-        sm.audio.play("Handbook - Turn page")
+        self.c_gui:setVisible(v.page, _IsTab)
+        self.c_gui:setButtonState(v.btn, _IsTab)
     end
+
+    sm.audio.play("Handbook - Turn page")
 end
 
 function SmartCannonGUI.ChangeNumberValue(self, index, changer)
@@ -431,31 +438,24 @@ function SmartCannonGUI.OnDestroyGUICallback(self)
     if not self.c_gui then return end
     self.c_gui:destroy()
     self.c_gui = nil
-    for i = 1, 6 do
-        self["LeftButton_callback"..i] = nil
-        self["RightButton_callback"..i] = nil
-    end
-    for i = 1, 8 do self["LogicButton_callback"..i] = nil end
-    for k, v in pairs(_TabCallbacks) do self[v.button.."_clickCallback"] = nil end
-    for k, v in pairs(_EffectCallbackTable) do
-        self["R"..v.name.."_callback_func"] = nil
-        self["L"..v.name.."_callback_func"] = nil
-    end
-    self.PageRight_Callback = nil
-    self.PageLeft_Callback = nil
     self.gui_temp_effect_values = nil
     self.gui_temp_logic_table = nil
     self.gui_temp_value_table = nil
-    self.destroy_gui_callback = nil
-    self.multiplier_callback_left = nil
-    self.multiplier_callback_right = nil
+    self.gui_multiplier_callback = nil
     self.gui_multiplier_page = nil
-    self.gui_maximum_page = nil
     self.gui_page = nil
-    self.save_button_callback = nil
+    self.gui_maximum_page = nil
     self.current_tab = nil
     self.gui_waiting_for_data = nil
+    self.gui_waiting_for_number_data = nil
     self.gui_animation_step = nil
     self.gui_animation_time = nil
+    self.gui_switch_nlogic_page = nil
+    self.destroy_gui_callback = nil
+    self.save_button_callback = nil
+    self.client_onGuiBooleanChange = nil
+    self.gui_tab_switch_callback = nil
+    self.client_onGuiValueChange = nil
     self.request_input_values_callback = nil
+    self.gui_effect_values_callback = nil
 end

@@ -18,7 +18,6 @@ function ShellEjector:client_onCreate()
     self.anim = {door_state = false, value = 0.0, speed = 1.5, wait_clock = 0.0}
 end
 function ShellEjector:server_onCreate()
-    self:GS_init()
     local config = CP_Cannons.load_cannon_info(self)
     self.server_effectTable = config.effect_table
     self.projectileConfiguration = config.proj_config

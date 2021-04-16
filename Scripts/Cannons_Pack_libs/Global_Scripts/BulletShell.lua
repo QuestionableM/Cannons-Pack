@@ -19,7 +19,7 @@ function BulletShell.server_sendProjectile(self, shapeScript, data)
     table.insert(self.proj_queue, {shapeScript.shape, position, velocity, friction, gravity, lifetime, shellEffect, collision_size})
 end
 
-function BulletShell.client_loadProjectile(self, shapeScript, data)
+function BulletShell.client_loadProjectile(self, data)
     local shape, position, velocity, friction, gravity, lifetime, shellEffect, collision_size = unpack(data)
     if (shape == nil or not sm.exists(shape)) then CP.print("BulletShell: NO SHAPE") return end
     local success, effect = pcall(sm.effect.createEffect, shellEffect)
@@ -47,31 +47,37 @@ function BulletShell.client_loadProjectile(self, shapeScript, data)
     self.projectiles[#self.projectiles + 1] = shell
 end
 
-function BulletShell.server_updateProjectile(self, dt)
+function BulletShell.server_onScriptUpdate(self, dt)
     for b, data in pairs(self.proj_queue) do
-        self:GS_sendToClients("client_loadProjectile", data)
+        self.network:sendToClients("client_loadProjectile", data)
         self.proj_queue[b] = nil
     end
 end
 
-function BulletShell.client_updateProjectile(self, dt)
+local _Vec3GetRotation = sm.vec3.getRotation
+local _Vec3New = sm.vec3.new
+local _QuatAngleAxis = sm.quat.angleAxis
+local _PhysicsRaycast = sm.physics.raycast
+local _Vec3Zero = sm.vec3.zero
+
+function BulletShell.client_onScriptUpdate(self, dt)
     for id, shell in pairs(self.projectiles) do
         if shell and shell.alive > 0 then
             shell.alive = shell.alive - dt
-            shell.dir = shell.dir * (1 - shell.friction) - sm.vec3.new(0, 0, shell.gravity * dt)
+            shell.dir = shell.dir * (1 - shell.friction) - _Vec3New(0, 0, shell.gravity * dt)
             local dir_length = math.min(math.max(shell.dir:length() / 3, 0.7) - 0.7, 0.7)
             shell.counter = (shell.counter + (dir_length / (shell.col_size - 1))) % math.pi
-            local hit, result = sm.physics.raycast(shell.pos, shell.pos + (shell.dir * shell.col_size) * dt * 1.2)
+            local hit, result = _PhysicsRaycast(shell.pos, shell.pos + (shell.dir * shell.col_size) * dt * 1.2)
             if hit then
-                local velocity = sm.vec3.zero()
-                local reflected_vector = sm.vec3.zero()
+                local velocity = _Vec3Zero()
+                local reflected_vector = _Vec3Zero()
                 if shell.alive > shell.no_col then
                     if dir_length > 0 then
                         if dir_length > 0.5 and (sm.camera.getPosition() - result.pointWorld):length() < 50 then
-                            local _EffectRotation = sm.vec3.getRotation(sm.vec3.new(0, 0, 1), result.normalWorld)
+                            local _EffectRotation = _Vec3GetRotation(_Vec3New(0, 0, 1), result.normalWorld)
                             local _EffMaterial = (result.type == "body" and result:getShape():getMaterialId()) or 1
                             local _Mass = (result.type == "body" and result:getShape():getMass()) or 0.01
-                            sm.effect.playEffect("Collision - Impact", result.pointWorld, sm.vec3.zero(), _EffectRotation, sm.vec3.zero(), {
+                            sm.effect.playEffect("Collision - Impact", result.pointWorld, _Vec3Zero(), _EffectRotation, _Vec3Zero(), {
                                 Size = _Mass / 1024,
                                 Velocity_max_50 = dir_length * 3.5 * shell.col_size,
                                 Material = _EffMaterial,
@@ -88,8 +94,8 @@ function BulletShell.client_updateProjectile(self, dt)
                 end
             else
                 if dir_length > 0 then
-                    local _RotDir = sm.vec3.getRotation(sm.vec3.new(1, 0, 0), shell.dir)
-                    local _ZRot = sm.quat.angleAxis(shell.counter, sm.vec3.new(0, 0, 1))
+                    local _RotDir = _Vec3GetRotation(_Vec3New(1, 0, 0), shell.dir)
+                    local _ZRot = _QuatAngleAxis(shell.counter, _Vec3New(0, 0, 1))
 
                     local _FinalRot = _RotDir * _ZRot
                     shell.effect:setRotation(_FinalRot)
@@ -98,7 +104,7 @@ function BulletShell.client_updateProjectile(self, dt)
             shell.pos = shell.pos + shell.dir * dt
             shell.effect:setPosition(shell.pos)
         else
-            shell.effect:setPosition(sm.vec3.new(0, 0, 10000))
+            shell.effect:setPosition(_Vec3New(0, 0, 10000))
             shell.effect:stop()
             shell.effect:destroy()
             sm.particle.createParticle("hammer_metal", shell.pos)
@@ -107,12 +113,11 @@ function BulletShell.client_updateProjectile(self, dt)
     end
 end
 
-function BulletShell.client_onDestroy(self)
+function BulletShell.client_onScriptDestroy(self)
     local deleted_projectiles = CP_Projectile.client_destroyProjectiles(self.projectiles)
-    self.projectiles = {}
-    self.proj_queue = {}
+    BulletShell.projectiles = {}
+    BulletShell.proj_queue = {}
     CP.print(("BulletShell: Deleted %s shells"):format(deleted_projectiles))
 end
 
 CP.g_script.BulletShell = BulletShell
-if GLOBAL_SCRIPT.updateScript then GLOBAL_SCRIPT.updateScript("BulletShell") end

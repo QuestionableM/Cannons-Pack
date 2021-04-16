@@ -562,15 +562,17 @@ function CP.print(...) print("[CannonsPack]", ...) end
 
 local _pi = math.pi
 local _2pi = math.pi * 2
+local _Atan2 = math.atan2
+local _Asin = math.asin
 function CP.isObjectVisible(v1, v1Pred, v2, LimiterXY, LimiterZ)
     local NormalizedObjectPos = (v1 - v1Pred):normalize()
     local NormalizedTargetPos = (v1 - v2):normalize()
-    local ObjectXYAngle = math.atan2(NormalizedObjectPos.y, NormalizedObjectPos.x)
-    local TargetXYAngle = math.atan2(NormalizedTargetPos.y, NormalizedTargetPos.x)
+    local ObjectXYAngle = _Atan2(NormalizedObjectPos.y, NormalizedObjectPos.x)
+    local TargetXYAngle = _Atan2(NormalizedTargetPos.y, NormalizedTargetPos.x)
     local AngleXY = ObjectXYAngle - TargetXYAngle
     AngleXY = (AngleXY > _pi and AngleXY - _2pi) or (AngleXY < -_pi and AngleXY + _2pi) or AngleXY
-    local ObjectZAngle = math.asin(NormalizedObjectPos.z)
-    local TargetZAngle = math.asin(NormalizedTargetPos.z)
+    local ObjectZAngle = _Asin(NormalizedObjectPos.z)
+    local TargetZAngle = _Asin(NormalizedTargetPos.z)
     local AngleZ = ObjectZAngle - TargetZAngle
     local isVisible = (AngleXY < LimiterXY and AngleXY > -LimiterXY and AngleZ < LimiterZ and AngleZ > -LimiterZ)
     return isVisible
@@ -610,11 +612,12 @@ function CP.calculate_spread(self, spread_degree, velocity, ignore_momentum)
     end
 end
 
+local _ShapeFire = sm.projectile.shapeFire
 function CP.shoot_projectile(shape, projectile, offset, direction, ignoreRotation)
     if not ignoreRotation then
-        sm.projectile.shapeFire(shape, projectile, offset, direction)
+        _ShapeFire(shape, projectile, offset, direction)
     else
-        sm.projectile.shapeFire(shape, projectile, shape:transformPoint(shape.worldPosition + offset), direction)
+        _ShapeFire(shape, projectile, shape:transformPoint(shape.worldPosition + offset), direction)
     end
 end
 

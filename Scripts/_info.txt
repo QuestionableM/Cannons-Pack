@@ -1,9 +1,9 @@
 What are u doing here? you little thief
 
-Cannons Pack version 4.1 changelog:
-1. Fixed projectile stuttering
-2. Added a Laser Cannon
-3. Improved the network code
+Cannons Pack version 4.2 changelog:
+1. Optimized the Smart Cannon GUI
+2. Optimized the Global Script handler
+3. Optimized all Global Scripts
 
 Made by:
 Questionable Mark - creator of all the textures, UV maps and also some scripts and cannon models.

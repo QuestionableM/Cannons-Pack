@@ -29,7 +29,6 @@ local _ExplosionTrans = {
 	[5] = "EMPCannon - Explosion"
 }
 function SmartCannon:server_onCreate()
-	self:GS_init()
 	self.sv_settings = {
 		number = {
 			fire_spread = 0.2,

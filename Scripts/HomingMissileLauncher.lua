@@ -13,7 +13,6 @@ HomingMissile.connectionOutput = sm.interactable.connectionType.none
 HomingMissile.colorNormal = sm.color.new(0x00538aff)
 HomingMissile.colorHighlight = sm.color.new(0x0099ffff)
 function HomingMissile:server_onCreate()
-	self:GS_init()
 	self.settings = {}
 	self.rocketConfig = CP_Cannons.load_cannon_info(self)
 end

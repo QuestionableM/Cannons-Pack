@@ -18,7 +18,6 @@ function OrbitalCannon:client_onCreate()
     self:client_injectScript("CPProjectile")
 end
 function OrbitalCannon:server_onCreate()
-    self:GS_init()
     self.projectileConfiguration = CP_Cannons.load_cannon_info(self)
 end
 function OrbitalCannon:server_createEffects(position, effectName, ExplLvl, ExplRad, ImpRad, ImpStr, explEffect, amonutOfBullets)

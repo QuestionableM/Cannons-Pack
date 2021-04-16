@@ -25,7 +25,6 @@ function emp:client_onDestroy()
     end
 end
 function emp:server_onCreate()
-    self:GS_init()
     self.options = {
         [1] = {reload = 120, uv = 24, radius = 0.5, toAdd = 280, recoil = 2500},
         [2] = {reload = 180, uv = 49.5, radius = 1, toAdd = 250, recoil = 4000},
@@ -71,15 +70,19 @@ function emp:server_onFixedUpdate()
 end
 function emp:client_onFixedUpdate()
     local _CurMode = self.uv.mode
+    local _OldIndex = (self.uv.index or 0)
+
+    if _CurMode == nil then return end
+
     if _CurMode == "rld" then
-        self.uv.index = math.max(self.uv.index - (180 / self.uv.rldTime), 0)
+        self.uv.index = math.max(_OldIndex - (180 / self.uv.rldTime), 0)
         self:client_setEffectVal(self.uv.index / 150, self.uv.index / 75, self.uv.index + 291)
         if self.uv.index == 0 then self:client_clearData() end
     elseif _CurMode == "crg" then
-        self.uv.index = math.min((self.uv.index or 0) + 0.005, 1)
+        self.uv.index = math.min(_OldIndex + 0.005, 1)
         self:client_setEffectVal(self.uv.index, self.uv.index * 3, self.uv.index * 150)
     elseif _CurMode == "col" then
-        self.uv.index = math.max(self.uv.index - 0.005, 0)
+        self.uv.index = math.max(_OldIndex - 0.005, 0)
         self:client_setEffectVal(self.uv.index, self.uv.index * 3, self.uv.index * 150)
         if self.uv.index == 0 then self:client_clearData() end
     end
