@@ -9,12 +9,12 @@
 		"description": "#ffffffStrzela słabymi pociskami.\n\n#ffff00Nie może zniszczyć materiałów bardziej wytrzymałych niż cement.#ffffff\n\nTyp - Działo przeciwlotnicze\nAutomatyczne przeładowanie - tak\nCzas przeładowania: 10 ticks.",
 		"keywords": ["Cannons Pack","dezaprobata","automatyczny","przeładować","mały","słaby","działo"]
 	},
-    "bc8178a9-8a38-4c43-a0d0-8a0f242a59c7": {
+	"bc8178a9-8a38-4c43-a0d0-8a0f242a59c7": {
 		"title": "Armata Czołgowa",
 		"description": "#ffffffStrzela mocnymi pociskami.\n\nTyp - Armata\nAutomatyczne przeładowanie - nie\nCzas przeładowania: 4 sekundy.",
 		"keywords": ["Cannons Pack","działo","średni","broń"]
 	},
-    "4295196d-cbd6-40c6-badc-ff9011208ad5": {
+	"4295196d-cbd6-40c6-badc-ff9011208ad5": {
 		"title": "Armata Czołgowa 2",
 		"description": "#ffffffStrzela mocnymi pociskami.\n\nTyp - Armata\nAutomatyczne przeładowanie - nie\nCzas przeładowania: 4 sekundy.",
 		"keywords": ["Cannons Pack","działo","średni","broń"]
@@ -44,12 +44,12 @@
 		"description": "#ffffffStrzela mocnymi pociskami.\n\nTyp - Armata\nAutomatyczne przeładowanie - nie\nCzas przeładowania: 7 sekund.",
 		"keywords": ["Cannons Pack","działo","średni","broń"]
 	},
-    "6c0bbf06-364f-4d51-98c2-1631b2d09cd5": {
+	"6c0bbf06-364f-4d51-98c2-1631b2d09cd5": {
 		"title": "Działo Okrętowe",
 		"description": "#ffffffStrzela mocnymi pociskami.\n\nTyp - Armata\nAutomatyczne przeładowanie - nie\nCzas przeładowania: 10 sekund.",
 		"keywords": ["Cannons Pack","działo","duży","silny","morski","statek","broń","potężny"]
 	},
-    "d0352961-c071-4278-8f23-99fcb8a7a377": {
+	"d0352961-c071-4278-8f23-99fcb8a7a377": {
 		"title":"Działo Okrętowe 2",
 		"description": "#ffffffStrzela mocnymi pociskami.\n\nTyp - Armata\nAutomatyczne przeładowanie - nie\nCzas przeładowania: 8 sekund.",
 		"keywords": ["Cannons Pack","działo","średni","silny","morski","statek","broń","potężny"]
@@ -90,10 +90,10 @@
 		"keywords": ["Cannons Pack","The Modpack","mądry","numer","logika"]
 	},
 	"d7070a10-403a-4f5f-9d4f-8bb321c6b562": {
-        "title": "Inteligentny Detektor Rakiet",
-        "description": "#ffffffTo urządzenie wykrywa pociski rakietowe w zasięgu pola widzenia!\n\nWysyła ono sygnał, gdy inteligentna rakieta jast w polu widzenia i leci w kierunku czujnika\n\nWejdź na strone w Warsztacie #ffff00Cannons Pack#ffffff aby dowiedzieć się więcej",
-        "keywords": ["Cannons Pack","detektor","wykrywacz","czujnik","pocisk","rakieta"]
-    },
+		"title": "Inteligentny Detektor Rakiet",
+		"description": "#ffffffTo urządzenie wykrywa pociski rakietowe w zasięgu pola widzenia!\n\nWysyła ono sygnał, gdy inteligentna rakieta jast w polu widzenia i leci w kierunku czujnika\n\nWejdź na strone w Warsztacie #ffff00Cannons Pack#ffffff aby dowiedzieć się więcej",
+		"keywords": ["Cannons Pack","detektor","wykrywacz","czujnik","pocisk","rakieta"]
+	},
 	"2bcd658f-6344-4e37-9fb5-ced1e2249c7b": {
 		"title": "Działo Orbitalne",
 		"description": "#ffffffWzywa atak orbitalny z powietrza w cel na który wskazujesz. Mozesz go wycelować wszędzie poza granicami świata aby wezwać ten potężny atak!",

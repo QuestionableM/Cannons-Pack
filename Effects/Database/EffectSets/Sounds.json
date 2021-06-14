@@ -1,10 +1,10 @@
 {
-    "OrbitalCannon - PointSound":{
+	"OrbitalCannon - PointSound":{
 		"effectList":[
 			{"type":"audio","name":"Blueprint - Camera","offset":{"x":0.0,"y":0.0,"z":0.0},"delay":0.0,"duration":2.0}
 		]
-    },
-    "OrbitalCannon - Error":{
+	},
+	"OrbitalCannon - Error":{
 		"effectList":[
 			{"type":"audio","name":"WeldTool - Error","offset":{"x":0.0,"y":0.0,"z":0.0},"delay":0.0,"duration":2.0}
 		]

@@ -1,9 +1,9 @@
 What are u doing here? you little thief
 
-Cannons Pack version 4.2 changelog:
-1. Optimized the Smart Cannon GUI
-2. Optimized the Global Script handler
-3. Optimized all Global Scripts
+Cannons Pack version 4.3 changelog:
+1. The mod is now compatible with the new buttons from MJM mod
+2. Optimized all the scripts
+3. Reduced the mod size by 2mb
 
 Made by:
 Questionable Mark - creator of all the textures, UV maps and also some scripts and cannon models.

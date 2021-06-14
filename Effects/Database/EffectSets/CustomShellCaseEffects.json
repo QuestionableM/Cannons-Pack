@@ -1,5 +1,5 @@
 {
-    "AircraftCannon - Case":{
+	"AircraftCannon - Case":{
 		"maxInstances":512,"parameterList":{},
 		"effectList":[
 			{"type":"particle","name":"AircraftCannonCase","offset":{"x":0.0,"y":0.0,"z":0.0},"direction":{"x":0.0,"y":0.0,"z":1.0},"duration":8.0,"delay":0.0}

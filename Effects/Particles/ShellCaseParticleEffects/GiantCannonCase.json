@@ -30,7 +30,7 @@
 				"time_to_live_min":0.30,
 				"time_to_live_val":0.30,
 				"visual_particle_quota":1001
-		   	}
+			}
 		],"scale":0.8,"scale_time":4,"scale_velocity":0.0,"system_type":"stream","min_quality":"low"
 	}
 }

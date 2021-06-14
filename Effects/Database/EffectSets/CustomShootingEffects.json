@@ -1,5 +1,5 @@
 {
-    "NavalCannon - Shoot":{
+	"NavalCannon - Shoot":{
 		"maxInstances":32,"parameterList":{"size":256.0,"color":"ffff00","radius":0.0,"intensity":0.0,"shakeStrength":1,"shakeRadius":50.0},
 		"parameterCurves":{
 			"radius":{"timeline":[{"time":0.03,"value":15.0},{"time":0.6,"value":0.0}]},

@@ -1,9 +1,9 @@
 {
-    "effectSetList":[
-        "$MOD_DATA/Effects/Database/EffectSets/CustomShellEffects.json",
-        "$MOD_DATA/Effects/Database/EffectSets/CustomShootingEffects.json",
-        "$MOD_DATA/Effects/Database/EffectSets/CustomExplosionEffects.json",
-        "$MOD_DATA/Effects/Database/EffectSets/CustomShellCaseEffects.json",
-        "$MOD_DATA/Effects/Database/EffectSets/Sounds.json"
-    ]
+	"effectSetList":[
+		"$MOD_DATA/Effects/Database/EffectSets/CustomShellEffects.json",
+		"$MOD_DATA/Effects/Database/EffectSets/CustomShootingEffects.json",
+		"$MOD_DATA/Effects/Database/EffectSets/CustomExplosionEffects.json",
+		"$MOD_DATA/Effects/Database/EffectSets/CustomShellCaseEffects.json",
+		"$MOD_DATA/Effects/Database/EffectSets/Sounds.json"
+	]
 }

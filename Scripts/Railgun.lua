@@ -1,6 +1,6 @@
 --[[
-    Copyright (c) 2021 Cannons Pack Team
-    Questionable Mark
+	Copyright (c) 2021 Cannons Pack Team
+	Questionable Mark
 ]]
 
 if Railgun then return end
@@ -8,66 +8,87 @@ dofile("Cannons_Pack_libs/ScriptLoader.lua")
 Railgun = class(GLOBAL_SCRIPT)
 Railgun.maxParentCount = 1
 Railgun.maxChildCount = 0
-Railgun.connectionInput = sm.interactable.connectionType.logic
-Railgun.connectionOutput = sm.interactable.connectionType.none
-Railgun.colorNormal = sm.color.new(0x00e8d1ff)
-Railgun.colorHighlight = sm.color.new(0x00ffe6ff)
+Railgun.connectionInput = _connectionType.logic
+Railgun.connectionOutput = _connectionType.none
+Railgun.colorNormal = _colorNew(0x00e8d1ff)
+Railgun.colorHighlight = _colorNew(0x00ffe6ff)
+
 function Railgun:client_onCreate()
-	self.effects = CP_Effects.client_loadEffect(self)
+	self.effects = _cpEffect_cl_loadEffects(self)
 	self.effects.eff:setParameter("velocity", 0)
 	self:client_injectScript("RailgunProjectile")
 	self.constant = 0.4285714285714286
 end
+
 function Railgun:server_onCreate()
-	self.projectileConfiguration = CP_Cannons.load_cannon_info(self)
+	self.projectileConfiguration = _cpCannons_loadCannonInfo(self)
 end
+
 function Railgun:client_uvAnim(data)
 	self.fdp = self.constant * (240 - data)
 end
+
 function Railgun:client_onFixedUpdate(dt)
-	if self.fdp then
-		self.fdp = math.min(self.fdp + self.constant, 30)
-		self.interactable:setUvFrameIndex(self.fdp)
-		if not self.effects.eff:isPlaying() then
-			self.effects.eff:start()
-		else
-			self.effects.eff:setParameter("velocity", self.fdp * 1.6)
-		end
-		if self.fdp >= 30 then
-			self.fdp = nil
-			if self.effects.eff:isPlaying() then
-				self.effects.eff:stop()
-				self.interactable:setUvFrameIndex(0)
-			end
+	if not self.fdp then return end
+
+	self.fdp = math.min(self.fdp + self.constant, 30)
+	self.interactable:setUvFrameIndex(self.fdp)
+
+	if not self.effects.eff:isPlaying() then
+		self.effects.eff:start()
+	else
+		self.effects.eff:setParameter("velocity", self.fdp * 1.6)
+	end
+
+	if self.fdp >= 30 then
+		self.fdp = nil
+
+		if self.effects.eff:isPlaying() then
+			self.effects.eff:stop()
+			self.interactable:setUvFrameIndex(0)
 		end
 	end
 end
+
+local railgun_recoil = _newVec(0, 0, -60000)
+local railgun_offset = _newVec(0, 0, 1.4)
 function Railgun:server_onFixedUpdate()
-	if not sm.exists(self.interactable) then return end
+	if not _smExists(self.interactable) then return end
+
 	local parent = self.interactable:getSingleParent()
 	local active = parent and parent.active
+
 	if active and not self.reload then
 		self.reload = 240
 		self.network:sendToClients("client_uvAnim", self.reload)
 	end
+
 	if self.reload then
-		if sm.game.getCurrentTick() % 21 == 20 and self.reload > 170 then
+		if _getCurrentTick() % 21 == 20 and self.reload > 170 then
 			self.network:sendToClients("client_uvAnim", self.reload)
 		end
+
 		if self.reload == 170 then
-			CP.shoot(self, nil, "client_effects", "sht", sm.vec3.new(0, 0, -60000))
-			self.projectileConfiguration.position = self.shape.worldPosition + self.shape.worldRotation * sm.vec3.new(0, 0, 1.4)
-			self.projectileConfiguration.velocity = CP.calculate_spread(self, 0, 1000)
+			_cp_Shoot(self, nil, "client_effects", "sht", railgun_recoil)
+			self.projectileConfiguration.position = self.shape.worldPosition + self.shape.worldRotation * railgun_offset
+			self.projectileConfiguration.velocity = _cp_calculateSpread(self, 0, 1000)
 			RailgunProjectile:server_sendProjectile(self, self.projectileConfiguration)
 		end
-		if self.reload == 30 then self.network:sendToClients("client_effects", "rld") end
+
+		if self.reload == 30 then
+			self.network:sendToClients("client_effects", "rld")
+		end
+
 		self.reload = (self.reload > 1 and self.reload - 1) or (active and 0 or nil)
 	end
 end
+
 function Railgun:client_effects(effect)
-	if effect == "sht" then
-		CP.spawn_optimized_effect(self.shape, {self.effects.sht, self.effects.sht2}, 100)
-	else
-		CP.spawn_optimized_effect(self.shape, self.effects[effect], 75)
-	end
+	local eff_list = self.effects
+	local is_sht_eff = (effect == "sht")
+
+	local cur_eff = (is_sht_eff and {eff_list.sht, eff_list.sht2} or eff_list[effect])
+	local eff_dist = (is_sht_eff and 100 or 75)
+
+	_cp_spawnOptimizedEffect(self.shape, cur_eff, eff_dist)
 end

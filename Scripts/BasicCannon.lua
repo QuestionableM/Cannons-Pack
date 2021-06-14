@@ -1,6 +1,6 @@
 --[[
-    Copyright (c) 2021 Cannons Pack Team
-    Questionable Mark
+	Copyright (c) 2021 Cannons Pack Team
+	Questionable Mark
 ]]
 
 if BasicCannon then return end
@@ -8,44 +8,53 @@ dofile("Cannons_Pack_libs/ScriptLoader.lua")
 BasicCannon = class(GLOBAL_SCRIPT)
 BasicCannon.maxParentCount = 1
 BasicCannon.maxChildCount = 1
-BasicCannon.connectionInput = sm.interactable.connectionType.logic
-BasicCannon.connectionOutput = sm.interactable.connectionType.logic
-BasicCannon.colorNormal = sm.color.new(0xc75600ff)
-BasicCannon.colorHighlight = sm.color.new(0xff6e00ff)
+BasicCannon.connectionInput = _connectionType.logic
+BasicCannon.connectionOutput = _connectionType.logic
+BasicCannon.colorNormal = _colorNew(0xc75600ff)
+BasicCannon.colorHighlight = _colorNew(0xff6e00ff)
+
 function BasicCannon:client_onCreate()
-    self.client_settings = CP_Cannons.client_load_CannonInfo(self)
-    self.effects = CP_Effects.client_loadEffect(self)
-    self:client_injectScript(self.client_settings.t_script)
+	self.client_settings = _cpCannons_cl_loadCannonInfo(self)
+	self.effects = _cpEffect_cl_loadEffects(self)
+	self:client_injectScript(self.client_settings.t_script)
 end
+
 function BasicCannon:server_onCreate()
-    local settings = CP_Cannons.server_load_CannonInfo(self)
-    self.projectileConfig = settings.proj_config
-    self.settings = settings.cannon_config
-    self.proj_scr = CP.g_script[settings.t_script]
+	local settings = _cpCannons_sv_loadCannonInfo(self)
+	self.projectileConfig = settings.proj_config
+	self.settings = settings.cannon_config
+	self.proj_scr = _CP_gScript[settings.t_script]
 end
+
 function BasicCannon:server_onFixedUpdate()
-    if not sm.exists(self.interactable) then return end
-    local parent = self.interactable:getSingleParent()
-    local active = parent and parent.active
+	if not _smExists(self.interactable) then return end
 
-    local child = self.interactable:getChildren()[1]
-    if child and tostring(child.shape.uuid) ~= self.settings.port_uuid then self.interactable:disconnect(child) end
+	local parent = self.interactable:getSingleParent()
+	local active = parent and parent.active
+	local s_set = self.settings
 
-    if active and not self.reload then
-        self.reload = CP.Shoot(self, self.settings.reload, "client_shoot", "sht", self.settings.impulse_dir, self.settings.impulse_str)
-        self.projectileConfig.velocity = CP.calculate_spread(self, self.settings.spread, self.settings.velocity)
-        self.proj_scr:server_sendProjectile(self, self.projectileConfig)
-        if child then child:setActive(true) end
-    end
-    if self.reload then
-        if ((self.settings.no_snd_on_hold and not active) or not self.settings.no_snd_on_hold) and self.settings.rld_sound and self.reload == self.settings.rld_sound then
-            self.network:sendToClients("client_shoot", "rld")
-        end
-        self.reload = CP.calculate_reload(self.reload, self.settings.auto_reload, active)
-    end
+	local child = self.interactable:getChildren()[1]
+	if child and tostring(child.shape.uuid) ~= s_set.port_uuid then self.interactable:disconnect(child) end
+
+	if active and not self.reload then
+		self.reload = _cp_Shoot(self, s_set.reload, "client_shoot", "sht", s_set.impulse_dir * s_set.impulse_str)
+		self.projectileConfig.velocity = _cp_calculateSpread(self, s_set.spread, s_set.velocity)
+		self.proj_scr:server_sendProjectile(self, self.projectileConfig)
+		if child then child:setActive(true) end
+	end
+	
+	if self.reload then
+		if ((s_set.no_snd_on_hold and not active) or not s_set.no_snd_on_hold) and s_set.rld_sound and self.reload == s_set.rld_sound then
+			self.network:sendToClients("client_shoot", "rld")
+		end
+
+		self.reload = _cp_calculateReload(self.reload, s_set.auto_reload, active)
+	end
 end
+
 function BasicCannon:client_shoot(effect)
-    if self.effects[effect] then
-        CP.spawn_optimized_effect(self.shape, self.effects[effect], self.client_settings.effect_distance)
-    end
+	local cur_eff = self.effects[effect]
+	if not cur_eff then return end
+
+	_cp_spawnOptimizedEffect(self.shape, cur_eff, self.client_settings.effect_distance)
 end

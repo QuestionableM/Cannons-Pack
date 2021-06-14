@@ -9,12 +9,12 @@
 		"description": "#ffffffShoots weak shells.\n\n#ffff00Can't destroy materials stronger than concrete.#ffffff\n\nType - Flak\nAuto-reloading - yes\nReload time: 10 ticks.",
 		"keywords": ["Cannons Pack","flak","auto","reloading","small","weak","cannon","weapon"]
 	},
-    "bc8178a9-8a38-4c43-a0d0-8a0f242a59c7": {
+	"bc8178a9-8a38-4c43-a0d0-8a0f242a59c7": {
 		"title":"Tank Cannon",
 		"description": "#ffffffShoots powerful shells.\n\nType - Cannon\nAuto-reloading - no\nReload time: 4 seconds.",
 		"keywords": ["Cannons Pack","cannon","medium","weapon"]
 	},
-    "4295196d-cbd6-40c6-badc-ff9011208ad5": {
+	"4295196d-cbd6-40c6-badc-ff9011208ad5": {
 		"title": "Tank Cannon 2",
 		"description": "#ffffffShoots powerful shells.\n\nType - Cannon\nAuto-reloading - no\nReload time: 4 seconds.",
 		"keywords": ["Cannons Pack","cannon","medium","weapon"]
@@ -44,12 +44,12 @@
 		"description": "#ffffffShoots powerful shells.\n\nType - Cannon\nAuto-reloading - no\nReload time: 7 seconds.",
 		"keywords": ["Cannons Pack","cannon","medium","weapon"]
 	},
-    "6c0bbf06-364f-4d51-98c2-1631b2d09cd5": {
+	"6c0bbf06-364f-4d51-98c2-1631b2d09cd5": {
 		"title": "Naval Cannon",
 		"description": "#ffffffShoots very powerful shells.\n\nType - Cannon\nAuto-reloading - no\nReload time: 10 seconds.",
 		"keywords": ["Cannons Pack","cannon","big","strong","naval","ship","weapon","powerful"]
 	},
-    "d0352961-c071-4278-8f23-99fcb8a7a377": {
+	"d0352961-c071-4278-8f23-99fcb8a7a377": {
 		"title": "Naval Cannon 2",
 		"description": "#ffffffShoots powerful shells.\n\nType - Cannon\nAuto-reloading - no\nReload time: 8 seconds.",
 		"keywords": ["Cannons Pack","cannon","medium","strong","naval","ship","weapon","powerful"]
