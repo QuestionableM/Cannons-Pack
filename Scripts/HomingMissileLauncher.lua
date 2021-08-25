@@ -200,7 +200,7 @@ function HomingMissile:client_onInteract(character, state)
 			self.network:sendToServer("server_setTarget")
 		else
 			local cur_player = pl_list[self.client_pl_page]
-			_cp_infoOutput("GUI Item drag", true, ("#ffff00Mode:#ffffff: Targeting #ff0000%s#ffffff"):format(cur_player.name))
+			_cp_infoOutput("GUI Item drag", true, ("#ffff00Mode#ffffff: Targeting #ff0000%s#ffffff"):format(cur_player.name))
 			self.network:sendToServer("server_setTarget", cur_player)
 		end
 	end
