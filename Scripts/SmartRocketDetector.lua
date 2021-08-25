@@ -16,15 +16,16 @@ RocketDetector.colorHighlight = _colorNew(0x00cf44ff)
 function RocketDetector:client_onCreate()
 	self.nearest_distance = math.huge
 	self.client_detectDistance = 300
-	self.network:sendToServer("server_getDetectDistance", _getLocalPlayer())
+
+	self.network:sendToServer("server_getDetectDistance")
 end
 
 function RocketDetector:client_receiveDetectDistance(distance)
 	self.client_detectDistance = distance
 end
 
-function RocketDetector:server_getDetectDistance(player)
-	self.network:sendToClient(player, "client_receiveDetectDistance", self.server_detectDistance)
+function RocketDetector:server_getDetectDistance(data, caller)
+	self.network:sendToClient(caller, "client_receiveDetectDistance", self.server_detectDistance)
 end
 
 function RocketDetector:server_onCreate()
@@ -38,14 +39,16 @@ function RocketDetector:server_onFixedUpdate()
 	local distance_pulse = false
 	local temp_distance = 300
 
-	for id, interactable in pairs(self.interactable:getParents()) do
-		local shape_color = tostring(interactable.shape.color)
-		if interactable.type == "scripted" and tostring(interactable.shape.uuid) ~= "6f2dd83e-bc0d-43f3-8ba5-d5209eb03d07" then
-			if shape_color == "eeeeeeff" and interactable.power > 0 then
-				temp_distance = interactable.power
+	local p_List = self.interactable:getParents()
+	for k, inter in pairs(p_List) do
+		local shape_color = tostring(inter.shape.color)
+		if inter.type == "scripted" and tostring(inter.shape.uuid) ~= "6f2dd83e-bc0d-43f3-8ba5-d5209eb03d07" then
+			local i_Power = inter.power
+			if shape_color == "eeeeeeff" and i_Power > 0 then
+				temp_distance = i_Power
 			end
 		else
-			if interactable.active then distance_pulse = true end
+			if inter.active then distance_pulse = true end
 		end
 	end
 
@@ -54,12 +57,15 @@ function RocketDetector:server_onFixedUpdate()
 		self.network:sendToClients("client_receiveDetectDistance", self.server_detectDistance)
 	end
 
-	local norm_dist = _mathMin(self.nearest_distance, self.server_detectDistance) / self.server_detectDistance
+	local d_Distance = self.server_detectDistance
+
+	local norm_dist = _mathMin(self.nearest_distance, d_Distance) / d_Distance
 	self.tick_counter = (self.tick_counter + (1 - norm_dist)) % math.pi
 	local interval = _mathAbs(_mathSin(self.tick_counter))
 	local pu = interval >= 0.5 or norm_dist < 0.2 or not distance_pulse
-	self.interactable:setActive(self.nearest_distance <= self.server_detectDistance and pu)
+	self.interactable:setActive(self.nearest_distance <= d_Distance and pu)
 end
+
 
 function RocketDetector:client_onFixedUpdate()
 	if not _smExists(self.interactable) then return end
@@ -70,13 +76,17 @@ function RocketDetector:client_onFixedUpdate()
 		local shape_pos = self.shape.worldPosition
 		local shape_up = self.shape.up
 		for id, s_rocket in pairs(SmartRocket.projectiles) do
-			local norm_dir = s_rocket.pos + s_rocket.dir:normalize()
-			local rocket_sees_sensor = _cp_isObjectVisible(s_rocket.pos, norm_dir, shape_pos, 1.22173, 1.22173)
-			local sensor_sees_rocket = _cp_isObjectVisible(shape_pos, shape_pos + shape_up, s_rocket.pos, 1.39626, 1.39626)
+			local rocket_pos = s_rocket.pos
+			local norm_dir = s_rocket.dir:normalize()
+
+			local rocket_sees_sensor = _cp_isObjectVisible(rocket_pos, norm_dir, shape_pos, -0.66)
+			local sensor_sees_rocket = _cp_isObjectVisible(shape_pos, shape_up, rocket_pos, -0.88)
 			
 			if rocket_sees_sensor and sensor_sees_rocket then
-				local distance = (shape_pos - s_rocket.pos):length()
-				if distance < self.nearest_distance then self.nearest_distance = distance end
+				local distance = (shape_pos - rocket_pos):length()
+				if distance < self.nearest_distance then
+					self.nearest_distance = distance
+				end
 			end
 		end
 

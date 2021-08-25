@@ -8,36 +8,33 @@ LaserProjectile = class(GLOBAL_SCRIPT)
 LaserProjectile.projectiles = {}
 LaserProjectile.proj_queue = {}
 
-function LaserProjectile.server_sendProjectile(self, shapeScript, data)
-	local position = data.position or _vecZero()
-	local velocity = data.velocity or _newVec(0, 0, 1)
-	local shellEffect = data.shellEffect
-	local lifetime = data.lifetime or 30
-
-	_tableInsert(self.proj_queue, {shapeScript.shape,position,velocity,shellEffect,lifetime})
+function LaserProjectile.server_sendProjectile(self, shapeScript, data, id)
+	_tableInsert(self.proj_queue, {id, shapeScript.shape, data[ProjSettingEnum.velocity]})
 end
 
 function LaserProjectile.client_loadProjectile(self, data)
-	local shape, position, velocity, shellEffect, lifetime = unpack(data)
+	local proj_data_id, shape, velocity = unpack(data)
 
 	if not _cpExists(shape) then
 		_cpPrint("LaserProjectile: NO SHAPE")
 		return
 	end
 
+	local proj_settings = _cpProj_GetProjectileSettings(proj_data_id)
+
+	local position = proj_settings[ProjSettingEnum.position]
 	position = shape.worldPosition + shape.worldRotation * position
 
-	local success, shellEffect = pcall(_createEffect, shellEffect)
-	if not success then
-		_logError(shellEffect)
-		return
-	end
-
+	local shellEffect = _createEffect("LaserCannon - Shell")
 	shellEffect:setPosition(position)
 	shellEffect:start()
 
-	local laser_proj = {effect = shellEffect, pos = position, dir = velocity, alive = lifetime}
-	self.projectiles[#self.projectiles + 1] = laser_proj
+	self.projectiles[#self.projectiles + 1] = {
+		effect = shellEffect,
+		pos = position,
+		dir = velocity,
+		alive = proj_settings[ProjSettingEnum.lifetime]
+	}
 end
 
 local _zAxis = _newVec(0, 0, 1)
@@ -96,17 +93,22 @@ function LaserProjectile.client_onScriptUpdate(self, dt)
 		if proj and not proj.hit then
 			proj.alive = proj.alive - dt
 
-			local r_hit, result = _physRaycast(proj.pos, proj.pos + proj.dir * dt * 1.2)
+			local p_Pos = proj.pos
+			local p_Dir = proj.dir
+
+			local r_hit, result = _physRaycast(p_Pos, p_Pos + p_Dir * dt * 1.2)
 			if r_hit or proj.alive <= 0 then
 				proj.hit = result
 				_cpProj_cl_onProjHit(proj.effect)
-			end
-			
-			proj.effect:setPosition(proj.pos)
-			proj.pos = proj.pos + proj.dir * dt
+			else
+				proj.pos = p_Pos + p_Dir * dt
 
-			if proj.dir:length() > 0.0001 then
-				proj.effect:setRotation(_getVec3Rotation(_xAxis, proj.dir))
+				local proj_effect = proj.effect
+				proj_effect:setPosition(proj.pos)
+
+				if p_Dir:length() > 0.0001 then
+					proj_effect:setRotation(_getVec3Rotation(_xAxis, p_Dir))
+				end
 			end
 		end
 	end

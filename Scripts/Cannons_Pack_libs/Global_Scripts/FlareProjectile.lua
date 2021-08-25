@@ -8,14 +8,12 @@ FlareProjectile = class(GLOBAL_SCRIPT)
 FlareProjectile.projectiles = {}
 FlareProjectile.proj_queue = {}
 
-function FlareProjectile.server_sendProjectile(self, shapeScript, data)
-	local lifetime = data.lifetime
-	local dir = data.dir
-	_tableInsert(self.proj_queue, {shapeScript.shape, lifetime, dir})
+function FlareProjectile.server_sendProjectile(self, shapeScript, direction)
+	_tableInsert(self.proj_queue, {shapeScript.shape, direction})
 end
 
 function FlareProjectile.client_loadProjectile(self, data)
-	local shape, lifetime, dir = unpack(data)
+	local shape, dir = unpack(data)
 
 	if not _cpExists(shape) then
 		_cpPrint("FlareProjectile: NO SHAPE")
@@ -28,8 +26,13 @@ function FlareProjectile.client_loadProjectile(self, data)
 	eff:setPosition(pos)
 	eff:start()
 
-	local FlareProj = {effect = eff, pos = pos, dir = dir, alive = lifetime, grav = 5}
-	self.projectiles[#self.projectiles + 1] = FlareProj
+	self.projectiles[#self.projectiles + 1] = {
+		effect = eff,
+		pos = pos,
+		dir = dir,
+		alive = 5,
+		grav = 5
+	}
 end
 
 function FlareProjectile.server_onScriptUpdate(self, dt)
@@ -49,10 +52,11 @@ function FlareProjectile.client_onScriptUpdate(self, dt)
 			if hit then
 				flare.effect:setVelocity(_vecZero())
 				flare.dir = _vecZero()
-			end
+			else
+				flare.pos = flare.pos + flare.dir * dt
 
-			flare.pos = flare.pos + flare.dir * dt
-			flare.effect:setPosition(flare.pos)
+				flare.effect:setPosition(flare.pos)
+			end
 
 			local _randVal = _mathRandom(100, 130)
 			flare.effect:setParameter("intensity", flare.alive > 2 and (_randVal / 100 + 0.5) or (_randVal / 100 * ((flare.alive / 2) + 0.5)))

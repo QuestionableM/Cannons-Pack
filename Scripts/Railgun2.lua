@@ -28,31 +28,34 @@ function Railgun2:client_uvAnim(data)
 end
 
 function Railgun2:client_onFixedUpdate(dt)
-	if not self.uv.fdp then return end
+	local uv_fdp = self.uv.fdp
+	if not uv_fdp then return end
 
-	if self.uv.fdp < 360 and not self.effects.eff:isPlaying() then
-		self.effects.eff:start()
+	local eff_effect = self.effects[EffectEnum.eff]
+
+	if uv_fdp < 360 and not eff_effect:isPlaying() then
+		eff_effect:start()
 	end
 
-	if self.uv.fdp < 359 and self.uv.fdp > 260 then 
-		self.effects.eff:setParameter("velocity", self.uv.pitch) 
+	if uv_fdp < 359 and uv_fdp > 260 then 
+		eff_effect:setParameter("velocity", self.uv.pitch) 
 		self.interactable:setUvFrameIndex(self.uv.anim) 
 	end
 
-	if self.uv.fdp < 265 then
-		self.effects.eff:setParameter("velocity", 0)
+	if uv_fdp < 265 then
+		eff_effect:setParameter("velocity", 0)
 		self.interactable:setUvFrameIndex(0)
-		self.effects.eff:stop()
+		eff_effect:stop()
 	end
 
-	self.uv.fdp = (self.uv.fdp > 240 and self.uv.fdp - 1) or nil
-	self.uv.pitch = math.min((self.uv.fdp and self.uv.pitch + 0.59) or 0.50)
-	self.uv.speed = math.min((self.uv.fdp and self.uv.speed + 0.07) or 0.6)
-	self.uv.anim = (self.uv.fdp and self.uv.anim % 53 + self.uv.speed) or 0
+	uv_fdp = (uv_fdp > 240 and uv_fdp - 1) or nil
+	self.uv.pitch = _mathMin((uv_fdp and self.uv.pitch + 0.59) or 0.50)
+	self.uv.speed = _mathMin((uv_fdp and self.uv.speed + 0.07) or 0.6)
+	self.uv.anim = (uv_fdp and self.uv.anim % 53 + self.uv.speed) or 0
+	self.uv.fdp = uv_fdp
 end
 
 local railgun2_recoil = _newVec(0, 0, -80000)
-local railgun2_offset = _newVec(0, 0, 1.1)
 function Railgun2:server_onFixedUpdate()
 	if not _smExists(self.interactable) then return end
 
@@ -70,14 +73,14 @@ function Railgun2:server_onFixedUpdate()
 		end
 
 		if self.reload == 265 then
-			_cp_Shoot(self, nil, "client_effects", "sht", railgun2_recoil)
-			self.projectileConfiguration.position = self.shape.worldPosition + self.shape.worldRotation * railgun2_offset
-			self.projectileConfiguration.velocity = _cp_calculateSpread(self, 0, 1000)
-			RailgunProjectile:server_sendProjectile(self, self.projectileConfiguration)
+			_cp_Shoot(self, nil, "client_effects", EffectEnum.sht, railgun2_recoil)
+			self.projectileConfiguration[ProjSettingEnum.velocity] = _cp_calculateSpread(self, 0, 1000)
+
+			RailgunProjectile:server_sendProjectile(self, self.projectileConfiguration, ProjEnum.Railgun2)
 		end
 
 		if self.reload == 30 then
-			self.network:sendToClients("client_effects", "rld")
+			self.network:sendToClients("client_effects", EffectEnum.rld)
 		end
 
 		self.reload = (self.reload > 1 and self.reload - 1) or (active and 0 or nil)

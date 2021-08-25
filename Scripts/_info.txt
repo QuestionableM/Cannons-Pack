@@ -1,9 +1,10 @@
 What are u doing here? you little thief
 
-Cannons Pack version 4.3 changelog:
-1. The mod is now compatible with the new buttons from MJM mod
-2. Optimized all the scripts
-3. Reduced the mod size by 2mb
+Cannons Pack version 4.4 changelog:
+1. Improved Smart Rocket aiming
+2. Improved networking
+3. Potatoes launched by Smart Cannons can now damage units
+4. Optimized most of the scripts
 
 Made by:
 Questionable Mark - creator of all the textures, UV maps and also some scripts and cannon models.

@@ -8,47 +8,53 @@ RailgunProjectile = class(GLOBAL_SCRIPT)
 RailgunProjectile.projectiles = {}
 RailgunProjectile.proj_queue = {}
 
-function RailgunProjectile.server_sendProjectile(self, shapeScript, data)
-	local position = data.position
-	local velocity = data.velocity
-	local shellEffect = data.shellEffect
-	local explosionEffect = data.explosionEffect or "PropaneTank - ExplosionBig"
-	local explosionLevel = data.explosionLevel or 5
-	local explosionRadius = data.explosionRadius or 0.5
-	local explosionImpulseRadius = data.explosionImpulseRadius or 10
-	local explosionImpulseStrength = data.explosionImpulseStrength or 50
-	local count = data.count
-	local effectToGive = data.shellEffect
+function RailgunProjectile.server_sendProjectile(self, shapeScript, data, id)
+	local data_to_send = _cpProj_ClearNetworkData(data, id)
 
-	_tableInsert(self.proj_queue, {position, velocity, shellEffect, explosionEffect, explosionLevel, explosionRadius, explosionImpulseRadius, explosionImpulseStrength, count, effectToGive})
+	_tableInsert(self.proj_queue, {id, shapeScript.shape, data_to_send})
 end
 
 function RailgunProjectile.client_loadProjectile(self, data)
-	local position,velocity,shellEffect,explosionEffect,explosionLevel,explosionRadius,explosionImpulseRadius,explosionImpulseStrength,count,effectToGive=unpack(data)
+	local proj_data_id = data[1]
+	local shape = data[2]
+	local rc_proj_data = data[3]
 
-	local success, shellEffect = pcall(_createEffect, shellEffect)
+	local has_shape = (shape ~= nil)
+	if has_shape and not _cpExists(shape) then
+		_cpPrint("RailgunProjectile: NO SHAPE")
+		return
+	end
+
+	local proj_settings = _cpProj_CombineProjectileData(rc_proj_data, proj_data_id)
+	local effect_name = proj_settings[ProjSettingEnum.shellEffect]
+
+	local success, shellEffect = pcall(_createEffect, effect_name)
 	if not success then
 		_logError(shellEffect)
 		return
 	end
 
+	local position = proj_settings[ProjSettingEnum.position]
+	if has_shape then
+		position = shape.worldPosition + shape.worldRotation * position
+	end
+
 	shellEffect:setPosition(position)
 	shellEffect:start()
 
-	local RlgProj = {
+	self.projectiles[#self.projectiles + 1] = {
 		effect = shellEffect,
 		pos = position,
-		dir = velocity,
+		dir = proj_settings[ProjSettingEnum.velocity],
 		alive = 10,
-		count = count,
-		effTG = effectToGive,
-		explosionLevel = explosionLevel,
-		explosionRadius = explosionRadius,
-		explosionImpulseRadius = explosionImpulseRadius,
-		explosionImpulseStrength = explosionImpulseStrength,
-		explosionEffect = explosionEffect
+		count = proj_settings[ProjSettingEnum.count],
+		explLvl = proj_settings[ProjSettingEnum.explosionLevel],
+		explRad = proj_settings[ProjSettingEnum.explosionRadius],
+		explImpRad = proj_settings[ProjSettingEnum.explosionImpulseRadius],
+		explImpStr = proj_settings[ProjSettingEnum.explosionImpulseStrength],
+		explEff = proj_settings[ProjSettingEnum.explosionEffect],
+		proj_id = proj_data_id
 	}
-	self.projectiles[#self.projectiles + 1] = RlgProj
 end
 
 function RailgunProjectile.server_onScriptUpdate(self, dt, network)
@@ -59,22 +65,17 @@ function RailgunProjectile.server_onScriptUpdate(self, dt, network)
 
 	for k, RlgProj in pairs(self.projectiles) do
 		if RlgProj and RlgProj.hit then
-			_cpProj_betterExplosion(RlgProj.hit.result, RlgProj.explosionLevel, RlgProj.explosionRadius, RlgProj.explosionImpulseStrength, RlgProj.explosionImpulseRadius, RlgProj.explosionEffect, true)
+			_cpProj_betterExplosion(RlgProj.hit.result, RlgProj.explLvl, RlgProj.explRad, RlgProj.explImpStr, RlgProj.explImpRad, RlgProj.explEff, true)
 			if RlgProj.count > 0 and RlgProj.hit.type ~= "invalid" and RlgProj.hit.type ~= "terrainAsset" and RlgProj.hit.type ~= "terrainSurface" then
-				local proj = {
-					RlgProj.hit.result,
-					RlgProj.dir,
-					RlgProj.effTG,
-					RlgProj.explosionEffect,
-					RlgProj.explosionLevel,
-					RlgProj.explosionRadius - 0.2,
-					RlgProj.explosionImpulseRadius - 10,
-					RlgProj.explosionImpulseStrength - 1000,
-					RlgProj.count - 1,
-					RlgProj.effTG
-				}
-
-				self.network:sendToClients("client_loadProjectile", proj)
+				local data_to_send = {}
+				data_to_send[ProjSettingEnum.position] = RlgProj.hit.result
+				data_to_send[ProjSettingEnum.velocity] = RlgProj.dir
+				data_to_send[ProjSettingEnum.explosionRadius] = RlgProj.explRad - 0.2
+				data_to_send[ProjSettingEnum.explosionImpulseRadius] = RlgProj.explImpRad * 0.8
+				data_to_send[ProjSettingEnum.explosionImpulseStrength] = RlgProj.explImpStr * 0.75
+				data_to_send[ProjSettingEnum.count] = RlgProj.count - 1
+				
+				self.network:sendToClients("client_loadProjectile", {RlgProj.proj_id, nil, data_to_send})
 			end
 		end
 	end
@@ -87,18 +88,23 @@ function RailgunProjectile.client_onScriptUpdate(self, dt)
 		if RlgProj and not RlgProj.hit then
 			RlgProj.alive = RlgProj.alive - dt
 
-			local hit, result = _physRaycast(RlgProj.pos, RlgProj.pos + RlgProj.dir * dt * 1.2)
+			local rlg_pos = RlgProj.pos
+			local rlg_dir = RlgProj.dir
+
+			local hit, result = _physRaycast(rlg_pos, rlg_pos + rlg_dir * dt * 1.2)
 			if hit or RlgProj.alive <= 0 then 
-				RlgProj.hit = {result = (result.pointWorld ~= _vecZero() and result.pointWorld) or RlgProj.pos, type = result.type}
+				RlgProj.hit = {result = (result.pointWorld ~= _vecZero() and result.pointWorld) or rlg_pos, type = result.type}
 				_cpProj_cl_onProjHit(RlgProj.effect)
-			end
+			else
+				RlgProj.pos = rlg_pos + rlg_dir * dt
 
-			RlgProj.pos = RlgProj.pos + RlgProj.dir * dt
-			if RlgProj.dir:length() > 0.0001 then
-				RlgProj.effect:setRotation(_getVec3Rotation(_xAxis, RlgProj.dir))
-			end
+				local proj_eff = RlgProj.effect
+				if rlg_dir:length() > 0.0001 then
+					proj_eff:setRotation(_getVec3Rotation(_xAxis, rlg_dir))
+				end
 
-			RlgProj.effect:setPosition(RlgProj.pos)
+				proj_eff:setPosition(RlgProj.pos)
+			end
 		end
 	end
 end

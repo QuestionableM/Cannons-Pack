@@ -21,7 +21,7 @@ end
 
 function BasicCannon:server_onCreate()
 	local settings = _cpCannons_sv_loadCannonInfo(self)
-	self.projectileConfig = settings.proj_config
+	self.projectileConfig = settings.proj_config or {}
 	self.settings = settings.cannon_config
 	self.proj_scr = _CP_gScript[settings.t_script]
 end
@@ -34,18 +34,27 @@ function BasicCannon:server_onFixedUpdate()
 	local s_set = self.settings
 
 	local child = self.interactable:getChildren()[1]
-	if child and tostring(child.shape.uuid) ~= s_set.port_uuid then self.interactable:disconnect(child) end
+	if child and tostring(child.shape.uuid) ~= s_set.port_uuid then
+		self.interactable:disconnect(child)
+	end
 
 	if active and not self.reload then
-		self.reload = _cp_Shoot(self, s_set.reload, "client_shoot", "sht", s_set.impulse_dir * s_set.impulse_str)
-		self.projectileConfig.velocity = _cp_calculateSpread(self, s_set.spread, s_set.velocity)
-		self.proj_scr:server_sendProjectile(self, self.projectileConfig)
-		if child then child:setActive(true) end
+		self.reload = _cp_Shoot(self, s_set.reload, "client_shoot", EffectEnum.sht, s_set.impulse_dir * s_set.impulse_str)
+		
+		self.projectileConfig[ProjSettingEnum.velocity] = _cp_calculateSpread(self, s_set.spread, s_set.velocity)
+		self.proj_scr:server_sendProjectile(self, self.projectileConfig, s_set.proj_data_id)
+		
+		if child then
+			child:setActive(true)
+		end
 	end
 	
 	if self.reload then
-		if ((s_set.no_snd_on_hold and not active) or not s_set.no_snd_on_hold) and s_set.rld_sound and self.reload == s_set.rld_sound then
-			self.network:sendToClients("client_shoot", "rld")
+		local snd_on_hold = s_set.no_snd_on_hold
+		local r_Sound = s_set.rld_sound
+		
+		if ((snd_on_hold and not active) or not snd_on_hold) and (r_Sound and self.reload == r_Sound) then
+			self.network:sendToClients("client_shoot", EffectEnum.rld)
 		end
 
 		self.reload = _cp_calculateReload(self.reload, s_set.auto_reload, active)

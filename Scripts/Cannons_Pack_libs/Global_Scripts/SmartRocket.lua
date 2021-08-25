@@ -8,42 +8,54 @@ SmartRocket = class(GLOBAL_SCRIPT)
 SmartRocket.projectiles = {}
 SmartRocket.proj_queue = {}
 
-function SmartRocket.server_sendProjectile(self, shapeScript, data)
-	local position = data.position
-	local direction = data.direction
-	local rocketSettings = data.rocketSettings
-	local velocity = data.velocity
-	local proxFuze = data.proxFuze or 0
-	local ignored_players = _cpProj_proxFuzeIgnore(shapeScript.shape.worldPosition, proxFuze)
+--The FOV of Smart Rocket is 60 degrees (-0.66)
+--The FOV of Smart Rocket Detector is 80 degress (-0.88)
 
-	_tableInsert(self.proj_queue,{shapeScript.shape,position,direction,rocketSettings,velocity,proxFuze,ignored_players})
+function SmartRocket.server_sendProjectile(self, shapeScript, data, id)
+	local data_to_send = _cpProj_ClearNetworkData(data, id)
+
+	_tableInsert(self.proj_queue, {id, shapeScript.shape, data_to_send})
 end
 
+SR_ModeEnum = {
+	cam = 1,
+	dirCam = 2
+}
+
 function SmartRocket.client_loadProjectile(self, data)
-	local shape, position, direction, rocketSettings, velocity, proxFuze, ignored_players = unpack(data)
+	local proj_data_id, shape, rc_proj_data = unpack(data)
 
 	if not _cpExists(shape) then
 		_cpPrint("SmartRocket: NO SHAPE")
 		return
 	end
 
+	local proj_settings = _cpProj_CombineProjectileData(rc_proj_data, proj_data_id)
+
+	local position = proj_settings[ProjSettingEnum.position]
+	position = shape.worldPosition + shape.worldRotation * position
+
+	local velocity = proj_settings[ProjSettingEnum.velocity]
+
 	local effect = _createEffect("RocketLauncher - Shell")
 	effect:setPosition(position)
 	effect:start()
 
-	local rocket = {
+	local proximity_fuze = proj_settings[ProjSettingEnum.proxFuze]
+	local ignored_players = _cpProj_proxFuzeIgnore(shape.worldPosition, proximity_fuze)
+
+	self.projectiles[#self.projectiles + 1] = {
 		effect = effect,
 		pos = position,
-		dir = direction,
+		dir = velocity,
 		alive = 15,
-		options = rocketSettings,
-		vel = velocity,
+		mode = proj_settings[ProjSettingEnum.mode],
+		vel = proj_settings[ProjSettingEnum.speed],
+		player = proj_settings[ProjSettingEnum.player],
 		shape = shape,
-		proxFuze = proxFuze,
-		ignored_players = ignored_players,
-		flar = nil
+		proxFuze = proximity_fuze,
+		ignored_players = ignored_players
 	}
-	self.projectiles[#self.projectiles + 1] = rocket
 end
 
 function SmartRocket.server_onScriptUpdate(self, dt)
@@ -53,181 +65,223 @@ function SmartRocket.server_onScriptUpdate(self, dt)
 	end
 
 	for b, proj in pairs(self.projectiles) do
-		if proj and proj.hit then 
+		if proj and proj.hit then
 			_cpProj_betterExplosion(proj.hit, 60, 0.7, 7000, 30, "ExplBig", true)
 		end
 	end
 end
 
-local _RVis = _mathRad(60)
-local function getClosestVisiblePlayer(v1, v1Pred)
+local function getClosestVisiblePlayer(pos, dir)
 	local ClosestPlayer = nil
 	local ClosestDistance = math.huge
 
 	for id, player in pairs(_getAllPlayers()) do
-		if player.character then
-			local isVisible = _cp_isObjectVisible(v1, v1Pred, player.character.worldPosition, _RVis, _RVis)
-			local distance = (v1 - player.character.worldPosition):length()
-			if isVisible and distance < ClosestDistance then
-				ClosestPlayer = player
-				ClosestDistance = distance
+		local p_Char = player.character
+
+		if _cpExists(p_Char) then
+			local c_Position = p_Char.worldPosition
+			local isVisible = _cp_isObjectVisible(pos, dir, c_Position, -0.66)
+
+			if isVisible then
+				local target_dist = (pos - c_Position):length()
+
+				if target_dist < ClosestDistance then
+					ClosestPlayer = c_Position
+					ClosestDistance = target_dist
+				end
 			end
 		end
 	end
+
 	return ClosestPlayer
 end
 
-local function pickATarget(rocket_pos, player, flare, playerVisible)
-	if (player and playerVisible) and flare then
-		local char_pos = player.character.worldPosition
+local _xAxis = _newVec(1, 0, 0)
+local function UpdateRocketEffect(rocket)
+	local dir_len = rocket.dir:length()
+	local r_Effect = rocket.effect
 
-		local player_d = (rocket_pos - char_pos):length()
-		local flare_d = (rocket_pos - flare):length()
-		if player_d > flare_d then
-			if (flare - char_pos):length() < 10 then return flare, "flare" end
-		end
+	r_Effect:setPosition(rocket.pos)
+	r_Effect:setParameter("intensity", _mathRandom(150, 230) / 100)
+	r_Effect:setParameter("velocity", dir_len)
 
-		local t = (player_d > flare_d) and flare or char_pos
-		local t_type = (player_d > flare_d) and "flare" or "char"
+	if dir_len > 0.001 then
+		local r_QuatDir = _getVec3Rotation(_xAxis, rocket.dir)
+		local r_RotSpeed = (_getCurrentTick() * 5) % 360
+		local r_QuatRot = _quatAngleAxis(_mathRad(r_RotSpeed), _xAxis)
 
-		return t, t_type
-	elseif player and playerVisible then
-		return player.character.worldPosition, "char"
-	elseif flare then
-		return flare, "flare"
+		r_Effect:setRotation(r_QuatDir * r_QuatRot)
 	end
 end
 
-local _xAxis = _newVec(1, 0, 0)
+local function GetPlayerCharacter(player)
+	if not _cpExists(player) then return end
+
+	local pl_char = player:getCharacter()
+	if _cpExists(pl_char) then
+		return pl_char
+	end
+end
+
+local r_FlarEnum = {
+	dead = 1,
+	char = 2,
+	flare = 3
+}
+
+local r_ModeDist = {
+	[r_FlarEnum.flare] = 8
+}
+
+local function PickATargetInternal(rocket_pos, char_pos, playerVisible, flare)
+	local has_char = (char_pos ~= nil and playerVisible)
+
+	if has_char and flare then
+		local pl_dist = (rocket_pos - char_pos):length()
+		local fl_dist = (rocket_pos - flare):length()
+
+		local is_pl_further = (pl_dist > fl_dist)
+
+		if is_pl_further and (flare - char_pos):length() < 10 then
+			return flare, r_FlarEnum.flare
+		end
+
+		local o_Pos = is_pl_further and flare or char_pos
+		local o_Type = is_pl_further and "flare" or "char"
+
+		return o_Pos, o_Type
+	elseif has_char then
+		return char_pos, r_FlarEnum.char
+	elseif flare then
+		return flare, r_FlarEnum.flare
+	end
+end
+
+local function PickATarget(rocket, char_pos, char_visible)
+	local r_Pos = rocket.pos
+
+	local closest_flare = _cpProj_getNearestVisibleFlare(FlareProjectile.projectiles, r_Pos, rocket.dir)
+	local targetPos, targetType = PickATargetInternal(r_Pos, char_pos, char_visible, closest_flare)
+
+	local is_char = (targetType == r_FlarEnum.char)
+	if targetPos and ((is_char and rocket.flar ~= r_FlarEnum.dead) or not is_char) then
+		local target_dist = (targetPos - r_Pos):length()
+
+		return targetPos, target_dist, targetType
+	end
+end
+
 function SmartRocket.client_onScriptUpdate(self, dt)
 	for k, rocket in pairs(self.projectiles) do
-		if rocket and rocket.hit then self.projectiles[k] = nil end
+		if rocket and rocket.hit then
+			self.projectiles[k] = nil
+		end
+
 		if rocket and not rocket.hit then
 			rocket.alive = rocket.alive - dt
-			local _Accuracy = 0.1
-			local position = rocket.pos + rocket.dir
-			local distance = math.huge
-			local r_shape_exists = _cpExists(rocket.shape)
-			local r_options = rocket.options
-			local camera = r_options.mode == "cam" or r_options.mode == "dirCam"
+			local r_Alive = rocket.alive
+			local r_Pos = rocket.pos
 
-			local player_table = _getAllPlayers()
-			if #player_table > 0 then
-				for amount, player in pairs(player_table) do
-					if rocket.flar ~= "dead" and _cpProj_isFlareNear(FlareProjectile.projectiles, rocket.pos, 10) then
-						rocket.flar = "dead"
-					end
+			local r_Accuracy = 0.1
+			local t_Position = r_Pos + rocket.dir
+			local t_Distance = math.huge
+			local r_shape = rocket.shape
+			local r_shape_exists = _cpExists(r_shape)
+			local r_Mode = rocket.mode
+			local camera = (r_Mode ~= nil)
 
-					local pl_char = player.character
-					if pl_char then
-						local pred_pos = rocket.pos + rocket.dir:normalize() * 2
-						local char_pos = pl_char.worldPosition
-						local opt_player = r_options.player
+			if rocket.flar ~= r_FlarEnum.dead and _cpProj_isFlareNear(FlareProjectile.projectiles, r_Pos, 10) then
+				rocket.flar = r_FlarEnum.dead
+			end
 
-						if opt_player then
-							if opt_player == player then
-								if not camera then
-									if rocket.alive < 14.5 and rocket.alive > 14 then
-										_Accuracy = 0.25
-										position = char_pos
-										distance = (position - rocket.pos):length()
-									end
+			local r_DirGood = (rocket.dir:length() > 0.001)
+			local o_Char = GetPlayerCharacter(rocket.player)
+			if o_Char ~= nil then
+				local char_pos = o_Char.worldPosition
 
-									if rocket.alive < 14 and rocket.dir:length() > 0.001 then
-										local closest_flare = _cpProj_getNearestVisibleFlare(FlareProjectile.projectiles, rocket.pos, pred_pos)
-										local charVisible = _cp_isObjectVisible(rocket.pos, pred_pos, char_pos, _RVis, _RVis)
-										local targetPos, targetType = pickATarget(rocket.pos, player, closest_flare, charVisible)
+				if camera then
+					local cam_offset = _newVec(0, 0, o_Char:isCrouching() and 0.275 or 0.575)
+					local offset_pos = char_pos + cam_offset
+					local char_dir = o_Char.direction
 
-										if targetPos and targetType and ((targetType == "char" and rocket.flar ~= "dead") or targetType ~= "char") then
-											position = targetPos
-											distance = (position - rocket.pos):length()
-											rocket.flar = targetType
-										end
-									end
-								else
-									local cam_offset = _newVec(0, 0, pl_char:isCrouching() and 0.277 or 0.569)
-									local char_dir = pl_char.direction
-
-									local bool, cam = _physRaycast(char_pos + cam_offset + char_dir, char_pos + char_dir * 2500)
-									if r_options.mode ~= "dirCam" then
-										if (r_shape_exists and cam:getBody() ~= rocket.shape.body) and cam:getCharacter() ~= player.id then
-											position = cam.pointWorld
-											distance = (position - rocket.pos):length()
-										end
-									else
-										if r_shape_exists then
-											position = cam.directionWorld * 20
-										end
-									end
-								end
+					local hit, result = _physRaycast(offset_pos + char_dir, offset_pos + char_dir * 2500)
+					if hit then
+						if r_Mode == SR_ModeEnum.dirCam then
+							if r_shape_exists then
+								t_Position = result.directionWorld * 20
 							end
 						else
-							if rocket.dir:length() > 0.001 then
-								local cl_vis_char = getClosestVisiblePlayer(rocket.pos, pred_pos)
-								local closest_flare = _cpProj_getNearestVisibleFlare(FlareProjectile.projectiles, rocket.pos, pred_pos)
-								local t_pos, t_type = pickATarget(rocket.pos, cl_vis_char, closest_flare, true)
-								if t_pos and t_type and ((t_type == "char" and rocket.flar ~= "dead") or t_type) then
-									position = t_pos
-									distance = (position - rocket.pos):length()
-									rocket.flar = t_type
-								end
+							if (r_shape_exists and result:getBody() ~= r_shape.body) and result:getCharacter() ~= o_Char then
+								t_Position = result.pointWorld
+								t_Distance = (t_Position - r_Pos):length()
 							end
+						end
+					end
+				else
+					if r_Alive < 14.5 and r_Alive > 14 then
+						r_Accuracy = 0.25
+						t_Position = char_pos
+						t_Distance = (t_Position - r_Pos):length()
+					elseif r_Alive < 14 and r_DirGood then
+						local charVisible = _cp_isObjectVisible(r_Pos, rocket.dir, char_pos, -0.66)
+						local tar_pos, tar_dst, tar_type = PickATarget(rocket, char_pos, charVisible)
+
+						if tar_pos ~= nil then
+							t_Position = tar_pos
+							t_Distance = tar_dst
+							rocket.flar = tar_type
 						end
 					end
 				end
 			else
-				if rocket.dir:length() > 0.001 then
-					local closest_flare = _cpProj_getNearestVisibleFlare(FlareProjectile.projectiles, rocket.pos, rocket.pos + rocket.dir:normalize() * 2)
-					if closest_flare then
-						position = closest_flare
-						distance = (position - rocket.pos):length()
+				if r_DirGood then
+					local vis_char = getClosestVisiblePlayer(r_Pos, rocket.dir)
+					local tar_pos, tar_dst, tar_type = PickATarget(rocket, vis_char, true)
+
+					if tar_pos ~= nil then
+						t_Position = tar_pos
+						t_Distance = tar_dst
+						rocket.flar = tar_type
 					end
 				end
 			end
 
-			if rocket.alive < 14.5 and position then
-				local _NewDir = (position - rocket.pos):normalize()
-				local _DirNorm = rocket.dir:normalize()
-				if not camera then
-					local hit1, result1 = _physRaycast(rocket.pos, rocket.pos + (rocket.dir / 1.5))
-					if hit1 and result1.type == "terrainAsset" or result1.type == "terrainSurface" or (r_shape_exists and result1.type == "body" and result1:getBody() == rocket.shape.body) then
-						local _normal = result1.normalWorld
-						local _dotP = rocket.dir:dot(_normal)
-						local reflected_vector = rocket.dir - (_normal * _dotP)
+			if r_Alive < 14.5 and t_Position then
+				local new_dir = (t_Position - r_Pos):normalize()
+				local dir_norm = rocket.dir:normalize()
 
-						rocket.dir = _vecLerp(_DirNorm, reflected_vector, 0.01):normalize() * rocket.vel
-					else
-						rocket.dir = _vecLerp(_DirNorm, _NewDir, _Accuracy):normalize() * rocket.vel
-					end
+				if camera then
+					rocket.dir = _vecLerp(dir_norm, new_dir, 0.08):normalize() * rocket.vel
 				else
-					rocket.dir = _vecLerp(_DirNorm, _NewDir, 0.08):normalize() * rocket.vel
+					local hit, result = _physRaycast(r_Pos, r_Pos + (rocket.dir / 1.5))
+					local r_Type = result.type
+
+					if hit and r_Type == "terrainAsset" or r_Type == "terrainSurface" or (r_shape_exists and result:getBody() == r_shape.body) then
+						local r_Normal = result.normalWorld
+						local r_Dot = rocket.dir:dot(r_Normal)
+						local r_Vector = rocket.dir - (r_Normal * r_Dot)
+
+						rocket.dir = _vecLerp(dir_norm, r_Vector, 0.01):normalize() * rocket.vel
+					else
+						rocket.dir = _vecLerp(dir_norm, new_dir, r_Accuracy):normalize() * rocket.vel
+					end
 				end
 			end
 			
-			if rocket.dir:length() > rocket.vel and camera then
+			if camera and rocket.dir:length() > rocket.vel then
 				rocket.vel = rocket.vel * 0.998
 			end
-			
-			if rocket.dir:length() > 0.0001 then
-				local _RocketDir = _getVec3Rotation(_xAxis, rocket.dir)
-				local _RotSpeed = (_getCurrentTick() * 5) % 360
-				local _RocketRot = _quatAngleAxis(_mathRad(_RotSpeed), _xAxis)
 
-				rocket.effect:setRotation(_RocketDir * _RocketRot)
-			end
-
-			local hit, result = _physRaycast(rocket.pos, rocket.pos + rocket.dir * dt * 1.2)
-			if hit or rocket.alive <= 0 or (rocket.flar == "char" and distance < 1) or (rocket.flar == "flare" and distance < 8) or (camera and distance < 1) or _cpProj_cl_proxFuze(rocket.proxFuze, rocket.pos, rocket.ignored_players) then
-				rocket.hit = (result.pointWorld ~= _vecZero() and result.pointWorld) or rocket.pos
+			local hit, result = _physRaycast(r_Pos, r_Pos + rocket.dir * dt * 1.2)
+			if hit or r_Alive <= 0 or t_Distance < (r_ModeDist[camera or rocket.flar] or 1) or _cpProj_cl_proxFuze(rocket.proxFuze, r_Pos, rocket.ignored_players) then
+				rocket.hit = (result.pointWorld ~= _vecZero() and result.pointWorld) or r_Pos
 				
 				_cpProj_cl_onProjHit(rocket.effect, true)
-				_cpProj_killNearestFlares(FlareProjectile.projectiles, rocket.pos, 8)
+				_cpProj_killNearestFlares(FlareProjectile.projectiles, rocket.hit, 8)
+			else
+				rocket.pos = r_Pos + rocket.dir * dt
+				UpdateRocketEffect(rocket)
 			end
-
-			rocket.pos = rocket.pos + rocket.dir * dt
-			rocket.effect:setPosition(rocket.pos)
-			rocket.effect:setParameter("intensity", _mathRandom(150, 230) / 100)
-			rocket.effect:setParameter("velocity", rocket.dir:length())
 		end
 	end
 end

@@ -8,29 +8,36 @@ EMPProjectile = class(GLOBAL_SCRIPT)
 EMPProjectile.projectiles = {}
 EMPProjectile.proj_queue = {}
 
+function EMPProjectile.server_sendProjectile(self, shapeScript, data, id)
+	local data_to_send = _cpProj_ClearNetworkData(data, id)
+
+	_tableInsert(self.proj_queue, {id, shapeScript.shape, data_to_send})
+end
+
 function EMPProjectile.client_loadProjectile(self, data)
-	local shape,position,velocity,disconnectRadius = unpack(data)
+	local proj_data_id, shape, data = unpack(data)
 
 	if not _cpExists(shape) then
 		_cpPrint("EMPProjectile: NO SHAPE")
 		return
 	end
 
-	local realPos = shape.worldPosition + shape.worldRotation * position
+	local proj_settings = _cpProj_CombineProjectileData(data, proj_data_id)
+
+	local position = proj_settings[ProjSettingEnum.position]
+	position = shape.worldPosition + shape.worldRotation * position
+
 	local eff = _createEffect("EMPCannon - Shell")
-
-	eff:setPosition(realPos)
+	eff:setPosition(position)
 	eff:start()
-	
-	local EMPProj = {effect = eff, pos = realPos, dir = velocity, alive = 10, disconnectRadius = disconnectRadius}
-	self.projectiles[#self.projectiles + 1] = EMPProj
-end
 
-function EMPProjectile.server_sendProjectile(self, shapeScript, data)
-	local position = data.position
-	local velocity = data.velocity
-	local disconnectRadius = data.disconnectRadius
-	_tableInsert(self.proj_queue, {shapeScript.shape, position, velocity, disconnectRadius})
+	self.projectiles[#self.projectiles + 1] = {
+		effect = eff,
+		pos = position,
+		dir = proj_settings[ProjSettingEnum.velocity],
+		alive = 10,
+		disconnectRadius = proj_settings[ProjSettingEnum.disconnectRadius]
+	}
 end
 
 function EMPProjectile.server_onScriptUpdate(self, dt)
@@ -44,11 +51,13 @@ function EMPProjectile.server_onScriptUpdate(self, dt)
 			local shape_list = _getShapesInSphere(EMPProjectile.hit, EMPProjectile.disconnectRadius)
 
 			for k, shape in pairs(shape_list) do
-				if _cpExists(shape) and shape:getInteractable() then
-					local s_interactable = shape:getInteractable()
+				if _cpExists(shape) then
+					local s_Inter = shape:getInteractable()
 
-					for k, parent in pairs(s_interactable:getParents()) do
-						parent:disconnect(s_interactable)
+					if s_Inter then
+						for k, parent in pairs(s_Inter:getParents()) do
+							parent:disconnect(s_Inter)
+						end
 					end
 				end
 			end
@@ -58,24 +67,34 @@ function EMPProjectile.server_onScriptUpdate(self, dt)
 	end
 end
 
+local function EMPProj_UpdateEffect(EMPProj)
+	local emp_effect = EMPProj.effect
+
+	emp_effect:setPosition(EMPProj.pos)
+
+	local emp_dir = EMPProj.dir
+	if emp_dir:length() > 0.0001 then
+		emp_effect:setRotation(_getVec3Rotation(_newVec(1, 0, 0), emp_dir))
+	end
+end
+
 function EMPProjectile.client_onScriptUpdate(self, dt)
 	for k,EMPProj in pairs(self.projectiles) do
 		if EMPProj and EMPProj.hit then self.projectiles[k] = nil end
 		if EMPProj and not EMPProj.hit then
 			EMPProj.alive = EMPProj.alive - dt
 
-			local hit,result = _physRaycast(EMPProj.pos, EMPProj.pos + EMPProj.dir * dt * 1.2)
+			local emp_pos = EMPProj.pos
+			local emp_dir = EMPProj.dir
+
+			local hit,result = _physRaycast(emp_pos, emp_pos + emp_dir * dt * 1.2)
 			if hit or EMPProj.alive <= 0 then
-				EMPProj.hit = (result.pointWorld ~= _vecZero() and result.pointWorld) or EMPProj.pos
+				EMPProj.hit = (result.pointWorld ~= _vecZero() and result.pointWorld) or emp_pos
 				_cpProj_cl_onProjHit(EMPProj.effect)
+			else
+				EMPProj.pos = emp_pos + emp_dir * dt
+				EMPProj_UpdateEffect(EMPProj)
 			end
-
-			EMPProj.pos = EMPProj.pos + EMPProj.dir * dt
-			if EMPProj.dir:length() > 0.0001 then
-				EMPProj.effect:setRotation(_getVec3Rotation(_newVec(1, 0, 0), EMPProj.dir))
-			end
-
-			EMPProj.effect:setPosition(EMPProj.pos)
 		end
 	end
 end

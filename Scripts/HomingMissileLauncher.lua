@@ -14,180 +14,207 @@ HomingMissile.colorNormal = _colorNew(0x00538aff)
 HomingMissile.colorHighlight = _colorNew(0x0099ffff)
 
 function HomingMissile:server_onCreate()
-	self.settings = {}
 	self.rocketConfig = _cpCannons_loadCannonInfo(self)
-end
-
-function HomingMissile:server_networking(data)
-	if data.mode == "victim" then
-		self.target = data.player
-	elseif data.mode == "camPlayer" then
-		self.cameraPlayer = data.player
-	elseif data.mode == "req" then
-		self.network:sendToClients("client_onChange", {case = "reveiveData", uv = self.reload ~= nil, logic = self.player ~= nil, camera = self.settings.mode == "cam" or self.settings.mode == "dirCam"})
-	end
-end
-
-
-local _recoil = _newVec(0, 0, -1000)
-function HomingMissile:server_onFixedUpdate()
-	if not _smExists(self.interactable) then return end
-
-	self.player = nil
-	self.settings.mode = "seek"
-	local launcher_active = false
-	local proximityFuse = 0
-
-	local Parents = self.interactable:getParents()
-	for l, gate in pairs(Parents) do
-		local gate_col = tostring(gate:getShape():getColor())
-
-		if _cp_isNumberLogic(gate) then
-			if gate_col == "eeeeeeff" then
-				self.player = _mathMax(_mathMin(gate.power, #_getAllPlayers() - 1), 0)
-			elseif gate_col == "7f7f7fff" then
-				if gate.power > 0 then proximityFuse = _mathMin(gate.power, 20) end
-			end
-		else
-			if _cp_isLogic(gate) then
-				if gate_col == "222222ff" then
-					if gate.active then self.settings.mode = "cam" end
-				elseif gate_col == "4a4a4aff" then
-					if gate.active then self.settings.mode = "dirCam" end
-				else
-					if gate.active then launcher_active = true end
-				end
-			end
-		end
-	end
-
-	if self.number ~= self.player then
-		self.number = self.player
-		self.network:sendToClients("client_onChange", {case = "numb", logic = self.player ~= nil})
-	end
-
-	if self.bool ~= self.settings.mode then
-		self.bool = self.settings.mode
-		self.network:sendToClients("client_onChange", {case = "camera", bool = self.settings.mode == "cam" or self.settings.mode == "dirCam"})
-	end
-
-	if self.settings.mode ~= "cam" and self.settings.mode ~= "dirCam" then
-		self.settings.player = self.target or (self.player and _getAllPlayers()[self.player + 1])
-		self.cameraPlayer = nil
-	end
-
-	if self.settings.mode == "cam" or self.settings.mode == "dirCam" then
-		self.target = nil
-		if self.player ~= nil and self.cameraPlayer ~= nil then 
-			self.cameraPlayer = nil 
-		end
-		self.settings.player = self.cameraPlayer or (self.player and _getAllPlayers()[self.player + 1])
-	end
-	
-	if launcher_active and not self.reload then
-		local hit = false
-		local bool, result = _physRaycast(self.shape.worldPosition, self.shape.worldPosition - self.shape.up / 1.58)
-		if not bool or (bool and result.type == "character") then
-			hit = true
-		end
-
-		self.reload = _cp_Shoot(self, 280, "client_onChange", {case = "sht", hit = hit, eff = "sht"}, _recoil)
-		self.rocketConfig.proxFuze = proximityFuse
-		self.rocketConfig.position = self.shape.worldPosition + self.shape.worldRotation * _newVec(0, 0, 0.7 + (_mathAbs(self.shape.up:dot(self.shape.velocity)) / 24))
-		self.rocketConfig.direction = _cp_calculateSpread(self, 0.2, 100)
-		self.rocketConfig.rocketSettings = {
-			mode = self.settings.mode or "seek",
-			player = self.settings.player
-		}
-
-		SmartRocket:server_sendProjectile(self, self.rocketConfig)
-	end
-
-	if self.reload then
-		if self.reload == 30 then
-			self.network:sendToClients("client_onChange", {case = "sht", eff = "rld", act = launcher_active})
-		end
-		self.reload = (self.reload > 1 and self.reload - 1) or nil
-	end
+	self.cam_bool = false
+	self.num_logic_bool = false
 end
 
 function HomingMissile:client_onCreate()
 	self.effects = _cpEffect_cl_loadEffects(self)
 	self:client_injectScript("SmartRocket")
-	self.network:sendToServer("server_networking", {mode = "req"})
-	self.victim = 0
-	self.logic = false
-	self.clientCamera = false
-	self.modes = {
-		[1] = {name = "Targeting closest visible player", id = "clpl"}
-	}
+
+	self.client_cam = false
+	self.client_num_logic = false
+	self.client_pl_page = 0
+
+	self.network:sendToServer("server_requestData")
 end
 
-function HomingMissile:client_onChange(data)
-	if data.case == "camera" then
-		self.clientCamera = data.bool
-		if data.bool then 
-			self.victim = 0
-		end
-	elseif data.case == "numb" then
-		self.logic = data.logic
-	elseif data.case == "sht" then
-		self.interactable:setUvFrameIndex(data.eff ~= "rld" and 70 or 0)
+function HomingMissile:server_requestData(data, caller)
+	self.network:sendToClient(caller, "client_receiveData", {self.reload ~= nil, self.num_logic_bool, self.cam_bool})
+end
 
-		if not data.act then
-			_cp_spawnOptimizedEffect(self.shape, self.effects[data.eff], 75)
-		end
+function HomingMissile:client_receiveData(data)
+	self:client_updateUvAnim(data[1])
+	self.client_num_logic = data[2]
+	self.client_cam = data[3]
+end
 
-		if data.hit then
-			_cp_spawnOptimizedEffect(self.shape, self.effects.fms, 150)
-		end
-	elseif data.case == "reveiveData" then
-		self.logic = data.logic
-		self.clientCamera = data.camera
-		if data.uv then
-			self.interactable:setUvFrameIndex(70)
-		end
+function HomingMissile:server_updateNumLogicBool(state)
+	if self.num_logic_bool ~= state then
+		self.num_logic_bool = state
+		self.network:sendToClients("client_setNumLogicMode", self.num_logic_bool)
 	end
 end
 
+function HomingMissile:server_updateCamBool(state)
+	if self.cam_bool ~= state then
+		self.cam_bool = state
+
+		if not self.cam_bool then
+			self.operator = nil
+		end
+
+		self.network:sendToClients("client_setCamMode", self.cam_bool)
+	end
+end
+
+function HomingMissile:server_setTarget(target)
+	self.target = target
+end
+
+function HomingMissile:server_setOperator(data, operator)
+	self.operator = operator
+end
+
+function HomingMissile:server_getFinalTarget(pl_target)
+	local final_target = nil
+
+	if self.cam_bool then
+		final_target = self.operator or pl_target
+	else
+		final_target = self.target or pl_target
+	end
+
+	return final_target
+end
+
+function HomingMissile:server_updateReload(can_shoot)
+	if self.reload then
+		if self.reload == 30 then
+			self.network:sendToClients("client_onEffect", {EffectEnum.rld, can_shoot})
+		end
+
+		self.reload = (self.reload > 1 and self.reload - 1) or nil
+	end
+end
+
+function HomingMissile:server_tryShootProjectile(can_shoot, rocket_mode, target_player, proximityFuze)
+	if can_shoot and not self.reload then
+		local s_Pos = self.shape.worldPosition
+		local bool, result = _physRaycast(s_Pos, s_Pos - self.shape.up / 1.58)
+		local hit = (not bool or (bool and result.type == "character"))
+
+		self.reload = _cp_Shoot(self, 280, "client_onEffect", {EffectEnum.sht, hit}, _recoil)
+
+		self.rocketConfig[ProjSettingEnum.velocity] = _cp_calculateSpread(self, 0.2, 100)
+		self.rocketConfig[ProjSettingEnum.player] = self:server_getFinalTarget(target_player)
+		self.rocketConfig[ProjSettingEnum.mode] = rocket_mode
+		self.rocketConfig[ProjSettingEnum.proxFuze] = proximityFuze
+
+		SmartRocket:server_sendProjectile(self, self.rocketConfig, ProjEnum.SmartRocketLauncher)
+	end
+end
+
+local _recoil = _newVec(0, 0, -1000)
+function HomingMissile:server_onFixedUpdate()
+	if not _smExists(self.interactable) then return end
+
+	local can_shoot = false
+	local target_player = nil
+	local player_list = _getAllPlayers()
+	local rocket_mode = nil
+	local proximityFuze = 0
+
+	local parent_list = self.interactable:getParents()
+	for k, p in pairs(parent_list) do
+		local p_Color = tostring(p.shape.color)
+
+		if _cp_isNumberLogic(p) then
+			local p_Power = p.power
+			if p_Color == "eeeeeeff" then
+				target_player = player_list[_mathMax(_mathMin(p_Power, #player_list - 1), 0) + 1]
+			elseif p_Color == "7f7f7fff" then
+				if p_Power > 0 then proximityFuze = _mathMin(p_Power, 20) end
+			end
+		else
+			if _cp_isLogic(p) then
+				local p_Active = p.active
+				if p_Color == "222222ff" then
+					if p_Active then rocket_mode = SR_ModeEnum.cam end
+				elseif p_Color == "4a4a4aff" then
+					if p_Active then rocket_mode = SR_ModeEnum.dirCam end
+				else
+					if p_Active then can_shoot = true end
+				end
+			end
+		end
+	end
+
+	self:server_updateCamBool(rocket_mode ~= nil)
+	self:server_updateNumLogicBool(target_player ~= nil)
+
+	self:server_tryShootProjectile(can_shoot, rocket_mode, target_player, proximityFuze)
+
+	self:server_updateReload(can_shoot)
+end
+
+function HomingMissile:client_onEffect(data)
+	local eff_idx = data[1]
+	local active = data[2]
+
+	local is_ShootEff = (eff_idx == EffectEnum.sht)
+	self:client_updateUvAnim(is_ShootEff)
+
+	if (not is_ShootEff and not active) or is_ShootEff then
+		_cp_spawnOptimizedEffect(self.shape, self.effects[eff_idx], 75)
+	end
+
+	if is_ShootEff and active then
+		_cp_spawnOptimizedEffect(self.shape, self.effects[EffectEnum.fms], 150)
+	end
+end
+
+function HomingMissile:client_setCamMode(state)
+	self.client_cam = state
+end
+
+function HomingMissile:client_setNumLogicMode(state)
+	self.client_num_logic = state
+end
+
+function HomingMissile:client_updateUvAnim(is_shoot)
+	self.interactable:setUvFrameIndex(is_shoot and 70 or 0)
+end
+
+local HM_NumLogicConnectedMsg = "You can't change any settings while number logic is connected to the rocket launcher"
 function HomingMissile:client_onInteract(character, state)
 	if not state then return end
 
-	if not self.logic then
-		if not self.clientCamera then
-			local pl_list = _getAllPlayers()
-			local mode_count = #self.modes
+	if self.client_num_logic then
+		_cp_infoOutput("GUI Item released", true, HM_NumLogicConnectedMsg)
+		return
+	end
 
-			local crouchValue = character:isCrouching() and -1 or 1
-			local valLimit = #pl_list + mode_count
-			self.victim = (self.victim + crouchValue) % valLimit
-
-			if (self.victim + 1) <= mode_count then
-				_cp_infoOutput("GUI Item drag", true, ("#ffff00Mode#ffffff: #ffff00%s#ffffff"):format(self.modes[self.victim + 1].name))
-				self.network:sendToServer("server_networking", {mode = "victim"})
-			else
-				local cur_player = pl_list[self.victim + 1 - mode_count]
-				_cp_infoOutput("GUI Item drag", true, ("#ffff00Mode#ffffff: Targeting #ff0000%s#ffffff"):format(cur_player.name), 2)
-				self.network:sendToServer("server_networking", {mode = "victim", player = cur_player})
-			end
-		else
-			self.network:sendToServer("server_networking", {mode = "camPlayer", player = _getLocalPlayer()})
-			_cp_infoOutput("Blueprint - Camera", true, "You are controlling the rockets now", 2)
-		end
+	if self.client_cam then
+		self.network:sendToServer("server_setOperator")
+		_cp_infoOutput("Blueprint - Camera", true, "You are controlling the rockets now!", 2)
 	else
-		_cp_infoOutput("GUI Item released", true, "You can't change stuff while number logic is connected to the rocket launcher")
+		local pl_list = _getAllPlayers()
+		
+		local c_Value = character:isCrouching() and -1 or 1
+		self.client_pl_page = (self.client_pl_page + c_Value) % (#pl_list + 1)
+		
+		if self.client_pl_page == 0 then
+			_cp_infoOutput("GUI Item drag", true, "#ffff00Mode#ffffff: #ffff00Targeting closest visible player#ffffff")
+			self.network:sendToServer("server_setTarget")
+		else
+			local cur_player = pl_list[self.client_pl_page]
+			_cp_infoOutput("GUI Item drag", true, ("#ffff00Mode:#ffffff: Targeting #ff0000%s#ffffff"):format(cur_player.name))
+			self.network:sendToServer("server_setTarget", cur_player)
+		end
 	end
 end
 
 function HomingMissile:client_canInteract()
-	if self.logic then
-		_setInteractionText("", "You can't change any settings while number logic is connected to the rocket launcher")
+	if self.client_num_logic then
+		_setInteractionText("", HM_NumLogicConnectedMsg)
 		return false
 	end
 
 	local use_key = _getKeyBinding("Use")
-		
-	if self.clientCamera then
+
+	if self.client_cam then
 		_setInteractionText("Press", use_key, "to control the rockets")
 	else
 		local crawl_key = _getKeyBinding("Crawl")

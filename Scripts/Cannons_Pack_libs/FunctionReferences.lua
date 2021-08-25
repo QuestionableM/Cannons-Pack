@@ -18,12 +18,14 @@ _smExists = sm.exists
 _getCamPosition = sm.camera.getPosition
 _gunSpread = sm.noise.gunSpread
 _shapeFire = sm.projectile.shapeFire
+_shapeProjAttack = sm.projectile.shapeProjectileAttack
 _applyImpulse = sm.physics.applyImpulse
 _audioPlay = sm.audio.play
 _displayAlertText = sm.gui.displayAlertText
 _createPart = sm.shape.createPart
 _quatIdentity = sm.quat.identity
 _createParticle = sm.particle.createParticle
+_getSphereContacts = sm.physics.getSphereContacts
 _logError = sm.log.error
 _playEffect = sm.effect.playEffect
 _physRaycast = sm.physics.raycast
@@ -61,10 +63,8 @@ end
 _cpExists = function(obj)
 	if obj == nil then return false end
 
-	local success, error = pcall(_smExists, obj)
-	if success and type(error) == "boolean" then return error end
-
-	return false
+	local success, output = pcall(_smExists, obj)
+	return (success and output == true)
 end
 
 _getAllPlayers = sm.player.getAllPlayers

@@ -1,6 +1,6 @@
 --[[
-    Copyright (c) 2021 Cannons Pack Team
-    Questionable Mark
+	Copyright (c) 2021 Cannons Pack Team
+	Questionable Mark
 ]]
 
 if SmartCannon then return end
@@ -14,54 +14,79 @@ SmartCannon.colorNormal = _colorNew(0x5d0096ff)
 SmartCannon.colorHighlight = _colorNew(0x9000e8ff)
 
 function SmartCannon:client_onCreate()
-	self.effects = _cpEffect_cl_loadEffects(self)
-	self.effects.sht_snd:setParameter("sound", 1)
-	self.network:sendToServer("server_requestSound", {player = _getLocalPlayer()})
 	self:client_injectScript("CPProjectile")
+
+	self.effects = _cpEffect_cl_loadEffects(self)
+	self.effects[EffectEnum.sht_snd]:setParameter("sound", 1)
+
+	self.network:sendToServer("server_requestSound")
+
 	self.cur_rld_effect = 1
 	self.cur_muzzle_flash_effect = 1
 end
 
 local _ExplosionTrans = {
-	[1] = "ExplSmall",
-	[2] = "AircraftCannon - Explosion",
-	[3] = "ExplBig2",
-	[4] = "DoraCannon - Explosion",
-	[5] = "EMPCannon - Explosion"
+	[1] = ExplEffectEnum.ExplSmall,
+	[2] = ExplEffectEnum.AircraftCannon,
+	[3] = ExplEffectEnum.ExplBig2,
+	[4] = ExplEffectEnum.DoraCannon,
+	[5] = ExplEffectEnum.EMPCannon
 }
+
+local NumLogicTrTable = {
+	fire_spread = 1,
+	fire_force = 2,
+	reload_time = 3,
+	cannon_recoil = 4,
+	projectile_per_shot = 5,
+	expl_level = 6,
+	expl_radius = 7,
+	expl_impulse_radius = 8,
+	expl_impulse_strength = 9,
+	projectile_gravity = 10,
+	projectile_lifetime = 11,
+	projectile_type = 12,
+	proximity_fuze = 13,
+	x_offset = 14,
+	y_offset = 15,
+	z_offset = 16
+}
+
+local LogicTrTable = {spudgun_mode = 1, no_friction_mode = 2, ignore_rotation_mode = 3, no_recoil_mode = 4, transfer_momentum = 5}
+local OtherTrTable = {sound = 1, muzzle_flash = 2, reload_sound = 3, explosion_effect = 4}
 
 function SmartCannon:server_onCreate()
 	self.sv_settings = {
 		number = {
-			fire_spread = 0.2,
-			fire_force = 700,
-			reload_time = 8,
-			cannon_recoil = 0,
-			projectile_per_shot = 0,
-			expl_level = 5,
-			expl_radius = 0.5,
-			expl_impulse_radius = 15,
-			expl_impulse_strength = 2000,
-			projectile_friction = 0.003,
-			projectile_gravity = 10,
-			projectile_lifetime = 15,
-			projectile_type = 0,
-			proximity_fuze = 0,
-			x_offset = 0,
-			y_offset = 0,
-			z_offset = 0
+			[NumLogicTrTable.fire_spread] = 0.2,
+			[NumLogicTrTable.fire_force] = 700,
+			[NumLogicTrTable.reload_time] = 8,
+			[NumLogicTrTable.cannon_recoil] = 0,
+			[NumLogicTrTable.projectile_per_shot] = 0,
+			[NumLogicTrTable.expl_level] = 5,
+			[NumLogicTrTable.expl_radius] = 6,
+			[NumLogicTrTable.expl_impulse_radius] = 15,
+			[NumLogicTrTable.expl_impulse_strength] = 2000,
+			[NumLogicTrTable.projectile_gravity] = 10,
+			[NumLogicTrTable.projectile_lifetime] = 15,
+			[NumLogicTrTable.projectile_type] = 0,
+			[NumLogicTrTable.proximity_fuze] = 0,
+			[NumLogicTrTable.x_offset] = 0,
+			[NumLogicTrTable.y_offset] = 0,
+			[NumLogicTrTable.z_offset] = 0
 		},
 		logic = {
-			spudgun_mode = false,
-			no_friction_mode = false,
-			ignore_rotation_mode = false,
-			no_recoil_mode = false,
-			transfer_momentum = true
+			[LogicTrTable.spudgun_mode] = false,
+			[LogicTrTable.no_friction_mode] = false,
+			[LogicTrTable.ignore_rotation_mode] = false,
+			[LogicTrTable.no_recoil_mode] = false,
+			[LogicTrTable.transfer_momentum] = true
 		},
-		sound = 0,
-		muzzle_flash = 0,
-		reload_sound = 0,
-		explosion_effect = 0
+		[OtherTrTable.sound] = 0,
+		[OtherTrTable.muzzle_flash] = 0,
+		[OtherTrTable.reload_sound] = 0,
+		[OtherTrTable.explosion_effect] = 0,
+		version = 1
 	}
 
 	local _SavedData = self.storage:load()
@@ -69,44 +94,47 @@ function SmartCannon:server_onCreate()
 	if _DataType == "number" then
 		self.sv_settings.sound = _SavedData
 	elseif _DataType == "table" then
-		local _NumDat = _SavedData.number or {}
-		local _LogicDat = _SavedData.logic or {}
-
 		local sv_set = self.sv_settings
 		local sv_num_set = sv_set.number
 		local sv_log_set = sv_set.logic
+		local sv_ver_exists = (_SavedData.version ~= nil)
 
-		sv_num_set.fire_spread = _NumDat.fire_spread or 0.2
-		sv_num_set.fire_force = _NumDat.fire_force or 700
-		sv_num_set.reload_time = _NumDat.reload_time or 8
-		sv_num_set.cannon_recoil = _NumDat.cannon_recoil or 0
-		sv_num_set.projectile_per_shot = _NumDat.projectile_per_shot or 0
-		sv_num_set.expl_level = _NumDat.expl_level or 5
-		sv_num_set.expl_radius = _NumDat.expl_radius or 0.5
-		sv_num_set.expl_impulse_radius = _NumDat.expl_impulse_radius or 15
-		sv_num_set.expl_impulse_strength = _NumDat.expl_impulse_strength or 2000
-		sv_num_set.projectile_gravity = _NumDat.projectile_gravity or 10
-		sv_num_set.projectile_lifetime = _NumDat.projectile_lifetime or 15
-		sv_num_set.projectile_type = _NumDat.projectile_type or 0
-		sv_num_set.proximity_fuze = _NumDat.proximity_fuze or 0
-		sv_num_set.x_offset = _NumDat.x_offset or 0
-		sv_num_set.y_offset = _NumDat.y_offset or 0
-		sv_num_set.z_offset = _NumDat.z_offset or 0
-		sv_log_set.spudgun_mode = _LogicDat.spudgun_mode
-		sv_log_set.no_friction_mode = _LogicDat.no_friction_mode
-		sv_log_set.ignore_rotation_mode = _LogicDat.ignore_rotation_mode
-		sv_log_set.no_recoil_mode = _LogicDat.no_recoil_mode
-		sv_log_set.transfer_momentum = _LogicDat.transfer_momentum
-		sv_set.sound = _SavedData.sound or 0
-		sv_set.muzzle_flash = _SavedData.muzzle_flash or 0
-		sv_set.explosion_effect = _SavedData.explosion_effect or 0
-		sv_set.reload_sound = _SavedData.reload_sound or 0
+		for k, v in pairs(_SavedData.number or {}) do
+			local tr_key = (sv_ver_exists and k or NumLogicTrTable[k])
+			if sv_num_set[tr_key] ~= nil then
+				sv_num_set[tr_key] = v
+			end
+		end
+
+		for k, v in pairs(_SavedData.logic or {}) do
+			local tr_key = (sv_ver_exists and k or LogicTrTable[k])
+			if sv_log_set[tr_key] ~= nil then
+				sv_log_set[tr_key] = v
+			end
+		end
+
+		for k, v in pairs(_SavedData or {}) do
+			if k ~= "logic" and k ~= "number" and k ~= "version" then
+				local tr_key = (sv_ver_exists and k or OtherTrTable[k])
+				if sv_set[tr_key] ~= nil then
+					sv_set[tr_key] = v
+				end
+			end
+		end
 	end
 
 	self.data_request_queue = {}
-	self.projectileConfiguration = _cpCannons_loadCannonInfo(self)
-	if self.sv_settings.explosion_effect > 0 then
-		self.projectileConfiguration.explosionEffect = _ExplosionTrans[self.sv_settings.explosion_effect + 1]
+
+	local cannon_info = _cpCannons_loadCannonInfo(self)
+	self.proj_data_id = cannon_info.proj_data_id
+	self.proj_types = cannon_info.proj_types
+	self.proj_type_amount = #self.proj_types
+
+	self.projConfig = _cpProj_GetProjectileSettings(self.proj_data_id)
+
+	local sv_expl_eff = self.sv_settings[OtherTrTable.explosion_effect]
+	if sv_expl_eff > 0 then
+		self.projConfig[ProjSettingEnum.explosionEffect] = _ExplosionTrans[sv_expl_eff + 1]
 	end
 end
 
@@ -120,36 +148,36 @@ function SmartCannon:server_onFixedUpdate()
 
 	local _NumSettings = self.sv_settings.number
 	--cannon settings
-	local fire_spread = _NumSettings.fire_spread
-	local fire_force = _NumSettings.fire_force
-	local reload_time = _NumSettings.reload_time
-	local cannon_recoil = _NumSettings.cannon_recoil
-	local projectile_per_shot = _NumSettings.projectile_per_shot
+	local fire_spread = _NumSettings[NumLogicTrTable.fire_spread]
+	local fire_force = _NumSettings[NumLogicTrTable.fire_force]
+	local reload_time = _NumSettings[NumLogicTrTable.reload_time]
+	local cannon_recoil = _NumSettings[NumLogicTrTable.cannon_recoil]
+	local projectile_per_shot = _NumSettings[NumLogicTrTable.projectile_per_shot]
 
 	--explosion settings
-	local expl_level = _NumSettings.expl_level
-	local expl_radius = _NumSettings.expl_radius
-	local expl_impulse_radius = _NumSettings.expl_impulse_radius
-	local expl_impulse_strength = _NumSettings.expl_impulse_strength
+	local expl_level = _NumSettings[NumLogicTrTable.expl_level]
+	local expl_radius = _NumSettings[NumLogicTrTable.expl_radius]
+	local expl_impulse_radius = _NumSettings[NumLogicTrTable.expl_impulse_radius]
+	local expl_impulse_strength = _NumSettings[NumLogicTrTable.expl_impulse_strength]
 
 	--projectile settings
 	local projectile_friction = 0.003
-	local projectile_gravity = _NumSettings.projectile_gravity
-	local projectile_lifetime = _NumSettings.projectile_lifetime
-	local projectile_type = _NumSettings.projectile_type
-	local proximity_fuze = _NumSettings.proximity_fuze
-	local x_offset = _NumSettings.x_offset
-	local y_offset = _NumSettings.y_offset
-	local z_offset = _NumSettings.z_offset
+	local projectile_gravity = _NumSettings[NumLogicTrTable.projectile_gravity]
+	local projectile_lifetime = _NumSettings[NumLogicTrTable.projectile_lifetime]
+	local projectile_type = _NumSettings[NumLogicTrTable.projectile_type]
+	local proximity_fuze = _NumSettings[NumLogicTrTable.proximity_fuze]
+	local x_offset = _NumSettings[NumLogicTrTable.x_offset]
+	local y_offset = _NumSettings[NumLogicTrTable.y_offset]
+	local z_offset = _NumSettings[NumLogicTrTable.z_offset]
 
 	local _LogicSettings = self.sv_settings.logic
 	--cannon modes
-	local spudgun_mode = _LogicSettings.spudgun_mode
-	local no_friction_mode = _LogicSettings.no_friction_mode
-	local ignore_rotation_mode = _LogicSettings.ignore_rotation_mode
-	local no_recoil_mode = _LogicSettings.no_recoil_mode
-	local transfer_momentum = _LogicSettings.transfer_momentum
-	local cannon_active = _LogicSettings.cannon_active
+	local spudgun_mode = _LogicSettings[LogicTrTable.spudgun_mode]
+	local no_friction_mode = _LogicSettings[LogicTrTable.no_friction_mode]
+	local ignore_rotation_mode = _LogicSettings[LogicTrTable.ignore_rotation_mode]
+	local no_recoil_mode = _LogicSettings[LogicTrTable.no_recoil_mode]
+	local transfer_momentum = _LogicSettings[LogicTrTable.transfer_momentum]
+	local cannon_active = false
 
 	local Parents = self.interactable:getParents()
 	for l, gate in pairs(Parents) do
@@ -190,7 +218,9 @@ function SmartCannon:server_onFixedUpdate()
 				elseif gate_color == "35086cff" then --4th violet
 					if g_power >= 0 then projectile_per_shot = _mathMin(g_power, 20) end
 				elseif gate_color == "eeeeeeff" then --white
-					if g_power >= 0 then projectile_type = _mathFloor(_mathMin(g_power, #self.projectileConfiguration.proj_types - 1)) end
+					if g_power >= 0 then
+						projectile_type = _mathFloor(_mathMin(g_power, self.proj_type_amount - 1))
+					end
 				end
 			else
 				if _cp_isLogic(gate) then
@@ -222,37 +252,43 @@ function SmartCannon:server_onFixedUpdate()
 		if child then child:setActive(true) end
 
 		self.reload = reload_time
-		self.network:sendToClients("client_displayEffect", "sht")
+		self.network:sendToClients("client_displayEffect", EffectEnum.sht)
+		local s_Shape = self.shape
 
 		if not spudgun_mode then
-			self.projectileConfiguration.localPosition = not ignore_rotation_mode
+			self.projConfig[ProjSettingEnum.localPosition] = not ignore_rotation_mode
 
 			if not ignore_rotation_mode then
-				self.projectileConfiguration.position = _newVec(x_offset, y_offset, z_offset + 0.1)
+				self.projConfig[ProjSettingEnum.position] = _newVec(x_offset, y_offset, z_offset + 0.1)
 			else
-				self.projectileConfiguration.position = self.shape.worldPosition + _newVec(x_offset, y_offset, z_offset)
+				self.projConfig[ProjSettingEnum.position] = s_Shape.worldPosition + _newVec(x_offset, y_offset, z_offset)
 			end
 
-			self.projectileConfiguration.friction = no_friction_mode and 0 or 0.003
-			self.projectileConfiguration.gravity = projectile_gravity
-			self.projectileConfiguration.lifetime = projectile_lifetime
-			self.projectileConfiguration.explosionLevel = expl_level
-			self.projectileConfiguration.explosionRadius = expl_radius
-			self.projectileConfiguration.explosionImpulseRadius = expl_impulse_radius
-			self.projectileConfiguration.explosionImpulseStrength = expl_impulse_strength
-			self.projectileConfiguration.proxFuze = proximity_fuze
+			self.projConfig[ProjSettingEnum.friction] = no_friction_mode and 0 or 0.003
+			self.projConfig[ProjSettingEnum.gravity] = projectile_gravity
+			self.projConfig[ProjSettingEnum.lifetime] = projectile_lifetime
+			self.projConfig[ProjSettingEnum.explosionLevel] = expl_level
+			self.projConfig[ProjSettingEnum.explosionRadius] = expl_radius
+			self.projConfig[ProjSettingEnum.explosionImpulseRadius] = expl_impulse_radius
+			self.projConfig[ProjSettingEnum.explosionImpulseStrength] = expl_impulse_strength
+			self.projConfig[ProjSettingEnum.proxFuze] = proximity_fuze
 
 			for i = 1, projectile_per_shot + 1, 1 do
-				self.projectileConfiguration.velocity = _cp_calculateSpread(self, fire_spread, fire_force, not transfer_momentum)
-				CPProjectile:server_sendProjectile(self, self.projectileConfiguration)
+				self.projConfig[ProjSettingEnum.velocity] = _cp_calculateSpread(self, fire_spread, fire_force, not transfer_momentum)
+				CPProjectile:server_sendProjectile(self, self.projConfig, self.proj_data_id)
 			end
 		else
 			local _Offset = _newVec(x_offset, y_offset, z_offset)
-			local _VelVec = _newVec(0, 0, fire_force + _mathAbs(self.shape.up:dot(self.shape.velocity)))
-			local _ProjType = self.projectileConfiguration.proj_types[projectile_type + 1]
+
+			local _VelVec = _newVec(0, 0, fire_force)
+			if transfer_momentum then
+				_VelVec.z = _VelVec.z + _mathAbs(s_Shape.up:dot(s_Shape.velocity))
+			end
+
+			local _ProjType = self.proj_types[projectile_type + 1]
 			for i = 1, projectile_per_shot + 1, 1 do
 				local _Spread = _gunSpread(_VelVec, fire_spread)
-				_cp_shootProjectile(self.shape, _ProjType, _Offset, _Spread, ignore_rotation_mode)
+				_cp_shootProjectile(s_Shape, _ProjType, 28, _Offset, _Spread, ignore_rotation_mode)
 			end
 		end
 
@@ -262,9 +298,9 @@ function SmartCannon:server_onFixedUpdate()
 	end
 
 	if self.reload then
-		local _ReloadConfig = _ReloadSoundTimeOffsets[self.sv_settings.reload_sound + 1]
+		local _ReloadConfig = _ReloadSoundTimeOffsets[self.sv_settings[OtherTrTable.reload_sound] + 1]
 		if reload_time >= _ReloadConfig.min_rld and self.reload == _ReloadConfig.val then
-			self.network:sendToClients("client_displayEffect", "rld")
+			self.network:sendToClients("client_displayEffect", EffectEnum.rld)
 		end
 		self.reload = (self.reload > 1 and self.reload - 1) or nil
 	end
@@ -273,29 +309,29 @@ function SmartCannon:server_onFixedUpdate()
 		for k, player in pairs(self.data_request_queue) do
 			self.network:sendToClient(player, "client_receiveCannonData", {
 				number = {
-					fire_spread = fire_spread,
-					fire_force = fire_force,
-					reload_time = reload_time,
-					cannon_recoil = cannon_recoil,
-					projectile_per_shot = projectile_per_shot,
-					expl_level = expl_level,
-					expl_radius = expl_radius,
-					expl_impulse_radius = expl_impulse_radius,
-					expl_impulse_strength = expl_impulse_strength,
-					projectile_gravity = projectile_gravity,
-					projectile_lifetime = projectile_lifetime,
-					projectile_type = projectile_type,
-					proximity_fuze = proximity_fuze,
-					x_offset = x_offset,
-					y_offset = y_offset,
-					z_offset = z_offset
+					[NumLogicTrTable.fire_spread] = fire_spread,
+					[NumLogicTrTable.fire_force] = fire_force,
+					[NumLogicTrTable.reload_time] = reload_time,
+					[NumLogicTrTable.cannon_recoil] = cannon_recoil,
+					[NumLogicTrTable.projectile_per_shot] = projectile_per_shot,
+					[NumLogicTrTable.expl_level] = expl_level,
+					[NumLogicTrTable.expl_radius] = expl_radius,
+					[NumLogicTrTable.expl_impulse_radius] = expl_impulse_radius,
+					[NumLogicTrTable.expl_impulse_strength] = expl_impulse_strength,
+					[NumLogicTrTable.projectile_gravity] = projectile_gravity,
+					[NumLogicTrTable.projectile_lifetime] = projectile_lifetime,
+					[NumLogicTrTable.projectile_type] = projectile_type,
+					[NumLogicTrTable.proximity_fuze] = proximity_fuze,
+					[NumLogicTrTable.x_offset] = x_offset,
+					[NumLogicTrTable.y_offset] = y_offset,
+					[NumLogicTrTable.z_offset] = z_offset
 				},
 				logic = {
-					spudgun_mode = spudgun_mode,
-					no_friction_mode = no_friction_mode,
-					ignore_rotation_mode = ignore_rotation_mode,
-					no_recoil_mode = no_recoil_mode,
-					transfer_momentum = transfer_momentum
+					[LogicTrTable.spudgun_mode] = spudgun_mode,
+					[LogicTrTable.no_friction_mode] = no_friction_mode,
+					[LogicTrTable.ignore_rotation_mode] = ignore_rotation_mode,
+					[LogicTrTable.no_recoil_mode] = no_recoil_mode,
+					[LogicTrTable.transfer_momentum] = transfer_momentum
 				}
 			})
 			self.data_request_queue[k] = nil
@@ -307,115 +343,89 @@ function SmartCannon:client_receiveCannonData(data)
 	self:client_GUI_LoadNewData(data)
 end
 
-function SmartCannon:server_requestNumberInputs(player)
+function SmartCannon:server_requestNumberInputs(data, player)
 	self.data_request_queue[#self.data_request_queue + 1] = player
 end
 
-function SmartCannon:server_requestCannonData(player)
+function SmartCannon:server_requestCannonData(data, player)
 	local _ServerData = self.sv_settings
 
 	local _Data = {
 		logic = _ServerData.logic,
 		number = _ServerData.number,
-		sound = _ServerData.sound,
-		muzzle_flash = _ServerData.muzzle_flash,
-		explosion_effect = self.projectileConfiguration.explosionEffect,
-		reload_sound = _ServerData.reload_sound
+		snd = _ServerData[OtherTrTable.sound],
+		mzl_fls = _ServerData[OtherTrTable.muzzle_flash],
+		exp_eff = self.projConfig[ProjSettingEnum.explosionEffect],
+		rld_snd = _ServerData[OtherTrTable.reload_sound]
 	}
 
 	self.network:sendToClient(player, "client_receiveCannonData", _Data)
 end
 
-function SmartCannon:server_requestSound(data)
-	self.network:sendToClient(data.player, "client_setEffects", {
-		sht_snd = self.sv_settings.sound + 1,
-		rld_snd = self.sv_settings.reload_sound + 1,
-		sht_eff = self.sv_settings.muzzle_flash + 1
-	})
+function SmartCannon:server_prepareEffectTable()
+	local sv_set = self.sv_settings
+	return {
+		sv_set[OtherTrTable.sound] + 1,
+		sv_set[OtherTrTable.reload_sound] + 1,
+		sv_set[OtherTrTable.muzzle_flash] + 1
+	}
+end
+
+function SmartCannon:server_requestSound(data, caller)
+	self.network:sendToClient(caller, "client_setEffects", self:server_prepareEffectTable())
 end
 
 function SmartCannon:server_setNewSettings(data)
+	local sv_logic = self.sv_settings.logic
 	for k, v in pairs(data.logic) do
-		if self.sv_settings.logic[k] ~= nil then
-			self.sv_settings.logic[k] = v
-		end
+		if sv_logic[k] ~= nil then sv_logic[k] = v end
 	end
 
+	local sv_number = self.sv_settings.number
 	for k, v in pairs(data.number) do
-		if self.sv_settings.number[k] ~= nil then
-			self.sv_settings.number[k] = v
-		end
+		if sv_number[k] ~= nil then sv_number[k] = v end
 	end
 
-	self.projectileConfiguration.explosionEffect = _ExplosionTrans[data.proj_explosion + 1]
-	self.sv_settings.explosion_effect = data.proj_explosion
-	self.sv_settings.sound = data.sound
-	self.sv_settings.reload_sound = data.reload_sound
-	self.sv_settings.muzzle_flash = data.muzzle_flash
+	self.projConfig[ProjSettingEnum.explosionEffect] = _ExplosionTrans[data.exp_eff + 1]
+	self.sv_settings[OtherTrTable.explosion_effect] = data.exp_eff
+	self.sv_settings[OtherTrTable.sound] = data.snd
+	self.sv_settings[OtherTrTable.reload_sound] = data.rld_snd
+	self.sv_settings[OtherTrTable.muzzle_flash] = data.mzl_fls
 
-	self.network:sendToClients("client_setEffects", {
-		sht_snd = self.sv_settings.sound + 1,
-		rld_snd = self.sv_settings.reload_sound + 1,
-		sht_eff = self.sv_settings.muzzle_flash + 1
-	})
+	self.network:sendToClients("client_setEffects", self:server_prepareEffectTable())
 
 	self.storage:save(self.sv_settings)
 end
 
-local _ReloadSoundNames = {
-	[1] = "Reloading",
-	[2] = "HeavyReloading"
-}
-
+local _ReloadSoundNames = {[1] = "Reloading", [2] = "HeavyReloading"}
 function SmartCannon:client_setEffects(data)
-	self.effects.sht_snd:setParameter("sound", data.sht_snd)
+	self.effects[EffectEnum.sht_snd]:setParameter("sound", data[1])
 
-	if self.cur_rld_effect ~= data.rld_snd then
-		self.cur_rld_effect = data.rld_snd
-		self.effects.rld:stop()
-		self.effects.rld:destroy()
-		self.effects.rld = _createEffect(_ReloadSoundNames[data.rld_snd], self.interactable)
+	local rld_snd = data[2]
+	if self.cur_rld_effect ~= rld_snd then
+		self.cur_rld_effect = rld_snd
+
+		local rld_effect = self.effects[EffectEnum.rld]
+		rld_effect:stopImmediate()
+		rld_effect:destroy()
+		self.effects[EffectEnum.rld] = _createEffect(_ReloadSoundNames[rld_snd], self.interactable)
 	end
 
-	if self.cur_muzzle_flash_effect ~= data.sht_eff then
-		self.cur_muzzle_flash_effect = data.sht_eff
-		self.effects.sht:stop()
-		self.effects.sht:destroy()
-		self.effects.sht = _createEffect("SmartCannon - MuzzleFlash"..data.sht_eff, self.interactable)
-	end
-end
+	local sht_eff = data[3]
+	if self.cur_muzzle_flash_effect ~= sht_eff then
+		self.cur_muzzle_flash_effect = sht_eff
 
-function SmartCannon:server_getChange(data)
-	self.sv_settings.sound = (self.sv_settings.sound + data.mode) % 4
-	self.storage:save(self.sv_settings.sound)
-	self.network:sendToClients("client_setSound", {
-		soundId = self.sv_settings.sound + 1,
-		caller = data.player
-	})
+		local sht_effect = self.effects[EffectEnum.sht]
+		sht_effect:stopImmediate()
+		sht_effect:destroy()
+		self.effects[EffectEnum.sht] = _createEffect("SmartCannon - MuzzleFlash"..sht_eff, self.interactable)
+	end
 end
 
 function SmartCannon:client_onInteract(character, state)
 	if not state then return end
 
-	if _cpGuiSupported then
-		self:client_GUI_Open()
-	else
-		self.network:sendToServer("server_getChange", {
-			mode = (character:isCrouching() and -1 or 1),
-			player = _getLocalPlayer()
-		})
-	end
-end
-
-function SmartCannon:client_setSound(data)
-	self.effects.sht_snd:setParameter("sound", data.soundId)
-
-	local caller = data.caller
-	local loc_pl = _getLocalPlayer()
-
-	if caller and caller == loc_pl then
-		_cp_infoOutput("GUI Item drag", true, "Changed the sound to #ffff00"..data.soundId.."#ffffff")
-	end
+	self:client_GUI_Open()
 end
 
 function SmartCannon:client_onFixedUpdate(dt)
@@ -423,16 +433,11 @@ function SmartCannon:client_onFixedUpdate(dt)
 end
 
 function SmartCannon:client_canInteract()
-	local _InteractKey = _getKeyBinding("Use")
-	if _cpGuiSupported then
-		_setInteractionText("Press", _InteractKey, "to open Smart Cannon GUI")
-	else
-		local crawl_key = _getKeyBinding("Crawl")
+	local k_Inter = _getKeyBinding("Use")
 
-		_setInteractionText("Press", _InteractKey, "or", ("%s + %s"):format(crawl_key, _InteractKey), "to change the shooting sound")
-	end
-
+	_setInteractionText("Press", k_Inter, "to open Smart Cannon GUI")
 	_setInteractionText("", "Check the workshop page of \"Cannons Pack\" for instructions")
+
 	return true
 end
 
@@ -441,9 +446,10 @@ function SmartCannon:client_onDestroy()
 end
 
 function SmartCannon:client_displayEffect(data)
-	local _EffList = (data == "sht" and {self.effects.sht_snd, self.effects.sht} or self.effects[data])
+	local e_List = self.effects
+	local cur_effects = (data == EffectEnum.sht and {e_List[EffectEnum.sht_snd], e_List[EffectEnum.sht]} or e_List[data])
 
-	_cp_spawnOptimizedEffect(self.shape, _EffList, 75)
+	_cp_spawnOptimizedEffect(self.shape, cur_effects, 75)
 end
 
 -----------------------------------------------
@@ -500,7 +506,7 @@ function SmartCannon:client_GUI_Open()
 
 	self:client_GUI_SetWaitingState(false)
 
-	self.network:sendToServer("server_requestCannonData", _getLocalPlayer())
+	self.network:sendToServer("server_requestCannonData")
 	
 	gui:open()
 end
@@ -530,7 +536,7 @@ function SmartCannon:client_GUI_onGetValueCallback()
 	gui.dot_anim = 0
 	gui.interface:setText("GetValues", "Getting Data")
 
-	self.network:sendToServer("server_requestNumberInputs", _getLocalPlayer())
+	self.network:sendToServer("server_requestNumberInputs")
 end
 
 function SmartCannon:client_GUI_onSaveButtonCallback()
@@ -543,11 +549,12 @@ function SmartCannon:client_GUI_onSaveButtonCallback()
 	for k, v in pairs(gui_temp.num_logic) do _Table.number[v.id] = v.value end
 	for k, v in pairs(gui_temp.logic) do _Table.logic[v.id] = v.value end
 
+
 	local tmp_eff = gui_temp.effects
-	_Table.sound = tmp_eff[4].value
-	_Table.muzzle_flash = tmp_eff[1].value
-	_Table.proj_explosion = tmp_eff[2].value
-	_Table.reload_sound = tmp_eff[3].value
+	_Table.snd = tmp_eff[4].value
+	_Table.mzl_fls = tmp_eff[1].value
+	_Table.exp_eff = tmp_eff[2].value
+	_Table.rld_snd = tmp_eff[3].value
 
 	self.network:sendToServer("server_setNewSettings", _Table)
 	_audioPlay("Retrowildblip")
@@ -743,22 +750,22 @@ end
 function SmartCannon:client_GUI_CreateTempValTable()
 	local temp = {}
 	temp.num_logic = {
-		[1] = {name = "Fire Force", id = "fire_force", value = 0, min = 1, max = math.huge},
-		[2] = {name = "Spread", id = "fire_spread", value = 0, min = 0, max = 360},
-		[3] = {name = "Reload Time", id = "reload_time", value = 0, min = 0, max = 1000000},
-		[4] = {name = "Explosion Level", id = "expl_level", value = 0, min = 0.001, max = math.huge},
-		[5] = {name = "Explosion Radius", id  = "expl_radius", value = 0, min = 0.001, max = 100},
-		[6] = {name = "Explosion Impulse Radius", id = "expl_impulse_radius", value = 0, min = 0.001, max = math.huge},
-		[7] = {name = "Explosion Impulse Strength", id = "expl_impulse_strength", value = 0, min = 0, max = math.huge},
-		[8] = {name = "Projectile Gravity", id = "projectile_gravity", value = 0, min = -math.huge, max = math.huge},
-		[9] = {name = "Projectile Lifetime", id = "projectile_lifetime", value = 0, min = 0.001, max = 30},
-		[10] = {name = "Recoil", id = "cannon_recoil", value = 0, min = 0, max = math.huge},
-		[11] = {name = "Proximity Fuze", id = "proximity_fuze", value = 0, min = 0, max = 20},
-		[12] = {name = "Projectiles Per Shot", id = "projectile_per_shot", value = 0, min = 0, max = 20, int = true},
-		[13] = {name = "X Projectile Offset", id = "x_offset", value = 0, min = -math.huge, max = math.huge},
-		[14] = {name = "Y Projectile Offset", id = "y_offset", value = 0, min = -math.huge, max = math.huge},
-		[15] = {name = "Z Projectile Offset", id = "z_offset", value = 0, min = -math.huge, max = math.huge},
-		[16] = {name = "Projectile Type (Spudgun Mode)", id = "projectile_type", value = 0, min = 0, max = 16, list = {
+		[1] = {name = "Fire Force", id = NumLogicTrTable.fire_force, value = 0, min = 1, max = math.huge},
+		[2] = {name = "Spread", id = NumLogicTrTable.fire_spread, value = 0, min = 0, max = 360},
+		[3] = {name = "Reload Time", id = NumLogicTrTable.reload_time, value = 0, min = 0, max = 1000000},
+		[4] = {name = "Explosion Level", id = NumLogicTrTable.expl_level, value = 0, min = 0.001, max = math.huge},
+		[5] = {name = "Explosion Radius", id  = NumLogicTrTable.expl_radius, value = 0, min = 0.001, max = 100},
+		[6] = {name = "Explosion Impulse Radius", id = NumLogicTrTable.expl_impulse_radius, value = 0, min = 0.001, max = math.huge},
+		[7] = {name = "Explosion Impulse Strength", id = NumLogicTrTable.expl_impulse_strength, value = 0, min = 0, max = math.huge},
+		[8] = {name = "Projectile Gravity", id = NumLogicTrTable.projectile_gravity, value = 0, min = -math.huge, max = math.huge},
+		[9] = {name = "Projectile Lifetime", id = NumLogicTrTable.projectile_lifetime, value = 0, min = 0.001, max = 30},
+		[10] = {name = "Recoil", id = NumLogicTrTable.cannon_recoil, value = 0, min = 0, max = math.huge},
+		[11] = {name = "Proximity Fuze", id = NumLogicTrTable.proximity_fuze, value = 0, min = 0, max = 20},
+		[12] = {name = "Projectiles Per Shot", id = NumLogicTrTable.projectile_per_shot, value = 0, min = 0, max = 20, int = true},
+		[13] = {name = "X Projectile Offset", id = NumLogicTrTable.x_offset, value = 0, min = -math.huge, max = math.huge},
+		[14] = {name = "Y Projectile Offset", id = NumLogicTrTable.y_offset, value = 0, min = -math.huge, max = math.huge},
+		[15] = {name = "Z Projectile Offset", id = NumLogicTrTable.z_offset, value = 0, min = -math.huge, max = math.huge},
+		[16] = {name = "Projectile Type (Spudgun Mode)", id = NumLogicTrTable.projectile_type, value = 0, min = 0, max = 16, list = {
 			[1] = "Potato",     [2] = "Small Potato", [3] = "Fries",
 			[4] = "Tomato",     [5] = "Carrot",      [6] = "Redbeet",
 			[7] = "Broccoli",   [8] = "Pineapple",   [9] = "Orange",
@@ -768,11 +775,11 @@ function SmartCannon:client_GUI_CreateTempValTable()
 		}}
 	}
 	temp.logic = {
-		[1] = {name = "Ignore Cannon Rotation", id = "ignore_rotation_mode", value = false},
-		[2] = {name = "No Projectile Friction", id = "no_friction_mode", value = false},
-		[3] = {name = "Spudgun Mode", id = "spudgun_mode", value = false},
-		[4] = {name = "No Recoil Mode", id = "no_recoil_mode", value = false},
-		[5] = {name = "Transfer Momentum", id = "transfer_momentum", value = false}
+		[1] = {name = "Ignore Cannon Rotation", id = LogicTrTable.ignore_rotation_mode, value = false},
+		[2] = {name = "No Projectile Friction", id = LogicTrTable.no_friction_mode, value = false},
+		[3] = {name = "Spudgun Mode", id = LogicTrTable.spudgun_mode, value = false},
+		[4] = {name = "No Recoil Mode", id = LogicTrTable.no_recoil_mode, value = false},
+		[5] = {name = "Transfer Momentum", id = LogicTrTable.transfer_momentum, value = false}
 	}
 	temp.effects = {
 		[1] = {value = 0, list = { --1 muzzle flash
@@ -825,11 +832,11 @@ function SmartCannon:client_GUI_SetCurrentTab(tab_name)
 end
 
 local _ExplTranslation = {
-	["ExplSmall"] = 0,
-	["AircraftCannon - Explosion"] = 1,
-	["ExplBig2"] = 2,
-	["DoraCannon - Explosion"] = 3,
-	["EMPCannon - Explosion"] = 4
+	[ExplEffectEnum.ExplSmall] = 0,
+	[ExplEffectEnum.AircraftCannon] = 1,
+	[ExplEffectEnum.ExplBig2] = 2,
+	[ExplEffectEnum.DoraCannon] = 3,
+	[ExplEffectEnum.EMPCannon] = 4
 }
 
 function SmartCannon:client_GUI_LoadNewData(data)
@@ -860,10 +867,10 @@ function SmartCannon:client_GUI_LoadNewData(data)
 		end
 	end
 
-	local m_flash = data.muzzle_flash
-	local ex_eff = data.explosion_effect
-	local rel_snd = data.reload_sound
-	local d_snd = data.sound
+	local m_flash = data.mzl_fls
+	local ex_eff = data.exp_eff
+	local rel_snd = data.rld_snd
+	local d_snd = data.snd
 
 	if m_flash and ex_eff and rel_snd and d_snd then
 		local s_effects = gui_temp.effects

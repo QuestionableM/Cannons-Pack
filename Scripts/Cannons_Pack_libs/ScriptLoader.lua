@@ -6,10 +6,13 @@
 if CP_SCRIPTLOADER_SCRIPTS_LOADED then return end
 CP_SCRIPTLOADER_SCRIPTS_LOADED = true
 
-print("[CannonsPack] Version: 4.1")
+print("[CannonsPack] Version: 4.4")
 print("[CannonsPack] Loading libraries...")
 
 dofile("FunctionReferences.lua")
+dofile("Databases/EffectSettings.lua")
+dofile("Databases/ProjectileSettings.lua")
+dofile("Databases/CannonSettings.lua")
 dofile("Additions.lua")
 dofile("GlobalScriptHandler.lua")
 dofile("Global_Scripts/CPProjectile.lua")

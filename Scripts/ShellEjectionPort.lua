@@ -16,46 +16,61 @@ ShellEjector.colorHighlight = _colorNew(0xff0067ff)
 
 function ShellEjector:client_onCreate()
 	self:client_injectScript("BulletShell")
-	self.anim = {door_state = false, value = 0.0, speed = 1.5, wait_clock = 0.0}
+
+	self.cl_anim = false
+	self.cl_anim_val = 0.0
+
+	self.network:sendToServer("server_requestAnimData")
+end
+
+function ShellEjector:server_requestAnimData(data, caller)
+	self.network:sendToClient(caller, "client_changeAnimState", self.sv_anim)
 end
 
 function ShellEjector:server_onCreate()
 	local config = _cpCannons_loadCannonInfo(self)
-	self.server_effectTable = config.effect_table
-	self.projectileConfiguration = config.proj_config
-	self.settings_table = config.settings_table
-	self.server_shell_queue = {}
+	self.sv_eff_table = config.effect_table
+
+	self.sv_shell_queue = {}
+	self.sv_queue_size = 0
+
+	self.sv_anim = false
+	self.sv_anim_clock = 0
+	self.animStateBool = false
 end
 
-function ShellEjector:server_onFixedUpdate()
-	if not _smExists(self.interactable) then return end
+function ShellEjector:server_resetAnimVals(state)
+	self.sv_anim_clock = 0.0
+	self.sv_anim = state
+end
 
-	local parent = self.interactable:getSingleParent()
+function ShellEjector:server_updateAnimVals(dt)
+	if self.sv_anim then
+		self.sv_anim_clock = self.sv_anim_clock + dt
 
-	if parent then
-		local effect_data = self.server_effectTable[tostring(parent.shape.uuid)]
-		if effect_data == nil then
-			parent:disconnect(self.interactable)
-		else
-			if self.interactable.active then
-				self.interactable:setActive(false)
-				self.network:sendToClients("client_changeAnimState")
-				_tableInsert(self.server_shell_queue, effect_data)
-			end
+		if self.sv_anim_clock >= 2.0 then
+			self:server_resetAnimVals(false)
 		end
 	end
 
-	if #self.server_shell_queue > 0 and not self.shell_launch_delay and self.anim.value == 1.0 then
+	if self.animStateBool ~= self.sv_anim then
+		self.animStateBool = self.sv_anim
+
+		self.network:sendToClients("client_changeAnimState", self.sv_anim)
+	end
+end
+
+function ShellEjector:server_TryEjectShell()
+	if self.sv_queue_size > 0 and not self.shell_launch_delay and self.cl_anim_val == 1.0 then
 		self.shell_launch_delay = 1
 		
-		local _cur_shell = self.server_shell_queue[1]
-		local proj_settings = self.settings_table[_cur_shell]
-		self.projectileConfiguration.shellEffect = _cur_shell
-		self.projectileConfiguration.collision_size = proj_settings.collision
-		self.network:sendToClients("client_changeAnimState")
+		local _cur_shell = self.sv_shell_queue[1]
+		BulletShell:server_sendProjectile(self, _cur_shell)
 
-		BulletShell:server_sendProjectile(self, self.projectileConfiguration)
-		_tableRemove(self.server_shell_queue, 1)
+		self:server_resetAnimVals(true)
+
+		_tableRemove(self.sv_shell_queue, 1)
+		self.sv_queue_size = self.sv_queue_size - 1
 	end
 
 	if self.shell_launch_delay then
@@ -63,27 +78,42 @@ function ShellEjector:server_onFixedUpdate()
 	end
 end
 
-function ShellEjector:client_onUpdate(dt)
+function ShellEjector:server_onFixedUpdate(dt)
 	if not _smExists(self.interactable) then return end
 
-	if self.anim.door_state then
-		self.anim.wait_clock = self.anim.wait_clock + dt
-		if self.anim.wait_clock >= 2.0 then
-			self.anim.door_state = false
-			self.anim.wait_clock = 0.0
+	local parent = self.interactable:getSingleParent()
+
+	if parent then
+		local effect_data = self.sv_eff_table[tostring(parent.shape.uuid)]
+		if effect_data == nil then
+			parent:disconnect(self.interactable)
+		else
+			if self.interactable.active then
+				self.interactable:setActive(false)
+				self:server_resetAnimVals(true)
+
+				_tableInsert(self.sv_shell_queue, effect_data)
+				self.sv_queue_size = self.sv_queue_size + 1
+			end
 		end
 	end
 
-	local _Changer = self.anim.door_state and self.anim.speed or -self.anim.speed
-	local _ChangedValue = _mathMin(_mathMax(self.anim.value + _Changer * dt, 0), 1)
+	self:server_updateAnimVals(dt)
+	self:server_TryEjectShell()
+end
 
-	if _ChangedValue ~= self.anim.value then
-		self.anim.value = _ChangedValue
-		self.interactable:setPoseWeight(0, self.anim.value)
+function ShellEjector:client_onUpdate(dt)
+	if not _smExists(self.interactable) then return end
+
+	local a_Changer = self.cl_anim and 1.5 or -1.5
+	local a_ChangedValue = _mathMin(_mathMax(self.cl_anim_val + a_Changer * dt, 0), 1)
+
+	if a_ChangedValue ~= self.cl_anim_val then
+		self.cl_anim_val = a_ChangedValue
+		self.interactable:setPoseWeight(0, a_ChangedValue)
 	end
 end
 
-function ShellEjector:client_changeAnimState(data)
-	self.anim.door_state = true
-	self.anim.wait_clock = 0.0
+function ShellEjector:client_changeAnimState(state)
+	self.cl_anim = state
 end

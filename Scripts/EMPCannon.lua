@@ -22,8 +22,9 @@ end
 function emp:client_onDestroy()
 	if self.effects then
 		self:client_clearData()
-		self.effects.crg:destroy()
-		self.effects.lit:destroy()
+
+		self.effects[EffectEnum.crg]:destroy()
+		self.effects[EffectEnum.lit]:destroy()
 	end
 end
 
@@ -39,6 +40,13 @@ function emp:server_onCreate()
 	self.projectileConfiguration = _cpCannons_loadCannonInfo(self)
 end
 
+local EMP_ModeEnum = {
+	crg = 1,
+	rld = 2,
+	col = 3,
+	clr = 4
+}
+
 function emp:server_onFixedUpdate()
 	if not _smExists(self.interactable) then return end
 
@@ -48,8 +56,9 @@ function emp:server_onFixedUpdate()
 	if not self.reload then
 		if active then
 			if not self.charge then
-				self.network:sendToClients("client_getUvData", {mode = "crg"})
+				self.network:sendToClients("client_getUvData", {EMP_ModeEnum.crg})
 			end
+
 			self.charge = _mathMin((self.charge or 0) + 0.005, 1)
 		end
 
@@ -58,25 +67,26 @@ function emp:server_onFixedUpdate()
 			local cur_opt = self.options[chargeLvl]
 
 			if cur_opt then
-				self.projectileConfiguration.disconnectRadius = cur_opt.radius
-				self.projectileConfiguration.velocity = _cp_calculateSpread(self, 0, 500)
+				self.projectileConfiguration[ProjSettingEnum.disconnectRadius] = cur_opt.radius
+				self.projectileConfiguration[ProjSettingEnum.velocity] = _cp_calculateSpread(self, 0, 500)
+
 				local c_recoil = _newVec(0, 0, -cur_opt.recoil)
 
-				self.reload = _cp_Shoot(self, cur_opt.reload, "client_getData", "sht", c_recoil)
+				self.reload = _cp_Shoot(self, cur_opt.reload, "client_getData", EffectEnum.sht, c_recoil)
 
-				EMPProjectile:server_sendProjectile(self, self.projectileConfiguration)
-				self.network:sendToClients("client_getUvData", {mode = "rld", index = self.charge * 150, rldTime = cur_opt.reload + cur_opt.toAdd})
+				EMPProjectile:server_sendProjectile(self, self.projectileConfiguration, ProjEnum.EMPCannon)
+				self.network:sendToClients("client_getUvData", {EMP_ModeEnum.rld, self.charge * 150, cur_opt.reload + cur_opt.toAdd})
 				self.charge = nil
 			end
 		elseif self.charge and chargeLvl == 0 and not active then
-			self.network:sendToClients("client_getUvData", {mode = "col"})
+			self.network:sendToClients("client_getUvData", {EMP_ModeEnum.col})
 			self.charge = nil
 		end
 	else
 		if self.reload == 30 then
-			self.network:sendToClients("client_getData", "rld")
+			self.network:sendToClients("client_getData", EffectEnum.rld)
 		elseif self.reload == 1 then
-			self.network:sendToClients("client_getUvData", {mode = "clr"})
+			self.network:sendToClients("client_getUvData", {EMP_ModeEnum.clr})
 		end
 
 		self.reload = (self.reload > 1 and self.reload - 1) or nil
@@ -89,14 +99,14 @@ function emp:client_onFixedUpdate()
 
 	if _CurMode == nil then return end
 
-	if _CurMode == "rld" then
+	if _CurMode == EMP_ModeEnum.rld then
 		self.uv.index = _mathMax(_OldIndex - (180 / self.uv.rldTime), 0)
 		self:client_setEffectVal(self.uv.index / 150, self.uv.index / 75, self.uv.index + 291)
 		if self.uv.index == 0 then self:client_clearData() end
-	elseif _CurMode == "crg" then
+	elseif _CurMode == EMP_ModeEnum.crg then
 		self.uv.index = _mathMin(_OldIndex + 0.005, 1)
 		self:client_setEffectVal(self.uv.index, self.uv.index * 3, self.uv.index * 150)
-	elseif _CurMode == "col" then
+	elseif _CurMode == EMP_ModeEnum.col then
 		self.uv.index = _mathMax(_OldIndex - 0.005, 0)
 		self:client_setEffectVal(self.uv.index, self.uv.index * 3, self.uv.index * 150)
 		if self.uv.index == 0 then self:client_clearData() end
@@ -104,8 +114,9 @@ function emp:client_onFixedUpdate()
 end
 
 function emp:client_setEffectVal(rpm_val, lit_val, uv_val)
-	self.effects.crg:setParameter("rpm", rpm_val)
-	self.effects.lit:setParameter("intensity", lit_val)
+	self.effects[EffectEnum.crg]:setParameter("rpm", rpm_val)
+	self.effects[EffectEnum.lit]:setParameter("intensity", lit_val)
+	
 	self.interactable:setUvFrameIndex(uv_val)
 end
 
@@ -113,23 +124,39 @@ function emp:client_clearData()
 	if _smExists(self.interactable) then
 		self.interactable:setUvFrameIndex(0)
 	end
+
+	local crg_eff = self.effects[EffectEnum.crg]
+	local lit_eff = self.effects[EffectEnum.lit]
+
+	crg_eff:setParameter("rpm", 0)
+	crg_eff:stop()
+
+	lit_eff:setParameter("intensity", 0)
+	lit_eff:stop()
 	
-	self.effects.crg:setParameter("rpm", 0)
-	self.effects.lit:setParameter("intensity", 0)
-	self.effects.crg:stop()
-	self.effects.lit:stop()
 	self.uv = {}
 end
 
 function emp:client_getUvData(data)
-	if data.mode == "clr" then self:client_clearData()
+	local mode = data[1]
+
+	if mode == EMP_ModeEnum.clr then
+		self:client_clearData()
 	else
-		self.uv.mode = data.mode
-		if not self.effects.crg:isPlaying() then self.effects.crg:start() end
-		if not self.effects.lit:isPlaying() then self.effects.lit:start() end
+		self.uv.mode = mode
+
+		local crg_eff = self.effects[EffectEnum.crg]
+		local lit_eff = self.effects[EffectEnum.lit]
+
+		if not crg_eff:isPlaying() then crg_eff:start() end
+		if not lit_eff:isPlaying() then lit_eff:start() end
 	end
-	if data.mode ~= "col" then self.uv.index = data.index end
-	self.uv.rldTime = data.rldTime
+
+	if mode ~= EMP_ModeEnum.col then
+		self.uv.index = data[2]
+	end
+
+	self.uv.rldTime = data[3]
 end
 
 function emp:client_getData(effect)
