@@ -64,7 +64,7 @@ function SmartCannon:server_onCreate()
 			[NumLogicTrTable.cannon_recoil] = 0,
 			[NumLogicTrTable.projectile_per_shot] = 0,
 			[NumLogicTrTable.expl_level] = 5,
-			[NumLogicTrTable.expl_radius] = 6,
+			[NumLogicTrTable.expl_radius] = 0.5,
 			[NumLogicTrTable.expl_impulse_radius] = 15,
 			[NumLogicTrTable.expl_impulse_strength] = 2000,
 			[NumLogicTrTable.projectile_gravity] = 10,
