@@ -3,7 +3,7 @@
 	Questionable Mark
 ]]
 
---if HomingMissile then return end
+if HomingMissile then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 HomingMissile = class(GLOBAL_SCRIPT)
 HomingMissile.maxParentCount = 5
