@@ -26,17 +26,48 @@ function BasicCannon:server_onCreate()
 	self.proj_scr = _CP_gScript[settings.t_script]
 end
 
+function BasicCannon:client_getAvailableChildConnectionCount(connectionType)
+	if connectionType == _connectionType.logic then
+		local res_value = 1 - #self.interactable:getChildren(_connectionType.logic)
+		self.update_child = res_value > 0
+
+		return res_value
+	end
+
+	return 0
+end
+
+function BasicCannon:client_getAvailableParentConnectionCount(connectionType)
+	if connectionType == _connectionType.logic then
+		return 1 - #self.interactable:getParents(_connectionType.logic)
+	end
+
+	return 0
+end
+
+function BasicCannon:server_updateAndCheckChild(port_uuid)
+	local child = self.interactable:getChildren()[1]
+
+	if self.update_child then
+		self.update_child = false
+
+		if child and tostring(child.shape.uuid) ~= port_uuid then
+			self.interactable:disconnect(child)
+			return
+		end
+	end
+
+	return child
+end
+
 function BasicCannon:server_onFixedUpdate()
 	if not _smExists(self.interactable) then return end
 
 	local parent = self.interactable:getSingleParent()
 	local active = parent and parent.active
-	local s_set = self.settings
 
-	local child = self.interactable:getChildren()[1]
-	if child and tostring(child.shape.uuid) ~= s_set.port_uuid then
-		self.interactable:disconnect(child)
-	end
+	local s_set = self.settings
+	local child = self:server_updateAndCheckChild(s_set.port_uuid)
 
 	if active and not self.reload then
 		self.reload = _cp_Shoot(self, s_set.reload, "client_shoot", EffectEnum.sht, s_set.impulse_dir * s_set.impulse_str)
