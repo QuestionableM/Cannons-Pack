@@ -3,7 +3,7 @@
 	Questionable Mark
 ]]
 
-if HomingMissile then return end
+--if HomingMissile then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 HomingMissile = class(GLOBAL_SCRIPT)
 HomingMissile.maxParentCount = 5
@@ -146,11 +146,7 @@ function HomingMissile:server_onFixedUpdate()
 	local parent_list = self.interactable:getParents()
 	for k, p in pairs(parent_list) do
 		if p:hasSteering() then
-			if not seat_interactable then
-				seat_interactable = p
-			else
-				p:disconnect(self.interactable)
-			end
+			seat_interactable = p
 		else
 			local p_Color = tostring(p.shape.color)
 			if _cp_isNumberLogic(p) then
@@ -183,6 +179,20 @@ function HomingMissile:server_onFixedUpdate()
 
 	self:server_tryShootProjectile(can_shoot, rocket_mode, target_player, proximityFuze, obstacle_avoidance)
 	self:server_updateReload(can_shoot)
+end
+
+local number_or_logic = bit.bor(_connectionType.logic, _connectionType.power)
+local is_seat_type = bit.bor(_connectionType.seated, _connectionType.bearing)
+function HomingMissile:client_getAvailableParentConnectionCount(connectionType)
+	if bit.band(connectionType, is_seat_type) ~= 0 then
+		return 1 - #self.interactable:getParents(is_seat_type)
+	end
+
+	if bit.band(connectionType, number_or_logic) ~= 0 then
+		return 4 - #self.interactable:getParents(number_or_logic)
+	end
+
+	return 0
 end
 
 function HomingMissile:client_onEffect(data)
