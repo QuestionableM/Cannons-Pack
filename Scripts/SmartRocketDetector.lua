@@ -33,6 +33,15 @@ function RocketDetector:server_onCreate()
 	self.server_detectDistance = 300
 end
 
+local number_or_logic = bit.bor(_connectionType.logic, _connectionType.power)
+function RocketDetector:client_getAvailableParentConnectionCount(connectionType)
+	if bit.band(connectionType, bit.bnot(number_or_logic)) == 0 then
+		return 2 - #self.interactable:getParents(number_or_logic)
+	end
+
+	return 0
+end
+
 function RocketDetector:server_onFixedUpdate()
 	if not _smExists(self.interactable) then return end
 
@@ -42,7 +51,7 @@ function RocketDetector:server_onFixedUpdate()
 	local p_List = self.interactable:getParents()
 	for k, inter in pairs(p_List) do
 		local shape_color = tostring(inter.shape.color)
-		if inter.type == "scripted" and tostring(inter.shape.uuid) ~= "6f2dd83e-bc0d-43f3-8ba5-d5209eb03d07" then
+		if _cp_isNumberLogic(inter) then
 			local i_Power = inter.power
 			if shape_color == "eeeeeeff" and i_Power > 0 then
 				temp_distance = i_Power
