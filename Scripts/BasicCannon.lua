@@ -28,10 +28,7 @@ end
 
 function BasicCannon:client_getAvailableChildConnectionCount(connectionType)
 	if connectionType == _connectionType.logic then
-		local res_value = 1 - #self.interactable:getChildren(_connectionType.logic)
-		self.update_child = res_value > 0
-
-		return res_value
+		return 1 - #self.interactable:getChildren(_connectionType.logic)
 	end
 
 	return 0
@@ -46,18 +43,18 @@ function BasicCannon:client_getAvailableParentConnectionCount(connectionType)
 end
 
 function BasicCannon:server_updateAndCheckChild(port_uuid)
-	local child = self.interactable:getChildren()[1]
+	local sInteractable = self.interactable
 
-	if self.update_child then
-		self.update_child = nil
+	local child = sInteractable:getChildren()[1]
+	if self.sv_saved_child ~= child then
+		self.sv_saved_child = child
 
 		if child and tostring(child.shape.uuid) ~= port_uuid then
-			self.interactable:disconnect(child)
+			self.sv_saved_child = nil
+			sInteractable:disconnect(child)
 			return
 		end
 	end
-
-	return child
 end
 
 function BasicCannon:server_onFixedUpdate()
@@ -67,7 +64,7 @@ function BasicCannon:server_onFixedUpdate()
 	local active = parent and parent.active
 
 	local s_set = self.settings
-	local child = self:server_updateAndCheckChild(s_set.port_uuid)
+	self:server_updateAndCheckChild(s_set.port_uuid)
 
 	if active and not self.reload then
 		self.reload = _cp_Shoot(self, s_set.reload, "client_shoot", EffectEnum.sht, s_set.impulse_dir * s_set.impulse_str)
@@ -75,8 +72,8 @@ function BasicCannon:server_onFixedUpdate()
 		self.projectileConfig[ProjSettingEnum.velocity] = _cp_calculateSpread(self, s_set.spread, s_set.velocity)
 		self.proj_scr:server_sendProjectile(self, self.projectileConfig, s_set.proj_data_id)
 		
-		if child then
-			child:setActive(true)
+		if self.sv_saved_child then
+			self.sv_saved_child:setActive(true)
 		end
 	end
 	
