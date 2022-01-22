@@ -3,7 +3,7 @@
 	Questionable Mark
 ]]
 
---if SmartCannon then return end
+if SmartCannon then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 SmartCannon = class(GLOBAL_SCRIPT)
 SmartCannon.maxParentCount = -1
@@ -239,22 +239,20 @@ function SmartCannon:server_onFixedUpdate()
 				end
 			end
 		else
-			if _cp_isLogic(gate) then
-				local g_active = gate.active
+			local g_active = gate.active
 
-				if gate_color == "323000ff" then --4th yellow
-					ignore_rotation_mode = g_active
-				elseif gate_color == "eeeeeeff" then --white
-					spudgun_mode = g_active
-				elseif gate_color == "7f7f7fff" then --2nd gray
-					no_friction_mode = g_active
-				elseif gate_color == "4a4a4aff" then --3rd gray
-					no_recoil_mode = g_active
-				elseif gate_color == "222222ff" then --black
-					transfer_momentum = g_active
-				else
-					if g_active then cannon_active = true end
-				end
+			if gate_color == "323000ff" then --4th yellow
+				ignore_rotation_mode = g_active
+			elseif gate_color == "eeeeeeff" then --white
+				spudgun_mode = g_active
+			elseif gate_color == "7f7f7fff" then --2nd gray
+				no_friction_mode = g_active
+			elseif gate_color == "4a4a4aff" then --3rd gray
+				no_recoil_mode = g_active
+			elseif gate_color == "222222ff" then --black
+				transfer_momentum = g_active
+			else
+				if g_active then cannon_active = true end
 			end
 		end
 	end

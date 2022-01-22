@@ -149,25 +149,26 @@ function HomingMissile:server_onFixedUpdate()
 			seat_interactable = p
 		else
 			local p_Color = tostring(p.shape.color)
+
 			if _cp_isNumberLogic(p) then
 				local p_Power = p.power
+
 				if p_Color == "eeeeeeff" then
 					target_player = player_list[_mathMax(_mathMin(p_Power, #player_list - 1), 0) + 1]
 				elseif p_Color == "7f7f7fff" then
 					if p_Power > 0 then proximityFuze = _mathMin(p_Power, 20) end
 				end
 			else
-				if _cp_isLogic(p) then
-					local p_Active = p.active
-					if p_Color == "222222ff" then
-						if p_Active then rocket_mode = SR_ModeEnum.cam end
-					elseif p_Color == "4a4a4aff" then
-						if p_Active then rocket_mode = SR_ModeEnum.dirCam end
-					elseif p_Color == "7f7f7fff" then
-						if p_Active then obstacle_avoidance = false end
-					else
-						if p_Active then can_shoot = true end
-					end
+				local p_Active = p.active
+
+				if p_Color == "222222ff" then
+					if p_Active then rocket_mode = SR_ModeEnum.cam end
+				elseif p_Color == "4a4a4aff" then
+					if p_Active then rocket_mode = SR_ModeEnum.dirCam end
+				elseif p_Color == "7f7f7fff" then
+					if p_Active then obstacle_avoidance = false end
+				else
+					if p_Active then can_shoot = true end
 				end
 			end
 		end
@@ -182,14 +183,16 @@ function HomingMissile:server_onFixedUpdate()
 end
 
 local number_or_logic = bit.bor(_connectionType.logic, _connectionType.power)
-local is_seat_type = bit.bor(_connectionType.seated, _connectionType.bearing)
 function HomingMissile:client_getAvailableParentConnectionCount(connectionType)
-	if bit.band(connectionType, is_seat_type) ~= 0 then
-		return 1 - #self.interactable:getParents(is_seat_type)
+	if bit.band(connectionType, _connectionType.seated) ~= 0 then
+		return 1 - #self.interactable:getParents(_connectionType.seated)
 	end
 
 	if bit.band(connectionType, number_or_logic) ~= 0 then
-		return 4 - #self.interactable:getParents(number_or_logic)
+		local has_seat = (#self.interactable:getParents(_connectionType.seated) ~= 0)
+		local connection_amount = has_seat and 5 or 4
+
+		return connection_amount - #self.interactable:getParents(number_or_logic)
 	end
 
 	return 0
