@@ -54,7 +54,8 @@ function SmartRocket.client_loadProjectile(self, data)
 		player = proj_settings[ProjSettingEnum.player],
 		shape = shape,
 		proxFuze = proximity_fuze,
-		ignored_players = ignored_players
+		ignored_players = ignored_players,
+		obsAvoid = proj_settings[ProjSettingEnum.obstacleAvoidance]
 	}
 end
 
@@ -256,7 +257,7 @@ function SmartRocket.client_onScriptUpdate(self, dt)
 					local hit, result = _physRaycast(r_Pos, r_Pos + (rocket.dir / 1.5))
 					local r_Type = result.type
 
-					if hit and r_Type == "terrainAsset" or r_Type == "terrainSurface" or (r_shape_exists and result:getBody() == r_shape.body) then
+					if rocket.obsAvoid and (hit and ((r_Type == "terrainAsset" or r_Type == "terrainSurface") or (r_shape_exists and result:getBody() == r_shape.body))) then
 						local r_Normal = result.normalWorld
 						local r_Dot = rocket.dir:dot(r_Normal)
 						local r_Vector = rocket.dir - (r_Normal * r_Dot)

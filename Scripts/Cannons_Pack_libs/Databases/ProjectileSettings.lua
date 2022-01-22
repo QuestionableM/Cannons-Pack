@@ -53,7 +53,8 @@ ProjSettingEnum = {
 	player = 19,
 	mode = 20,
 	speed = 21,
-	count = 22
+	count = 22,
+	obstacleAvoidance = 23
 }
 
 local function TranslateSettings(set_table)
@@ -213,7 +214,8 @@ local ProjSettings = {
 	[ProjEnum.SmartRocketLauncher] = TranslateSettings({
 		position = _newVec(0, 0, 0.6),
 		speed = 100,
-		proxFuze = 0
+		proxFuze = 0,
+		obstacleAvoidance = true
 	}),
 	[ProjEnum.Railgun] = TranslateSettings({
 		position = _newVec(0, 0, 1.4),			velocity = _newVec(0, 0, 1000),

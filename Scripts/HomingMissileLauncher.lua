@@ -6,7 +6,7 @@
 if HomingMissile then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 HomingMissile = class(GLOBAL_SCRIPT)
-HomingMissile.maxParentCount = 4
+HomingMissile.maxParentCount = 5
 HomingMissile.maxChildCount = 0
 HomingMissile.connectionInput = _connectionType.logic + _connectionType.power
 HomingMissile.connectionOutput = _connectionType.none
@@ -23,6 +23,7 @@ function HomingMissile:client_onCreate()
 	self.effects = _cpEffect_cl_loadEffects(self)
 	self:client_injectScript("SmartRocket")
 
+	self.client_seat = false
 	self.client_cam = false
 	self.client_num_logic = false
 	self.client_pl_page = 0
@@ -31,13 +32,69 @@ function HomingMissile:client_onCreate()
 end
 
 function HomingMissile:server_requestData(data, caller)
-	self.network:sendToClient(caller, "client_receiveData", {self.reload ~= nil, self.num_logic_bool, self.cam_bool})
+	self.network:sendToClient(caller, "client_receiveData", {self.reload ~= nil, self.num_logic_bool, self.cam_bool, self.sv_operator_seat ~= nil})
 end
 
 function HomingMissile:client_receiveData(data)
 	self:client_updateUvAnim(data[1])
 	self.client_num_logic = data[2]
 	self.client_cam = data[3]
+	self.client_seat = data[4]
+end
+
+function HomingMissile:server_setTarget(target)
+	self.target = target
+end
+
+function HomingMissile:server_setOperator(data, operator)
+	self.operator = operator
+end
+
+function HomingMissile:server_getFinalTarget(pl_target)
+	local final_target = nil
+
+	if self.cam_bool then
+		if _cpExists(self.sv_operator_seat) then
+			local seat_char = self.sv_operator_seat:getSeatCharacter()
+			if _cpExists(seat_char) then
+				final_target = seat_char:getPlayer()
+			end
+		else
+			final_target = self.operator or pl_target
+		end
+	else
+		final_target = self.target or pl_target
+	end
+
+	return final_target
+end
+
+function HomingMissile:server_updateReload(can_shoot)
+	if self.reload then
+		if self.reload == 30 then
+			self.network:sendToClients("client_onEffect", {EffectEnum.rld, can_shoot})
+		end
+
+		self.reload = (self.reload > 1 and self.reload - 1) or nil
+	end
+end
+
+function HomingMissile:server_tryShootProjectile(can_shoot, rocket_mode, target_player, proximityFuze, obsAvoidance)
+	if can_shoot and not self.reload then
+		local s_Pos = self.shape.worldPosition
+		local bool, result = _physRaycast(s_Pos, s_Pos - self.shape.up / 1.58)
+		local hit = (not bool or (bool and result.type == "character"))
+
+		self.reload = _cp_Shoot(self, 280, "client_onEffect", {EffectEnum.sht, hit}, _recoil)
+
+		self.rocketConfig[ProjSettingEnum.velocity] = _cp_calculateSpread(self, 0.2, 100)
+		self.rocketConfig[ProjSettingEnum.player] = self:server_getFinalTarget(target_player)
+		self.rocketConfig[ProjSettingEnum.mode] = rocket_mode
+		self.rocketConfig[ProjSettingEnum.proxFuze] = proximityFuze
+		self.rocketConfig[ProjSettingEnum.obstacleAvoidance] = obsAvoidance
+
+		SmartRocket:server_sendProjectile(self, self.rocketConfig, ProjEnum.SmartRocketLauncher)
+	end
 end
 
 function HomingMissile:server_updateNumLogicBool(state)
@@ -59,50 +116,10 @@ function HomingMissile:server_updateCamBool(state)
 	end
 end
 
-function HomingMissile:server_setTarget(target)
-	self.target = target
-end
-
-function HomingMissile:server_setOperator(data, operator)
-	self.operator = operator
-end
-
-function HomingMissile:server_getFinalTarget(pl_target)
-	local final_target = nil
-
-	if self.cam_bool then
-		final_target = self.operator or pl_target
-	else
-		final_target = self.target or pl_target
-	end
-
-	return final_target
-end
-
-function HomingMissile:server_updateReload(can_shoot)
-	if self.reload then
-		if self.reload == 30 then
-			self.network:sendToClients("client_onEffect", {EffectEnum.rld, can_shoot})
-		end
-
-		self.reload = (self.reload > 1 and self.reload - 1) or nil
-	end
-end
-
-function HomingMissile:server_tryShootProjectile(can_shoot, rocket_mode, target_player, proximityFuze)
-	if can_shoot and not self.reload then
-		local s_Pos = self.shape.worldPosition
-		local bool, result = _physRaycast(s_Pos, s_Pos - self.shape.up / 1.58)
-		local hit = (not bool or (bool and result.type == "character"))
-
-		self.reload = _cp_Shoot(self, 280, "client_onEffect", {EffectEnum.sht, hit}, _recoil)
-
-		self.rocketConfig[ProjSettingEnum.velocity] = _cp_calculateSpread(self, 0.2, 100)
-		self.rocketConfig[ProjSettingEnum.player] = self:server_getFinalTarget(target_player)
-		self.rocketConfig[ProjSettingEnum.mode] = rocket_mode
-		self.rocketConfig[ProjSettingEnum.proxFuze] = proximityFuze
-
-		SmartRocket:server_sendProjectile(self, self.rocketConfig, ProjEnum.SmartRocketLauncher)
+function HomingMissile:server_updateSeatInteractable(sInteractable)
+	if sInteractable ~= self.sv_operator_seat then
+		self.sv_operator_seat = sInteractable
+		self.network:sendToClients("client_setSeatMode", sInteractable ~= nil)
 	end
 end
 
@@ -111,41 +128,52 @@ function HomingMissile:server_onFixedUpdate()
 	if not _smExists(self.interactable) then return end
 
 	local can_shoot = false
+	local obstacle_avoidance = true
 	local target_player = nil
 	local player_list = _getAllPlayers()
 	local rocket_mode = nil
 	local proximityFuze = 0
+	local seat_interactable = nil
 
 	local parent_list = self.interactable:getParents()
 	for k, p in pairs(parent_list) do
-		local p_Color = tostring(p.shape.color)
-
-		if _cp_isNumberLogic(p) then
-			local p_Power = p.power
-			if p_Color == "eeeeeeff" then
-				target_player = player_list[_mathMax(_mathMin(p_Power, #player_list - 1), 0) + 1]
-			elseif p_Color == "7f7f7fff" then
-				if p_Power > 0 then proximityFuze = _mathMin(p_Power, 20) end
+		if p:hasSteering() then
+			if not seat_interactable then
+				seat_interactable = p
+			else
+				p:disconnect(self.interactable)
 			end
 		else
-			if _cp_isLogic(p) then
-				local p_Active = p.active
-				if p_Color == "222222ff" then
-					if p_Active then rocket_mode = SR_ModeEnum.cam end
-				elseif p_Color == "4a4a4aff" then
-					if p_Active then rocket_mode = SR_ModeEnum.dirCam end
-				else
-					if p_Active then can_shoot = true end
+			local p_Color = tostring(p.shape.color)
+			if _cp_isNumberLogic(p) then
+				local p_Power = p.power
+				if p_Color == "eeeeeeff" then
+					target_player = player_list[_mathMax(_mathMin(p_Power, #player_list - 1), 0) + 1]
+				elseif p_Color == "7f7f7fff" then
+					if p_Power > 0 then proximityFuze = _mathMin(p_Power, 20) end
+				end
+			else
+				if _cp_isLogic(p) then
+					local p_Active = p.active
+					if p_Color == "222222ff" then
+						if p_Active then rocket_mode = SR_ModeEnum.cam end
+					elseif p_Color == "4a4a4aff" then
+						if p_Active then rocket_mode = SR_ModeEnum.dirCam end
+					elseif p_Color == "7f7f7fff" then
+						if p_Active then obstacle_avoidance = false end
+					else
+						if p_Active then can_shoot = true end
+					end
 				end
 			end
 		end
 	end
 
+	self:server_updateSeatInteractable(seat_interactable)
 	self:server_updateCamBool(rocket_mode ~= nil)
 	self:server_updateNumLogicBool(target_player ~= nil)
 
-	self:server_tryShootProjectile(can_shoot, rocket_mode, target_player, proximityFuze)
-
+	self:server_tryShootProjectile(can_shoot, rocket_mode, target_player, proximityFuze, obstacle_avoidance)
 	self:server_updateReload(can_shoot)
 end
 
@@ -165,6 +193,10 @@ function HomingMissile:client_onEffect(data)
 	end
 end
 
+function HomingMissile:client_setSeatMode(state)
+	self.client_seat = state
+end
+
 function HomingMissile:client_setCamMode(state)
 	self.client_cam = state
 end
@@ -178,18 +210,24 @@ function HomingMissile:client_updateUvAnim(is_shoot)
 end
 
 local HM_NumLogicConnectedMsg = "You can't change any settings while number logic is connected to the rocket launcher"
+local HR_SeatConnectedMsg = "You can't control the rockets while a seat is connected to the rocket launcher"
 function HomingMissile:client_onInteract(character, state)
 	if not state then return end
 
-	if self.client_num_logic then
-		_cp_infoOutput("GUI Item released", true, HM_NumLogicConnectedMsg)
-		return
-	end
-
 	if self.client_cam then
+		if self.client_seat then
+			_setInteractionText("", HR_SeatConnectedMsg)
+			return
+		end
+
 		self.network:sendToServer("server_setOperator")
 		_cp_infoOutput("Blueprint - Camera", true, "You are controlling the rockets now!", 2)
 	else
+		if self.client_num_logic then
+			_cp_infoOutput("GUI Item released", true, HM_NumLogicConnectedMsg)
+			return
+		end
+
 		local pl_list = _getAllPlayers()
 		
 		local c_Value = character:isCrouching() and -1 or 1
@@ -207,16 +245,21 @@ function HomingMissile:client_onInteract(character, state)
 end
 
 function HomingMissile:client_canInteract()
-	if self.client_num_logic then
-		_setInteractionText("", HM_NumLogicConnectedMsg)
-		return false
-	end
-
 	local use_key = _getKeyBinding("Use")
 
 	if self.client_cam then
+		if self.client_seat then
+			_setInteractionText("", HR_SeatConnectedMsg)
+			return false
+		end
+
 		_setInteractionText("Press", use_key, "to control the rockets")
 	else
+		if self.client_num_logic then
+			_setInteractionText("", HM_NumLogicConnectedMsg)
+			return false
+		end
+
 		local crawl_key = _getKeyBinding("Crawl")
 
 		_setInteractionText("Press", crawl_key, "or", ("%s + %s"):format(crawl_key, use_key), "to choose the target")
