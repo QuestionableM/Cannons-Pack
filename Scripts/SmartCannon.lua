@@ -3,7 +3,7 @@
 	Questionable Mark
 ]]
 
-if SmartCannon then return end
+--if SmartCannon then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 SmartCannon = class(GLOBAL_SCRIPT)
 SmartCannon.maxParentCount = -1
@@ -143,6 +143,23 @@ local _ReloadSoundTimeOffsets = {
 	[2] = {val = 190, min_rld = 210}
 }
 
+local number_or_logic = bit.bnot(bit.bor(_connectionType.logic, _connectionType.power))
+function SmartCannon:client_getAvailableParentConnectionCount(connectionType)
+	if bit.band(connectionType, number_or_logic) == 0 then
+		return 1
+	end
+
+	return 0
+end
+
+function SmartCannon:client_getAvailableChildConnectionCount(connectionType)
+	if connectionType == _connectionType.logic then
+		return 1 - #self.interactable:getChildren(_connectionType.logic)
+	end
+
+	return 0
+end
+
 function SmartCannon:server_onFixedUpdate()
 	if not _smExists(self.interactable) then return end
 
@@ -181,68 +198,64 @@ function SmartCannon:server_onFixedUpdate()
 
 	local Parents = self.interactable:getParents()
 	for l, gate in pairs(Parents) do
-		if not gate:hasSteering() then
-			local gate_color = tostring(gate:getShape():getColor())
+		local gate_color = tostring(gate:getShape():getColor())
 
-			if _cp_isNumberLogic(gate) then
-				local g_power = gate.power
-				
-				if gate_color == "eeaf5cff" then --1st orange
-					if g_power > 0 then fire_force = g_power end
-				elseif gate_color == "673b00ff" then --3rd orange
-					fire_spread = g_power
-				elseif gate_color == "472800ff" then --4th orange
-					reload_time = g_power
-				elseif gate_color == "f06767ff" then --1st red
-					if g_power > 0 then expl_level = g_power end
-				elseif gate_color == "d02525ff" then --2nd red
-					if g_power > 0 then expl_radius = _mathMin(g_power, 100) end
-				elseif gate_color == "7c0000ff" then --3rd red
-					if g_power > 0 then expl_impulse_radius = g_power end
-				elseif gate_color == "560202ff" then --4th red
-					if g_power >= 0 then expl_impulse_strength = g_power end
-				elseif gate_color == "ee7bf0ff" then --1st pink
-					projectile_gravity = g_power
-				elseif gate_color == "cf11d2ff" then --2nd pink
-					if g_power > 0 then projectile_lifetime = _mathMin(g_power, 30) end
-				elseif gate_color == "720a74ff" then --3rd pink
-					if g_power > 0 then cannon_recoil = g_power end
-				elseif gate_color == "520653ff" then --4th pink
-					if g_power > 0 then proximity_fuze = _mathMin(g_power, 20) end
-				elseif gate_color == "f5f071ff" then --1st yellow
-					x_offset = g_power / 4
-				elseif gate_color == "e2db13ff" then --2nd yellow
-					y_offset = g_power / 4
-				elseif gate_color == "817c00ff" then --3rd yellow
-					z_offset = g_power / 4
-				elseif gate_color == "35086cff" then --4th violet
-					if g_power >= 0 then projectile_per_shot = _mathMin(g_power, 20) end
-				elseif gate_color == "eeeeeeff" then --white
-					if g_power >= 0 then
-						projectile_type = _mathFloor(_mathMin(g_power, self.proj_type_amount - 1))
-					end
-				end
-			else
-				if _cp_isLogic(gate) then
-					local g_active = gate.active
-
-					if gate_color == "323000ff" then --4th yellow
-						ignore_rotation_mode = g_active
-					elseif gate_color == "eeeeeeff" then --white
-						spudgun_mode = g_active
-					elseif gate_color == "7f7f7fff" then --2nd gray
-						no_friction_mode = g_active
-					elseif gate_color == "4a4a4aff" then --3rd gray
-						no_recoil_mode = g_active
-					elseif gate_color == "222222ff" then --black
-						transfer_momentum = g_active
-					else
-						if g_active then cannon_active = true end
-					end
+		if _cp_isNumberLogic(gate) then
+			local g_power = gate.power
+			
+			if gate_color == "eeaf5cff" then --1st orange
+				if g_power > 0 then fire_force = g_power end
+			elseif gate_color == "673b00ff" then --3rd orange
+				fire_spread = g_power
+			elseif gate_color == "472800ff" then --4th orange
+				reload_time = g_power
+			elseif gate_color == "f06767ff" then --1st red
+				if g_power > 0 then expl_level = g_power end
+			elseif gate_color == "d02525ff" then --2nd red
+				if g_power > 0 then expl_radius = _mathMin(g_power, 100) end
+			elseif gate_color == "7c0000ff" then --3rd red
+				if g_power > 0 then expl_impulse_radius = g_power end
+			elseif gate_color == "560202ff" then --4th red
+				if g_power >= 0 then expl_impulse_strength = g_power end
+			elseif gate_color == "ee7bf0ff" then --1st pink
+				projectile_gravity = g_power
+			elseif gate_color == "cf11d2ff" then --2nd pink
+				if g_power > 0 then projectile_lifetime = _mathMin(g_power, 30) end
+			elseif gate_color == "720a74ff" then --3rd pink
+				if g_power > 0 then cannon_recoil = g_power end
+			elseif gate_color == "520653ff" then --4th pink
+				if g_power > 0 then proximity_fuze = _mathMin(g_power, 20) end
+			elseif gate_color == "f5f071ff" then --1st yellow
+				x_offset = g_power / 4
+			elseif gate_color == "e2db13ff" then --2nd yellow
+				y_offset = g_power / 4
+			elseif gate_color == "817c00ff" then --3rd yellow
+				z_offset = g_power / 4
+			elseif gate_color == "35086cff" then --4th violet
+				if g_power >= 0 then projectile_per_shot = _mathMin(g_power, 20) end
+			elseif gate_color == "eeeeeeff" then --white
+				if g_power >= 0 then
+					projectile_type = _mathFloor(_mathMin(g_power, self.proj_type_amount - 1))
 				end
 			end
 		else
-			gate:disconnect(self.interactable)
+			if _cp_isLogic(gate) then
+				local g_active = gate.active
+
+				if gate_color == "323000ff" then --4th yellow
+					ignore_rotation_mode = g_active
+				elseif gate_color == "eeeeeeff" then --white
+					spudgun_mode = g_active
+				elseif gate_color == "7f7f7fff" then --2nd gray
+					no_friction_mode = g_active
+				elseif gate_color == "4a4a4aff" then --3rd gray
+					no_recoil_mode = g_active
+				elseif gate_color == "222222ff" then --black
+					transfer_momentum = g_active
+				else
+					if g_active then cannon_active = true end
+				end
+			end
 		end
 	end
 
