@@ -7,16 +7,12 @@ if _CP_gScript then return end
 _CP_gScript = {}
 
 function _cp_isLogic(interactable)
-	if interactable:hasSteering() then return false end
-
-	local i_type = interactable.type
-	return (i_type == "button" or i_type == "lever" or i_type == "logic" or i_type == "scripted" or i_type == "timer")
+	return interactable:getConnectionOutputType() == _connectionType.logic
 end
 
+local number_or_logic = bit.bor(_connectionType.logic, _connectionType.power)
 function _cp_isNumberLogic(interactable)
-	local uuid_str = tostring(interactable.shape.uuid)
-
-	return (uuid_str == "289e08ef-e3d8-4f1b-bc10-a0bcf36fa0ce" or uuid_str == "d8296109-2ffb-4efb-819a-54bd8cadf549")
+	return interactable:getConnectionOutputType() == number_or_logic
 end
 
 function _cp_isObjectVisible(pos, dir, target_pos, angle)
