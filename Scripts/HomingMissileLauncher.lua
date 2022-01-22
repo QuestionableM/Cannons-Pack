@@ -53,17 +53,25 @@ end
 function HomingMissile:server_getFinalTarget(pl_target)
 	local final_target = nil
 
+	local seated_player = nil
+	if _cpExists(self.sv_operator_seat) then
+		local seat_char = self.sv_operator_seat:getSeatCharacter()
+		if _cpExists(seat_char) then
+			seated_player = seat_char:getPlayer()
+		end
+	end
+
 	if self.cam_bool then
-		if _cpExists(self.sv_operator_seat) then
-			local seat_char = self.sv_operator_seat:getSeatCharacter()
-			if _cpExists(seat_char) then
-				final_target = seat_char:getPlayer()
-			end
+		if seated_player then
+			final_target = seated_player
 		else
 			final_target = self.operator or pl_target
 		end
 	else
 		final_target = self.target or pl_target
+		if final_target == seated_player then
+			final_target = nil
+		end
 	end
 
 	return final_target
