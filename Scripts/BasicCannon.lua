@@ -49,7 +49,7 @@ function BasicCannon:server_updateAndCheckChild(port_uuid)
 	local child = self.interactable:getChildren()[1]
 
 	if self.update_child then
-		self.update_child = false
+		self.update_child = nil
 
 		if child and tostring(child.shape.uuid) ~= port_uuid then
 			self.interactable:disconnect(child)

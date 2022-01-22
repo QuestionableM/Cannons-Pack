@@ -79,23 +79,30 @@ function ShellEjector:server_TryEjectShell()
 end
 
 function ShellEjector:server_onFixedUpdate(dt)
-	if not _smExists(self.interactable) then return end
+	local sInteractable = self.interactable
+	if not _smExists(sInteractable) then return end
 
-	local parent = self.interactable:getSingleParent()
+	local parent = sInteractable:getSingleParent()
+	if self.sv_saved_parent ~= parent then
+		self.sv_saved_parent = parent
 
-	if parent then
-		local effect_data = self.sv_eff_table[tostring(parent.shape.uuid)]
-		if effect_data == nil then
-			parent:disconnect(self.interactable)
-		else
-			if self.interactable.active then
-				self.interactable:setActive(false)
-				self:server_resetAnimVals(true)
-
-				_tableInsert(self.sv_shell_queue, effect_data)
-				self.sv_queue_size = self.sv_queue_size + 1
+		if parent then
+			self.sv_cur_eff_data = self.sv_eff_table[tostring(parent.shape.uuid)]
+			if self.sv_cur_eff_data == nil then
+				self.sv_saved_parent = nil
+				parent:disconnect(sInteractable)
 			end
+		else
+			self.sv_cur_eff_data = nil
 		end
+	end
+
+	if sInteractable.active and self.sv_cur_eff_data then
+		sInteractable:setActive(false)
+		self:server_resetAnimVals(true)
+
+		_tableInsert(self.sv_shell_queue, self.sv_cur_eff_data)
+		self.sv_queue_size = self.sv_queue_size + 1
 	end
 
 	self:server_updateAnimVals(dt)
@@ -103,14 +110,15 @@ function ShellEjector:server_onFixedUpdate(dt)
 end
 
 function ShellEjector:client_onUpdate(dt)
-	if not _smExists(self.interactable) then return end
+	local sInteractable = self.interactable
+	if not _smExists(sInteractable) then return end
 
 	local a_Changer = self.cl_anim and 1.5 or -1.5
 	local a_ChangedValue = _mathMin(_mathMax(self.cl_anim_val + a_Changer * dt, 0), 1)
 
 	if a_ChangedValue ~= self.cl_anim_val then
 		self.cl_anim_val = a_ChangedValue
-		self.interactable:setPoseWeight(0, a_ChangedValue)
+		sInteractable:setPoseWeight(0, a_ChangedValue)
 	end
 end
 
