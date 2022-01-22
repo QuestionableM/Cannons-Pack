@@ -1,10 +1,9 @@
 What are u doing here? you little thief
 
-Cannons Pack version 4.4 changelog:
-1. Improved Smart Rocket aiming
-2. Improved networking
-3. Potatoes launched by Smart Cannons can now damage units
-4. Optimized most of the scripts
+Cannons Pack version 4.5 changelog:
+1. You can now connect a driver's seat / saddle to the Smart Rocket Launcher to aim the rockets without having to press E on every single rocket launcher
+2. Added an option to disable obstacle avoidance for Smart Rockets (2nd gray)
+3. Optimized the scripts and added proper checks for number logic
 
 Made by:
 Questionable Mark - creator of all the textures, UV maps and also some scripts and cannon models.
