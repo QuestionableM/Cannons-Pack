@@ -1,0 +1,26 @@
+{
+	"lodList":[
+		{
+			"mesh":"$MOD_DATA/Objects/Mesh/SmartRocketLauncher.fbx",
+			"subMeshList":[
+				{
+					"material":"DifAsgNor",
+					"textureList":[
+						"$MOD_DATA/Objects/Textures/CP_default_dif.tga",
+						"$MOD_DATA/Objects/Textures/CP_default_asg.tga",
+						"$MOD_DATA/Objects/Textures/nonor_nor.tga"
+					]
+				},
+				{
+					"material":"UVAnimDifAsgNor",
+					"custom":{"uv0":{"u":0.001,"v":0.001}},
+					"textureList":[
+						"$MOD_DATA/Objects/Textures/CP_default_dif.tga",
+						"$MOD_DATA/Objects/Textures/CP_default_asg.tga",
+						"$MOD_DATA/Objects/Textures/nonor_nor.tga"
+					]
+				}
+			]
+		}
+	]
+}

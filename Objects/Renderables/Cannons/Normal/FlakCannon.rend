@@ -1,0 +1,17 @@
+{
+	"lodList":[
+		{
+			"mesh":"$MOD_DATA/Objects/Mesh/FlakCannon.fbx",
+			"subMeshList":[
+				{
+					"material":"DifAsgNor",
+					"textureList":[
+						"$MOD_DATA/Objects/Textures/CP_default_dif.tga",
+						"$MOD_DATA/Objects/Textures/CP_default_asg.tga",
+						"$MOD_DATA/Objects/Textures/nonor_nor.tga"
+					]
+				}
+			]
+		}
+	]
+}
