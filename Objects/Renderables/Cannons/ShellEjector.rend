@@ -1,23 +1,23 @@
 {
 	"lodList":[
 		{
-			"mesh":"$MOD_DATA/Objects/Mesh/ShellUnloader_closed.fbx",
-			"pose0":"$MOD_DATA/Objects/Mesh/ShellUnloader_opened.fbx",
+			"mesh":"$CONTENT_DATA/Objects/Mesh/ShellUnloader_closed.fbx",
+			"pose0":"$CONTENT_DATA/Objects/Mesh/ShellUnloader_opened.fbx",
 			"subMeshList":[
 				{
 					"material":"DifAsgNor",
 					"textureList":[
-						"$MOD_DATA/Objects/Textures/CP_default_dif.tga",
-						"$MOD_DATA/Objects/Textures/CP_default_asg.tga",
-						"$MOD_DATA/Objects/Textures/nonor_nor.tga"
+						"$CONTENT_DATA/Objects/Textures/CP_default_dif.tga",
+						"$CONTENT_DATA/Objects/Textures/CP_default_asg.tga",
+						"$CONTENT_DATA/Objects/Textures/nonor_nor.tga"
 					]
 				},
 				{
 					"material":"PoseAnimDifAsgNor",
 					"textureList":[
-						"$MOD_DATA/Objects/Textures/CP_default_dif.tga",
-						"$MOD_DATA/Objects/Textures/CP_default_asg.tga",
-						"$MOD_DATA/Objects/Textures/nonor_nor.tga"
+						"$CONTENT_DATA/Objects/Textures/CP_default_dif.tga",
+						"$CONTENT_DATA/Objects/Textures/CP_default_asg.tga",
+						"$CONTENT_DATA/Objects/Textures/nonor_nor.tga"
 					]
 				}
 			]

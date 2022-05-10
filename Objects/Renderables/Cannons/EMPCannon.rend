@@ -1,23 +1,23 @@
 {
 	"lodList":[
 		{
-			"mesh":"$MOD_DATA/Objects/Mesh/EMPCannon.fbx",
+			"mesh":"$CONTENT_DATA/Objects/Mesh/EMPCannon.fbx",
 			"subMeshList":[
 				{
 					"material":"UVAnimDifAsgNor",
 					"custom":{"uv0":{"u":0.001,"v":0.001}},
 					"textureList":[
-						"$MOD_DATA/Objects/Textures/CP_default_dif.tga",
-						"$MOD_DATA/Objects/Textures/CP_default_asg.tga",
-						"$MOD_DATA/Objects/Textures/nonor_nor.tga"
+						"$CONTENT_DATA/Objects/Textures/CP_default_dif.tga",
+						"$CONTENT_DATA/Objects/Textures/CP_default_asg.tga",
+						"$CONTENT_DATA/Objects/Textures/nonor_nor.tga"
 					]
 				},
 				{
 					"material":"DifAsgNor",
 					"textureList":[
-						"$MOD_DATA/Objects/Textures/CP_default_dif.tga",
-						"$MOD_DATA/Objects/Textures/CP_default_asg.tga",
-						"$MOD_DATA/Objects/Textures/nonor_nor.tga"
+						"$CONTENT_DATA/Objects/Textures/CP_default_dif.tga",
+						"$CONTENT_DATA/Objects/Textures/CP_default_asg.tga",
+						"$CONTENT_DATA/Objects/Textures/nonor_nor.tga"
 					]
 				}
 			]

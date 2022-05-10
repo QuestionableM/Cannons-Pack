@@ -1,14 +1,14 @@
 {
 	"lodList":[
 		{
-			"mesh":"$MOD_DATA/Objects/Mesh/SchwererGustav.fbx",
+			"mesh":"$CONTENT_DATA/Objects/Mesh/SchwererGustav.fbx",
 			"subMeshList":[
 				{
 					"material":"DifAsgNor",
 					"textureList":[
-						"$MOD_DATA/Objects/Textures/CP_default_dif.tga",
-						"$MOD_DATA/Objects/Textures/CP_default_asg.tga",
-						"$MOD_DATA/Objects/Textures/nonor_nor.tga"
+						"$CONTENT_DATA/Objects/Textures/CP_default_dif.tga",
+						"$CONTENT_DATA/Objects/Textures/CP_default_asg.tga",
+						"$CONTENT_DATA/Objects/Textures/nonor_nor.tga"
 					]
 				}
 			]

@@ -6,7 +6,7 @@
 			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/Normal/AircraftCannon.rend",
 			"scripted": {
 				"classname": "BasicCannon",
-				"filename": "$MOD_DATA/Scripts/BasicCannon.lua"
+				"filename": "$CONTENT_DATA/Scripts/BasicCannon.lua"
 			},
 			"hull": {
 				"margin": 0.025,
@@ -30,7 +30,7 @@
 			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/Normal/FlakCannon.rend",
 			"scripted": {
 				"classname": "BasicCannon",
-				"filename": "$MOD_DATA/Scripts/BasicCannon.lua"
+				"filename": "$CONTENT_DATA/Scripts/BasicCannon.lua"
 			},
 			"hull": {
 				"margin": 0.025,
@@ -54,7 +54,7 @@
 			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/Normal/TankCannon.rend",
 			"scripted": {
 				"classname": "BasicCannon",
-				"filename": "$MOD_DATA/Scripts/BasicCannon.lua"
+				"filename": "$CONTENT_DATA/Scripts/BasicCannon.lua"
 			},
 			"cylinder": { "axis": "Z", "depth": 5, "diameter": 1 },
 			"physicsMaterial": "Metal",
@@ -72,7 +72,7 @@
 			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/Normal/TankCannon2.rend",
 			"scripted": {
 				"classname": "BasicCannon",
-				"filename": "$MOD_DATA/Scripts/BasicCannon.lua"
+				"filename": "$CONTENT_DATA/Scripts/BasicCannon.lua"
 			},
 			"cylinder": { "axis": "Z", "depth": 5, "diameter": 1 },
 			"physicsMaterial": "Metal",
@@ -90,7 +90,7 @@
 			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/LaserCannon.rend",
 			"scripted": {
 				"classname": "BasicCannon",
-				"filename": "$MOD_DATA/Scripts/BasicCannon.lua"
+				"filename": "$CONTENT_DATA/Scripts/BasicCannon.lua"
 			},
 			"cylinder": { "axis": "Z", "depth": 5, "diameter": 1 },
 			"physicsMaterial": "Metal",
@@ -108,7 +108,7 @@
 			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/Launchers/RocketLauncher.rend",
 			"scripted": {
 				"classname": "BasicCannon",
-				"filename": "$MOD_DATA/Scripts/BasicCannon.lua"
+				"filename": "$CONTENT_DATA/Scripts/BasicCannon.lua"
 			},
 			"box": { "x": 1, "y": 1, "z": 5 },
 			"physicsMaterial": "Metal",
@@ -126,7 +126,7 @@
 			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/Launchers/SmartRocketLauncher.rend",
 			"scripted": {
 				"classname": "HomingMissile",
-				"filename": "$MOD_DATA/Scripts/HomingMissileLauncher.lua"
+				"filename": "$CONTENT_DATA/Scripts/HomingMissileLauncher.lua"
 			},
 			"box": { "x": 1, "y": 1, "z": 5 },
 			"physicsMaterial": "Metal",
@@ -144,7 +144,7 @@
 			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/Normal/TankCannon3.rend",
 			"scripted": {
 				"classname": "BasicCannon",
-				"filename": "$MOD_DATA/Scripts/BasicCannon.lua"
+				"filename": "$CONTENT_DATA/Scripts/BasicCannon.lua"
 			},
 			"cylinder": { "axis": "Z", "depth": 10, "diameter": 1 },
 			"physicsMaterial": "Metal",
@@ -162,7 +162,7 @@
 			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/Normal/M1AbramsCannon.rend",
 			"scripted": {
 				"classname": "BasicCannon",
-				"filename": "$MOD_DATA/Scripts/BasicCannon.lua"
+				"filename": "$CONTENT_DATA/Scripts/BasicCannon.lua"
 			},
 			"cylinder": { "axis": "Z", "depth": 12, "diameter": 1 },
 			"physicsMaterial": "Metal",
@@ -180,7 +180,7 @@
 			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/Normal/NavalCannon.rend",
 			"scripted": {
 				"classname": "BasicCannon",
-				"filename": "$MOD_DATA/Scripts/BasicCannon.lua"
+				"filename": "$CONTENT_DATA/Scripts/BasicCannon.lua"
 			},
 			"hull": {
 				"margin": 0.050,
@@ -204,7 +204,7 @@
 			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/Normal/NavalCannon2.rend",
 			"scripted": {
 				"classname": "BasicCannon",
-				"filename": "$MOD_DATA/Scripts/BasicCannon.lua"
+				"filename": "$CONTENT_DATA/Scripts/BasicCannon.lua"
 			},
 			"hull": {
 				"margin": 0.05,
@@ -228,7 +228,7 @@
 			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/Railgun.rend",
 			"scripted": {
 				"classname": "Railgun",
-				"filename": "$MOD_DATA/Scripts/Railgun.lua"
+				"filename": "$CONTENT_DATA/Scripts/Railgun.lua"
 			},
 			"hull": {
 				"margin": 0.050,
@@ -252,7 +252,7 @@
 			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/Railgun2.rend",
 			"scripted": {
 				"classname": "Railgun2",
-				"filename": "$MOD_DATA/Scripts/Railgun2.lua"
+				"filename": "$CONTENT_DATA/Scripts/Railgun2.lua"
 			},
 			"hull": {
 				"margin": 0.050,
@@ -276,7 +276,7 @@
 			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/EMPCannon.rend",
 			"scripted": {
 				"classname": "emp",
-				"filename": "$MOD_DATA/Scripts/EMPCannon.lua"
+				"filename": "$CONTENT_DATA/Scripts/EMPCannon.lua"
 			},
 			"box": { "x": 1, "y": 1, "z": 7 },
 			"physicsMaterial": "Metal",
@@ -294,7 +294,7 @@
 			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/Normal/M109Howitzer.rend",
 			"scripted": {
 				"classname": "BasicCannon",
-				"filename": "$MOD_DATA/Scripts/BasicCannon.lua"
+				"filename": "$CONTENT_DATA/Scripts/BasicCannon.lua"
 			},
 			"hull": {
 				"margin": 0.050,
@@ -318,7 +318,7 @@
 			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/Normal/SchwererGustav.rend",
 			"scripted": {
 				"classname": "BasicCannon",
-				"filename": "$MOD_DATA/Scripts/BasicCannon.lua"
+				"filename": "$CONTENT_DATA/Scripts/BasicCannon.lua"
 			},
 			"hull": {
 				"margin": 0.050,
@@ -342,7 +342,7 @@
 			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/SmallSmartCannon.rend",
 			"scripted": {
 				"classname": "SmartCannon",
-				"filename": "$MOD_DATA/Scripts/SmartCannon.lua"
+				"filename": "$CONTENT_DATA/Scripts/SmartCannon.lua"
 			},
 			"hull": {
 				"margin": 0.025,
@@ -366,7 +366,7 @@
 			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/SmartCannon.rend",
 			"scripted": {
 				"classname": "SmartCannon",
-				"filename": "$MOD_DATA/Scripts/SmartCannon.lua"
+				"filename": "$CONTENT_DATA/Scripts/SmartCannon.lua"
 			},
 			"cylinder": { "axis": "Z", "depth": 1, "diameter": 1 },
 			"physicsMaterial": "Metal",
@@ -384,7 +384,7 @@
 			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/SmartRocketDetector.rend",
 			"scripted": {
 				"classname": "RocketDetector",
-				"filename": "$MOD_DATA/Scripts/SmartRocketDetector.lua"
+				"filename": "$CONTENT_DATA/Scripts/SmartRocketDetector.lua"
 			},
 			"box": { "x": 1.0, "y": 1.0, "z": 1.0 },
 			"physicsMaterial": "Metal",
@@ -402,7 +402,7 @@
 			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/OrbitalCannon.rend",
 			"scripted": {
 				"classname": "OrbitalCannon",
-				"filename": "$MOD_DATA/Scripts/OrbitalCannon.lua"
+				"filename": "$CONTENT_DATA/Scripts/OrbitalCannon.lua"
 			},
 			"cylinder": { "axis": "Z", "depth": 2, "diameter": 1 },
 			"physicsMaterial": "Metal",
@@ -420,7 +420,7 @@
 			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/Launchers/FlareLauncher.rend",
 			"scripted": {
 				"classname": "flare",
-				"filename": "$MOD_DATA/Scripts/FlareLauncher.lua"
+				"filename": "$CONTENT_DATA/Scripts/FlareLauncher.lua"
 			},
 			"hull": {
 				"margin": 0.01,
@@ -444,7 +444,7 @@
 			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/ShellEjector.rend",
 			"scripted": {
 				"classname": "ShellEjector",
-				"filename": "$MOD_DATA/Scripts/ShellEjectionPort.lua"
+				"filename": "$CONTENT_DATA/Scripts/ShellEjectionPort.lua"
 			},
 			"box": { "x": 1, "y": 1, "z": 2 },
 			"physicsMaterial": "Metal",
