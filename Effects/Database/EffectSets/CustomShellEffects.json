@@ -1,112 +1,322 @@
 {
 	"TankCannon - Shell":{
-		"maxInstances":512,"parameterList":{"color":"ffff00","radius":2.0,"intensity":1.8},
+		"maxInstances":512,
+		"parameterList":{"color":"ffff00","radius":2.0,"intensity":1.8},
 		"effectList":[
-			{"type":"particle","name":"TankShell","offset":{"x":0.65,"y":0.0,"z":0.0},"delay":0.0},
-			{"type":"pointLight","name":"","offset":{"x":0.65,"y":0.0,"z":0.0},"parameters":["color","radius","intensity"],"delay":0.03}
+			{
+				"type":"renderable",
+				"name":"$CONTENT_DATA/Effects/Renderables/TankCannonShell.rend",
+				"offset":{"x":0.65,"y":0.0,"z":0.0},
+				"delay":0.0
+			},
+			{
+				"type":"pointLight",
+				"name":"",
+				"offset":{"x":0.65,"y":0.0,"z":0.0},
+				"parameters":["color","radius","intensity"],
+				"delay":0.03
+			}
 		]
 	},
 	"FlakCannon - Shell":{
-		"maxInstances":512,"parameterList":{"size":16.0,"color":"ffff00","radius":2.0,"intensity":1.8},
+		"maxInstances":512,
+		"parameterList":{"size":16.0,"color":"ffff00","radius":2.0,"intensity":1.8},
 		"effectList":[
-			{"type":"particle","name":"FlakCannonShell","offset":{"x":0.65,"y":0.0,"z":0.0},"delay":0.0},
-			{"type":"pointLight","name":"","offset":{"x":0.55,"y":0.0,"z":0.0},"parameters":["color","radius","intensity"],"delay":0.03}
+			{
+				"type":"renderable",
+				"name":"$CONTENT_DATA/Effects/Renderables/FlakCannonShell.rend",
+				"offset":{"x":0.65,"y":0.0,"z":0.0},
+				"delay":0.0
+			},
+			{
+				"type":"pointLight",
+				"name":"",
+				"offset":{"x":0.55,"y":0.0,"z":0.0},
+				"parameters":["color","radius","intensity"],
+				"delay":0.03
+			}
 		]
 	},
 	"NavalCannon - Shell":{
-		"maxInstances":512,"parameterList":{"color":"ffff00","radius":2.0,"intensity":2.0,"shakeStrength":0.2,"shakeRadius":4.0},
+		"maxInstances":512,
+		"parameterList":{"color":"ffff00","radius":2.0,"intensity":2.0,"shakeStrength":0.2,"shakeRadius":4.0},
 		"effectList":[
-			{"type":"particle","name":"NavalCannonShell","offset": {"x":1.0,"y":0.0,"z":0.0},"delay":0.0},
-			{"type":"pointLight","name":"","offset":{"x":1.0,"y":0.0,"z":0.0},"parameters":["color","radius","intensity"],"delay":0.08}
+			{
+				"type":"renderable",
+				"name":"$CONTENT_DATA/Effects/Renderables/NavalCannonShell.rend",
+				"offset":{"x":1.0,"y":0.0,"z":0.0},
+				"delay":0.0
+			},
+			{
+				"type":"pointLight",
+				"name":"",
+				"offset":{"x":1.0,"y":0.0,"z":0.0},
+				"parameters":["color","radius","intensity"],
+				"delay":0.08
+			}
 		]
 	},
 	"M1AbramsCannon - Shell":{
-		"maxInstances":512,"parameterList":{"color":"ffff00","radius":2.0,"intensity":2.0},
+		"maxInstances":512,
+		"parameterList":{"color":"ffff00","radius":2.0,"intensity":2.0},
 		"effectList":[
-			{"type":"particle","name":"M1AbramsCannonShell","offset":{"x":1.55,"y":0.0,"z":0.0},"delay":0.0},
-			{"type":"pointLight","name":"","offset":{"x":1.55,"y":0.0,"z":0.0},"parameters":["color","radius","intensity"],"delay":0.06}
+			{
+				"type":"renderable",
+				"name":"$CONTENT_DATA/Effects/Renderables/M1AbramsCannonShell.rend",
+				"offset":{"x":1.55,"y":0.0,"z":0.0},
+				"delay":0.0
+			},
+			{
+				"type":"pointLight",
+				"name":"",
+				"offset":{"x":1.55,"y":0.0,"z":0.0},
+				"parameters":["color","radius","intensity"],
+				"delay":0.06
+			}
 		]
 	},
 	"DoraCannon - Shell":{
-		"maxInstances":512,"parameterList":{"color":"ffff00","radius":5.0,"intensity":2.0,"shakeStrength":0.5,"shakeRadius":6.0},
+		"maxInstances":512,
+		"parameterList":{"color":"ffff00","radius":5.0,"intensity":2.0,"shakeStrength":0.5,"shakeRadius":6.0},
 		"effectList":[
-			{"type":"particle","name":"DoraCannonShell","offset":{"x":1.9,"y":0.0,"z": 0.0},"delay": 0.0},
-			{"type":"pointLight","name":"","offset":{"x":1.9,"y":0.0,"z":0.0},"parameters":["color","radius","intensity"],"delay":0.08}
+			{
+				"type":"renderable",
+				"name":"$CONTENT_DATA/Effects/Renderables/DoraCannonShell.rend",
+				"offset":{"x":1.9,"y":0.0,"z": 0.0},
+				"delay": 0.0
+			},
+			{
+				"type":"pointLight",
+				"name":"",
+				"offset":{"x":1.9,"y":0.0,"z":0.0},
+				"parameters":["color","radius","intensity"],
+				"delay":0.08
+			}
 		]
 	},
 	"AircraftCannon - Shell":{
-		"maxInstances":512,"parameterList":{"size":0.0,"color":"ffff00","radius":2.0,"intensity":2.0},
+		"maxInstances":512,
+		"parameterList":{"size":0.0,"color":"ffff00","radius":2.0,"intensity":2.0},
 		"effectList":[
-			{"type":"particle","name":"AircraftCannonShell","offset":{"x":0.65,"y":0.0,"z":0.0},"delay":0.0},
-			{"type":"pointLight","name":"","offset":{"x":0.65,"y":0.0,"z":0.0},"parameters":["color","radius","intensity"],"delay":0.04}
+			{
+				"type":"renderable",
+				"name":"$CONTENT_DATA/Effects/Renderables/AircraftCannonShell.rend",
+				"offset":{"x":0.65,"y":0.0,"z":0.0},
+				"delay":0.0
+			},
+			{
+				"type":"pointLight",
+				"name":"",
+				"offset":{"x":0.65,"y":0.0,"z":0.0},
+				"parameters":["color","radius","intensity"],
+				"delay":0.04
+			}
 		]
 	},
 	"NavalCannon2 - Shell":{
-		"maxInstances":512,"parameterList":{"color":"ffff00","radius":2.0,"intensity":2.0},
+		"maxInstances":512,
+		"parameterList":{"color":"ffff00","radius":2.0,"intensity":2.0},
 		"effectList":[
-			{"type":"particle","name":"NavalCannon2Shell","offset":{"x":1.9,"y":0.0,"z":0.0},"delay":0.0},
-			{"type":"pointLight","name":"","offset":{"x":1.9,"y":0.0,"z":0.0},"parameters":["color","radius","intensity"],"delay":0.02}
+			{
+				"type":"renderable",
+				"name":"$CONTENT_DATA/Effects/Renderables/NavalCannon2Shell.rend",
+				"offset":{"x":1.9,"y":0.0,"z":0.0},
+				"delay":0.0
+			},
+			{
+				"type":"pointLight",
+				"name":"",
+				"offset":{"x":1.9,"y":0.0,"z":0.0},
+				"parameters":["color","radius","intensity"],
+				"delay":0.02
+			}
 		]
 	},
 	"RailgunCannon - Shell":{
-		"maxInstances":512,"parameterList":{"color":"ffff00","radius":2.0,"intensity":2.0},
+		"maxInstances":512,
+		"parameterList":{"color":"ffff00","radius":2.0,"intensity":2.0},
 		"effectList":[
-			{"type":"particle","name":"RailgunCannonShell","offset":{"x":2.4,"y":0.0,"z":0.0},"delay":0.0},
-			{"type":"pointLight","name":"","offset":{"x":1.8,"y":0.0,"z":0.0},"parameters":["color","radius","intensity"],"delay":0.02}
+			{
+				"type":"renderable",
+				"name":"$CONTENT_DATA/Effects/Renderables/RailgunCannonShell.rend",
+				"offset":{"x":2.4,"y":0.0,"z":0.0},
+				"delay":0.0
+			},
+			{
+				"type":"pointLight",
+				"name":"",
+				"offset":{"x":1.8,"y":0.0,"z":0.0},
+				"parameters":["color","radius","intensity"],
+				"delay":0.02
+			}
 		]
 	},
 	"HowitzerCannon - Shell":{
-		"maxInstances":512,"parameterList":{"color":"ffff00","radius":2.0,"intensity":2.0},
+		"maxInstances":512,
+		"parameterList":{"color":"ffff00","radius":2.0,"intensity":2.0},
 		"effectList":[
-			{"type":"particle","name":"HowitzerCannonShell","offset":{"x":1.4,"y":0.0,"z":0.0},"delay":0.0},
-			{"type":"pointLight","name":"","offset":{"x":1.4,"y":0.0,"z":0.0},"parameters":["color","radius","intensity"],"delay":0.04}
+			{
+				"type":"renderable",
+				"name":"$CONTENT_DATA/Effects/Renderables/HowitzerCannonShell.rend",
+				"offset":{"x":1.4,"y":0.0,"z":0.0},
+				"delay":0.0
+			},
+			{
+				"type":"pointLight",
+				"name":"",
+				"offset":{"x":1.4,"y":0.0,"z":0.0},
+				"parameters":["color","radius","intensity"],
+				"delay":0.04
+			}
 		]
 	},
 	"RocketLauncher - Shell":{
-		"maxInstances":512,"parameterList":{"velocity":200.0,"power":200.0,"color":"ff8000","radius":6.0,"intensity":2.0},
+		"maxInstances":512,
+		"parameterList":{"velocity":200.0,"power":200.0,"color":"ff8000","radius":6.0,"intensity":2.0},
 		"effectList":[
-			{"type":"audio","name":"event:/vehicle/thrusters/thruster01","offset":{"x":0.15,"y":0.0,"z":0.0},"parameters":["velocity","power"],"delay":0.0},
-			{"type":"particle","name":"RocketLauncherShell","offset":{"x":0.75,"y":0.0,"z":0.0},"delay":0.0},
-			{"type":"particle","name":"RocketShellFlames","offset":{"x":0.15,"y":0.0,"z":0.0},"direction":{"x":-1,"y":0,"z":0},"delay":0.0},
-			{"type":"particle","name":"RocketFumes","offset":{"x":-0.15,"y":0.0,"z":0.0},"direction":{"x":-1,"y":0,"z":0},"delay":0.0},
-			{"type":"pointLight","name":"","offset":{"x":0.15,"y":0.0,"z":0.0},"parameters":["color","radius","intensity"],"delay":0.08}
+			{
+				"type":"audio",
+				"name":"event:/vehicle/thrusters/thruster01",
+				"offset":{"x":0.15,"y":0.0,"z":0.0},
+				"parameters":["velocity","power"],
+				"delay":0.0
+			},
+			{
+				"type":"renderable",
+				"name":"$CONTENT_DATA/Effects/Renderables/RocketLauncherShell.rend",
+				"offset":{"x":0.75,"y":0.0,"z":0.0},
+				"delay":0.0
+			},
+			{
+				"type":"particle",
+				"name":"RocketShellFlames",
+				"offset":{"x":0.15,"y":0.0,"z":0.0},
+				"direction":{"x":-1,"y":0,"z":0},
+				"delay":0.0
+			},
+			{
+				"type":"particle",
+				"name":"RocketFumes",
+				"offset":{"x":-0.15,"y":0.0,"z":0.0},
+				"direction":{"x":-1,"y":0,"z":0},
+				"delay":0.0
+			},
+			{
+				"type":"pointLight",
+				"name":"",
+				"offset":{"x":0.15,"y":0.0,"z":0.0},
+				"parameters":["color","radius","intensity"],
+				"delay":0.08
+			}
 		]
 	},
 	"NumberLogicCannon - Shell":{
-		"maxInstances":512,"parameterList":{"color":"ffff00","radius":1.3,"intensity":0.5},
+		"maxInstances":512,
+		"parameterList":{"color":"ffff00","radius":1.3,"intensity":0.5},
 		"effectList":[
-			{"type":"particle","name":"NumberLogicCannonShell","offset":{"x":0.5,"y":0.0,"z":0.0},"delay":0.0},
-			{"type":"pointLight","name":"","offset":{"x":0.4,"y":0.0,"z":0.0},"parameters":["color","radius","intensity"],"delay":0}
+			{
+				"type":"renderable",
+				"name":"$CONTENT_DATA/Effects/Renderables/FlakCannonShell.rend",
+				"offset":{"x":0.5,"y":0.0,"z":0.0},
+				"delay":0.0
+			},
+			{
+				"type":"pointLight",
+				"name":"",
+				"offset":{"x":0.4,"y":0.0,"z":0.0},
+				"parameters":["color","radius","intensity"],
+				"delay":0
+			}
 		]
 	},
 	"FlareLauncher - Shell":{
-		"maxInstances":512,"parameterList":{"size":16.0,"color":"ffff00","radius":3.0,"intensity":1.3},
+		"maxInstances":512,
+		"parameterList":{"size":16.0,"color":"ffff00","radius":3.0,"intensity":1.3},
 		"effectList":[
-			{"type":"particle","name":"FlareShell","offset":{"x":0.0,"y":0.0,"z":0.0},"delay":0.0},
-			{"type":"particle","name":"FlareFumes","offset":{"x":0.0,"y":0.0,"z":0.0},"delay":0.0},
-			{"type":"pointLight","name":"","offset":{"x":-0.100,"y":0.0,"z":0.0},"parameters":["color","radius","intensity"],"delay":0.08,"attached":true}
+			{
+				"type":"renderable",
+				"name":"$CONTENT_DATA/Effects/Renderables/FlareShell.rend",
+				"offset":{"x":0.0,"y":0.0,"z":0.0},
+				"delay":0.0
+			},
+			{
+				"type":"particle",
+				"name":"FlareFumes",
+				"offset":{"x":0.0,"y":0.0,"z":0.0},
+				"delay":0.0
+			},
+			{
+				"type":"pointLight",
+				"name":"",
+				"offset":{"x":-0.100,"y":0.0,"z":0.0},
+				"parameters":["color","radius","intensity"],
+				"delay":0.08,
+				"attached":true
+			}
 		]
 	},
 	"EMPCannon - Shell":{
-		"maxInstances":512,"parameterList":{"size":16.0,"color":"00ffff","radius":3.0,"intensity":1.3},
+		"maxInstances":512,
+		"parameterList":{"size":16.0,"color":"00ffff","radius":3.0,"intensity":1.3},
 		"effectList":[
-			{"type":"particle","name":"EMPCannonShell","offset":{"x":1.0,"y":0.0,"z":0.0},"delay":0.0},
-			{"type":"particle","name":"EMPCannonShellEffect","offset":{"x":1.0,"y":0.0,"z":0.0},"delay":0.0},
-			{"type":"pointLight","name":"","offset":{"x":0.9,"y":0.0,"z":0.0},"parameters":["color","radius","intensity"],"delay":0.08,"attached":true}
+			{
+				"type":"particle",
+				"name":"EMPCannonShell",
+				"offset":{"x":1.0,"y":0.0,"z":0.0},
+				"delay":0.0
+			},
+			{
+				"type":"particle",
+				"name":"EMPCannonShellEffect",
+				"offset":{"x":1.0,"y":0.0,"z":0.0},
+				"delay":0.0
+			},
+			{
+				"type":"pointLight",
+				"name":"",
+				"offset":{"x":0.9,"y":0.0,"z":0.0},
+				"parameters":["color","radius","intensity"],
+				"delay":0.08,
+				"attached":true
+			}
 		]
 	},
 	"SmallSmartCannon - Shell":{
-		"maxInstances":512,"parameterList":{"color":"ffff00","radius":1.0,"intensity":0.5},
+		"maxInstances":512,
+		"parameterList":{"color":"ffff00","radius":1.0,"intensity":0.5},
 		"effectList":[
-			{"type":"particle","name":"SmallSmartCannonShell","offset":{"x":0.5,"y":0.0,"z":0.0},"delay":0.0},
-			{"type":"pointLight","name":"","offset":{"x":0.5,"y":0.0,"z":0.0},"parameters":["color","radius","intensity"],"delay":0}
+			{
+				"type":"renderable",
+				"name":"$CONTENT_DATA/Effects/Renderables/SmallSmartCannonShell.rend",
+				"offset":{"x":0.5,"y":0.0,"z":0.0},
+				"delay":0.0
+			},
+			{
+				"type":"pointLight",
+				"name":"",
+				"offset":{"x":0.5,"y":0.0,"z":0.0},
+				"parameters":["color","radius","intensity"],
+				"delay":0
+			}
 		]
 	},
 	"LaserCannon - Shell":{
-		"maxInstances":512,"parameterList":{"color":"ff0000","radius":1.5,"intensity":1.0},
+		"maxInstances":512,
+		"parameterList":{"color":"ff0000","radius":1.5,"intensity":1.0},
 		"effectList":[
-			{"type":"particle","name":"LaserCannonShell","offset":{"x":2.7,"y":0.0,"z":0.0},"delay":0.0},
-			{"type":"pointLight","name":"","offset":{"x":2.7,"y":0.0,"z":0.0},"parameters":["color","radius","intensity"],"delay":0}
+			{
+				"type":"renderable",
+				"name":"$CONTENT_DATA/Effects/Renderables/LaserCannonShell.rend",
+				"offset":{"x":2.7,"y":0.0,"z":0.0},
+				"delay":0.0
+			},
+			{
+				"type":"pointLight",
+				"name":"",
+				"offset":{"x":2.7,"y":0.0,"z":0.0},
+				"parameters":["color","radius","intensity"],
+				"delay":0
+			}
 		]
 	}
 }

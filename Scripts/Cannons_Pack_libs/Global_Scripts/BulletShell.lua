@@ -114,7 +114,7 @@ function BulletShell.client_onScriptUpdate(self, dt)
 			shell.effect:setPosition(shell.pos)
 		else
 			shell.effect:setPosition(_newVec(0, 0, 10000))
-			shell.effect:stop()
+			shell.effect:stopImmediate()
 			shell.effect:destroy()
 			_createParticle("hammer_metal", shell.pos)
 			self.projectiles[id] = nil

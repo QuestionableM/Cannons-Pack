@@ -164,7 +164,7 @@ function _cpProj_cl_destroyProjectiles(proj_table)
 
 		if _cpExists(proj_effect) then
 			proj_effect:setPosition(_cpProj_TPPos)
-			proj_effect:stop()
+			proj_effect:stopImmediate()
 			proj_effect:destroy()
 			deleted_projectiles = deleted_projectiles + 1
 		end

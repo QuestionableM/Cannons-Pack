@@ -5,7 +5,7 @@
 		"effectList":[
 			{
 				"type":"renderable",
-				"name":"$CONTENT_DATA/Effects/Renderables/AircraftCannonCase.rend",
+				"name":"$CONTENT_DATA/Effects/Renderables/ShellCases/AircraftCannonCase.rend",
 				"offset":{"x":0.0,"y":0.0,"z":0.0},
 				"direction":{"x":0.0,"y":0.0,"z":1.0},
 				"duration":8.0,
@@ -19,7 +19,7 @@
 		"effectList":[
 			{
 				"type":"renderable",
-				"name":"$CONTENT_DATA/Effects/Renderables/BigCannonCase.rend",
+				"name":"$CONTENT_DATA/Effects/Renderables/ShellCases/BigCannonCase.rend",
 				"offset":{"x":0.0,"y":0.0,"z":0.0},
 				"direction":{"x":0.0,"y":0.0,"z":1.0},
 				"duration":8.0,
@@ -33,7 +33,7 @@
 		"effectList":[
 			{
 				"type":"renderable",
-				"name":"$CONTENT_DATA/Effects/Renderables/GiantCannonCase.rend",
+				"name":"$CONTENT_DATA/Effects/Renderables/ShellCases/GiantCannonCase.rend",
 				"offset":{"x":0.0,"y":0.0,"z":0.0},
 				"direction":{"x":0.0,"y":0.0,"z":1.0},
 				"duration":8.0,
