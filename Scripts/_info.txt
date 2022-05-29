@@ -5,7 +5,7 @@ Cannons Pack version 4.6 changelog:
 2. Fixed projectile flickering --DONE
 3. Improved smoke effects for rockets --DONE
 4. Improved smoke effects for Smart Rocket Launcher --DONE
-5. Improved smoke for flares --WIP
+5. Improved smoke for flares --DONE
 
 Made by:
 Questionable Mark - creator of all the textures, UV maps and also some scripts and cannon models.
