@@ -4,8 +4,8 @@
 		"parameterList":{"color":"ffff00","radius":2.0,"intensity":1.8},
 		"effectList":[
 			{
-				"type":"renderable",
-				"name":"$CONTENT_DATA/Effects/Renderables/TankCannonShell.rend",
+				"type":"particle",
+				"name":"TankShell",
 				"offset":{"x":0.65,"y":0.0,"z":0.0},
 				"delay":0.0
 			},
@@ -23,8 +23,8 @@
 		"parameterList":{"size":16.0,"color":"ffff00","radius":2.0,"intensity":1.8},
 		"effectList":[
 			{
-				"type":"renderable",
-				"name":"$CONTENT_DATA/Effects/Renderables/FlakCannonShell.rend",
+				"type":"particle",
+				"name":"FlakCannonShell",
 				"offset":{"x":0.65,"y":0.0,"z":0.0},
 				"delay":0.0
 			},
@@ -42,8 +42,8 @@
 		"parameterList":{"color":"ffff00","radius":2.0,"intensity":2.0,"shakeStrength":0.2,"shakeRadius":4.0},
 		"effectList":[
 			{
-				"type":"renderable",
-				"name":"$CONTENT_DATA/Effects/Renderables/NavalCannonShell.rend",
+				"type":"particle",
+				"name":"NavalCannonShell",
 				"offset":{"x":1.0,"y":0.0,"z":0.0},
 				"delay":0.0
 			},
@@ -61,8 +61,8 @@
 		"parameterList":{"color":"ffff00","radius":2.0,"intensity":2.0},
 		"effectList":[
 			{
-				"type":"renderable",
-				"name":"$CONTENT_DATA/Effects/Renderables/M1AbramsCannonShell.rend",
+				"type":"particle",
+				"name":"M1AbramsCannonShell",
 				"offset":{"x":1.55,"y":0.0,"z":0.0},
 				"delay":0.0
 			},
@@ -80,8 +80,8 @@
 		"parameterList":{"color":"ffff00","radius":5.0,"intensity":2.0,"shakeStrength":0.5,"shakeRadius":6.0},
 		"effectList":[
 			{
-				"type":"renderable",
-				"name":"$CONTENT_DATA/Effects/Renderables/DoraCannonShell.rend",
+				"type":"particle",
+				"name":"DoraCannonShell",
 				"offset":{"x":1.9,"y":0.0,"z": 0.0},
 				"delay": 0.0
 			},
@@ -99,8 +99,8 @@
 		"parameterList":{"size":0.0,"color":"ffff00","radius":2.0,"intensity":2.0},
 		"effectList":[
 			{
-				"type":"renderable",
-				"name":"$CONTENT_DATA/Effects/Renderables/AircraftCannonShell.rend",
+				"type":"particle",
+				"name":"AircraftCannonShell",
 				"offset":{"x":0.65,"y":0.0,"z":0.0},
 				"delay":0.0
 			},
@@ -118,8 +118,8 @@
 		"parameterList":{"color":"ffff00","radius":2.0,"intensity":2.0},
 		"effectList":[
 			{
-				"type":"renderable",
-				"name":"$CONTENT_DATA/Effects/Renderables/NavalCannon2Shell.rend",
+				"type":"particle",
+				"name":"NavalCannon2Shell",
 				"offset":{"x":1.9,"y":0.0,"z":0.0},
 				"delay":0.0
 			},
@@ -137,8 +137,8 @@
 		"parameterList":{"color":"ffff00","radius":2.0,"intensity":2.0},
 		"effectList":[
 			{
-				"type":"renderable",
-				"name":"$CONTENT_DATA/Effects/Renderables/RailgunCannonShell.rend",
+				"type":"particle",
+				"name":"RailgunCannonShell",
 				"offset":{"x":2.4,"y":0.0,"z":0.0},
 				"delay":0.0
 			},
@@ -156,8 +156,8 @@
 		"parameterList":{"color":"ffff00","radius":2.0,"intensity":2.0},
 		"effectList":[
 			{
-				"type":"renderable",
-				"name":"$CONTENT_DATA/Effects/Renderables/HowitzerCannonShell.rend",
+				"type":"particle",
+				"name":"HowitzerCannonShell",
 				"offset":{"x":1.4,"y":0.0,"z":0.0},
 				"delay":0.0
 			},
@@ -182,8 +182,8 @@
 				"delay":0.0
 			},
 			{
-				"type":"renderable",
-				"name":"$CONTENT_DATA/Effects/Renderables/RocketLauncherShell.rend",
+				"type":"particle",
+				"name":"RocketLauncherShell",
 				"offset":{"x":0.75,"y":0.0,"z":0.0},
 				"delay":0.0
 			},
@@ -215,8 +215,8 @@
 		"parameterList":{"color":"ffff00","radius":1.3,"intensity":0.5},
 		"effectList":[
 			{
-				"type":"renderable",
-				"name":"$CONTENT_DATA/Effects/Renderables/FlakCannonShell.rend",
+				"type":"particle",
+				"name":"NumberLogicCannonShell",
 				"offset":{"x":0.5,"y":0.0,"z":0.0},
 				"delay":0.0
 			},
@@ -234,8 +234,8 @@
 		"parameterList":{"size":16.0,"color":"ffff00","radius":3.0,"intensity":1.3},
 		"effectList":[
 			{
-				"type":"renderable",
-				"name":"$CONTENT_DATA/Effects/Renderables/FlareShell.rend",
+				"type":"particle",
+				"name":"FlareShell",
 				"offset":{"x":0.0,"y":0.0,"z":0.0},
 				"delay":0.0
 			},
@@ -286,8 +286,8 @@
 		"parameterList":{"color":"ffff00","radius":1.0,"intensity":0.5},
 		"effectList":[
 			{
-				"type":"renderable",
-				"name":"$CONTENT_DATA/Effects/Renderables/SmallSmartCannonShell.rend",
+				"type":"particle",
+				"name":"SmallSmartCannonShell",
 				"offset":{"x":0.5,"y":0.0,"z":0.0},
 				"delay":0.0
 			},
@@ -305,8 +305,8 @@
 		"parameterList":{"color":"ff0000","radius":1.5,"intensity":1.0},
 		"effectList":[
 			{
-				"type":"renderable",
-				"name":"$CONTENT_DATA/Effects/Renderables/LaserCannonShell.rend",
+				"type":"particle",
+				"name":"LaserCannonShell",
 				"offset":{"x":2.7,"y":0.0,"z":0.0},
 				"delay":0.0
 			},

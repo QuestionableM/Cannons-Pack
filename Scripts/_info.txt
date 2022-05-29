@@ -1,9 +1,11 @@
 What are u doing here? you little thief
 
-Cannons Pack version 4.5 changelog:
-1. You can now connect a driver's seat / saddle to the Smart Rocket Launcher to aim the rockets without having to press E on every single rocket launcher
-2. Added an option to disable obstacle avoidance for Smart Rockets (2nd gray)
-3. Optimized the scripts and added proper checks for number logic
+Cannons Pack version 4.6 changelog:
+1. Added text inputs to Smart Cannon Gui --WIP
+2. Fixed projectile flickering --DONE
+3. Improved smoke effects for rockets --DONE
+4. Improved smoke effects for Smart Rocket Launcher --DONE
+5. Improved smoke for flares --WIP
 
 Made by:
 Questionable Mark - creator of all the textures, UV maps and also some scripts and cannon models.

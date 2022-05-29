@@ -17,6 +17,22 @@
 		"ParticleEffects/spudling_muzzle_effect.json",
 		"ParticleEffects/LaserCannon/LaserExplosion01.json",
 		"ParticleEffects/LaserCannon/LaserExplosion02.json",
-		"ParticleEffects/LaserCannon/LaserCannonMuzzleFlash.json"
+		"ParticleEffects/LaserCannon/LaserCannonMuzzleFlash.json",
+
+		//Shell Effects
+		"ParticleEffects/TankShell.json",
+		"ParticleEffects/FlakCannonShell.json",
+		"ParticleEffects/NavalCannon/NavalCannonShell.json",
+		"ParticleEffects/M1AbramsCannonShell.json",
+		"ParticleEffects/DoraCannonShell.json",
+		"ParticleEffects/AircraftCannonShell.json",
+		"ParticleEffects/NavalCannon/NavalCannon2Shell.json",
+		"ParticleEffects/Railgun/RailgunCannonShell.json",
+		"ParticleEffects/HowitzerCannonShell.json",
+		"ParticleEffects/RocketLauncher/RocketLauncherShell.json",
+		"ParticleEffects/NumberLogicCannonShell.json",
+		"ParticleEffects/Flare/FlareShell.json",
+		"ParticleEffects/SmallSmartCannonShell.json",
+		"ParticleEffects/LaserCannon/LaserCannonShell.json"
 	]
 }

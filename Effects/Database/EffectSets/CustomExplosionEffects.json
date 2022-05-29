@@ -117,7 +117,7 @@
 			{"type":"particle","name":"p_powersocket_powersocket01","offset":{"x":0.0,"y":0.0,"z":0.0},"direction":{"x":0.0,"y":1.0,"z":0.0},"attached":true,"delay":0.0},
 			{"type":"audio","name":"event:/props/installations/powercore_insert","offset":{"x":0.0,"y":0.0,"z":0.0},"delay":0.0},
 			{"type":"particle","name":"p_totebot_destroy","attached":false,"delay":0.0},
-			{"type":"particle","name":"p_parteffects_electricity","delay":0.0},
+			//{"type":"particle","name":"p_parteffects_electricity","delay":0.0},
 			{"type":"audio","name":"event:/amb/3D/electric_spark","delay":0.0},
 			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.5},"parameters":["color","radius","intensity"],"duration":1.0,"delay":0.0}
 		]
