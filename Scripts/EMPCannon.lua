@@ -1,5 +1,5 @@
 --[[
-	Copyright (c) 2021 Cannons Pack Team
+	Copyright (c) 2022 Cannons Pack Team
 	Questionable Mark
 ]]
 
@@ -7,10 +7,10 @@ if emp then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 emp = class(GLOBAL_SCRIPT)
 emp.maxParentCount = 1
-emp.maxChildCount = 0
-emp.connectionInput = _connectionType.logic
+emp.maxChildCount  = 0
+emp.connectionInput  = _connectionType.logic
 emp.connectionOutput = _connectionType.none
-emp.colorNormal = _colorNew(0xb1d900ff)
+emp.colorNormal    = _colorNew(0xb1d900ff)
 emp.colorHighlight = _colorNew(0xd0ff00ff)
 
 function emp:client_onCreate()

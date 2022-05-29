@@ -1,5 +1,5 @@
 --[[
-	Copyright (c) 2021 Cannons Pack Team
+	Copyright (c) 2022 Cannons Pack Team
 	Questionable Mark
 ]]
 
@@ -7,11 +7,11 @@ if ShellEjector then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 ShellEjector = class(GLOBAL_SCRIPT)
 ShellEjector.maxParentCount = 1
-ShellEjector.maxChildCount = 0
-ShellEjector.connectionInput = _connectionType.logic
+ShellEjector.maxChildCount  = 0
+ShellEjector.connectionInput  = _connectionType.logic
 ShellEjector.connectionOutput = _connectionType.none
 ShellEjector.poseWeightCount = 1
-ShellEjector.colorNormal = _colorNew(0x8a0038ff)
+ShellEjector.colorNormal    = _colorNew(0x8a0038ff)
 ShellEjector.colorHighlight = _colorNew(0xff0067ff)
 
 function ShellEjector:client_onCreate()

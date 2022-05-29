@@ -2,10 +2,10 @@ What are u doing here? you little thief
 
 Cannons Pack version 4.6 changelog:
 1. Added text inputs to Smart Cannon Gui --WIP
-2. Fixed projectile flickering --DONE
-3. Improved smoke effects for rockets --DONE
-4. Improved smoke effects for Smart Rocket Launcher --DONE
-5. Improved smoke for flares --DONE
+2. Fixed projectile flickering
+3. Improved smoke effects for rockets
+4. Improved smoke effects for Smart Rocket Launcher
+5. Improved smoke for flares
 
 Made by:
 Questionable Mark - creator of all the textures, UV maps and also some scripts and cannon models.

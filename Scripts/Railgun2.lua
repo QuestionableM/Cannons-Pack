@@ -1,5 +1,5 @@
 --[[
-	Copyright (c) 2021 Cannons Pack Team
+	Copyright (c) 2022 Cannons Pack Team
 	Questionable Mark
 ]]
 
@@ -7,10 +7,10 @@ if Railgun2 then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 Railgun2 = class(GLOBAL_SCRIPT)
 Railgun2.maxParentCount = 1
-Railgun2.maxChildCount = 0
-Railgun2.connectionInput = _connectionType.logic
+Railgun2.maxChildCount  = 0
+Railgun2.connectionInput  = _connectionType.logic
 Railgun2.connectionOutput = _connectionType.none
-Railgun2.colorNormal = _colorNew(0x700000ff)
+Railgun2.colorNormal    = _colorNew(0x700000ff)
 Railgun2.colorHighlight = _colorNew(0xd10000ff)
 
 function Railgun2:client_onCreate()

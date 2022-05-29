@@ -1,5 +1,5 @@
 --[[
-	Copyright (c) 2021 Cannons Pack Team
+	Copyright (c) 2022 Cannons Pack Team
 	Questionable Mark
 ]]
 
@@ -7,10 +7,10 @@ if SmartCannon then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 SmartCannon = class(GLOBAL_SCRIPT)
 SmartCannon.maxParentCount = -1
-SmartCannon.maxChildCount = 1
-SmartCannon.connectionInput = _connectionType.logic + _connectionType.power
+SmartCannon.maxChildCount  = 1
+SmartCannon.connectionInput  = _connectionType.logic + _connectionType.power
 SmartCannon.connectionOutput = _connectionType.logic
-SmartCannon.colorNormal = _colorNew(0x5d0096ff)
+SmartCannon.colorNormal    = _colorNew(0x5d0096ff)
 SmartCannon.colorHighlight = _colorNew(0x9000e8ff)
 
 function SmartCannon:client_onCreate()
@@ -444,7 +444,7 @@ function SmartCannon:client_onFixedUpdate(dt)
 end
 
 function SmartCannon:client_canInteract()
-	local k_Inter = _getKeyBinding("Use")
+	local k_Inter = _getKeyBinding("Use", true)
 
 	_setInteractionText("Press", k_Inter, "to open Smart Cannon GUI")
 	_setInteractionText("", "Check the workshop page of \"Cannons Pack\" for instructions")

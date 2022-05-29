@@ -1,5 +1,5 @@
 --[[
-	Copyright (c) 2021 Cannons Pack Team
+	Copyright (c) 2022 Cannons Pack Team
 	Questionable Mark
 ]]
 
@@ -7,10 +7,10 @@ if HomingMissile then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 HomingMissile = class(GLOBAL_SCRIPT)
 HomingMissile.maxParentCount = 5
-HomingMissile.maxChildCount = 0
-HomingMissile.connectionInput = _connectionType.logic + _connectionType.power
+HomingMissile.maxChildCount  = 0
+HomingMissile.connectionInput  = _connectionType.logic + _connectionType.power
 HomingMissile.connectionOutput = _connectionType.none
-HomingMissile.colorNormal = _colorNew(0x00538aff)
+HomingMissile.colorNormal    = _colorNew(0x00538aff)
 HomingMissile.colorHighlight = _colorNew(0x0099ffff)
 
 function HomingMissile:server_onCreate()
@@ -265,28 +265,35 @@ function HomingMissile:client_onInteract(character, state)
 	end
 end
 
+local default_hypertext = "<p textShadow='false' bg='gui_keybinds_bg_orange' color='#66440C' spacing='9'>%s</p>"
+local cp_instruction_hyper = default_hypertext:format("Check the workshop page of \"Cannons Pack\" for instructions")
+local hr_seat_connected_hyper = default_hypertext:format(HR_SeatConnectedMsg)
+local hm_num_logic_connected_hyper = default_hypertext:format(HM_NumLogicConnectedMsg)
 function HomingMissile:client_canInteract()
 	local use_key = _getKeyBinding("Use")
+	local use_hyper = default_hypertext:format(use_key)
 
 	if self.client_cam then
 		if self.client_seat then
-			_setInteractionText("", HR_SeatConnectedMsg)
+			_setInteractionText("", hr_seat_connected_hyper)
 			return false
 		end
 
-		_setInteractionText("Press", use_key, "to control the rockets")
+		_setInteractionText("Press", use_hyper, "to control the rockets")
 	else
 		if self.client_num_logic then
-			_setInteractionText("", HM_NumLogicConnectedMsg)
+			_setInteractionText("", hm_num_logic_connected_hyper)
 			return false
 		end
 
 		local crawl_key = _getKeyBinding("Crawl")
+		local crawl_hyper = default_hypertext:format(crawl_key)
+		local crawl_and_use_hyper = default_hypertext:format(crawl_key.." + "..use_key)
 
-		_setInteractionText("Press", crawl_key, "or", ("%s + %s"):format(crawl_key, use_key), "to choose the target")
+		_setInteractionText("Press", crawl_hyper, "or", crawl_and_use_hyper, "to choose the target")
 	end
 
-	_setInteractionText("", "Check the workshop page of \"Cannons Pack\" for instructions")
+	_setInteractionText("", cp_instruction_hyper)
 
 	return true
 end

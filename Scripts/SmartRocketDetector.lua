@@ -1,16 +1,16 @@
 --[[
-	Copyright (c) 2021 Cannons Pack Team
+	Copyright (c) 2022 Cannons Pack Team
 	Questionable Mark
 ]]
 
 if RocketDetector then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 RocketDetector = class()
-RocketDetector.connectionInput = _connectionType.logic
+RocketDetector.connectionInput  = _connectionType.logic
 RocketDetector.connectionOutput = _connectionType.logic
-RocketDetector.maxChildCount = -1
+RocketDetector.maxChildCount  = -1
 RocketDetector.maxParentCount = 2
-RocketDetector.colorNormal = _colorNew(0x009130ff)
+RocketDetector.colorNormal    = _colorNew(0x009130ff)
 RocketDetector.colorHighlight = _colorNew(0x00cf44ff)
 
 function RocketDetector:client_onCreate()

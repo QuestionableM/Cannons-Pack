@@ -1,5 +1,5 @@
 --[[
-	Copyright (c) 2021 Cannons Pack Team
+	Copyright (c) 2022 Cannons Pack Team
 	Questionable Mark
 ]]
 
@@ -7,10 +7,10 @@ if OrbitalCannon then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 OrbitalCannon = class(GLOBAL_SCRIPT)
 OrbitalCannon.maxParentCount = 1
-OrbitalCannon.maxChildCount = 0
-OrbitalCannon.connectionInput = _connectionType.logic
+OrbitalCannon.maxChildCount  = 0
+OrbitalCannon.connectionInput  = _connectionType.logic
 OrbitalCannon.connectionOutput = _connectionType.none
-OrbitalCannon.colorNormal = _colorNew(0x638583ff)
+OrbitalCannon.colorNormal    = _colorNew(0x638583ff)
 OrbitalCannon.colorHighlight = _colorNew(0x99cfcbff)
 
 function OrbitalCannon:client_onCreate()

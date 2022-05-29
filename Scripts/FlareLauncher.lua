@@ -1,5 +1,5 @@
 --[[
-	Copyright (c) 2021 Cannons Pack Team
+	Copyright (c) 2022 Cannons Pack Team
 	Questionable Mark
 ]]
 
@@ -7,10 +7,10 @@ if flare then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 flare = class(GLOBAL_SCRIPT)
 flare.maxParentCount = 1
-flare.maxChildCount = 0
-flare.connectionInput = _connectionType.logic
+flare.maxChildCount  = 0
+flare.connectionInput  = _connectionType.logic
 flare.connectionOutput = _connectionType.none
-flare.colorNormal = _colorNew(0x000396ff)
+flare.colorNormal    = _colorNew(0x000396ff)
 flare.colorHighlight = _colorNew(0x0004c7ff)
 
 function flare:server_onCreate()
