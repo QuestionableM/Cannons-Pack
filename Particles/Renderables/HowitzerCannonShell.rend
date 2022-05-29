@@ -1,11 +1,11 @@
 {
-	"lodList": [
+	"lodList" : [
 		{
-			"mesh": "$CONTENT_DATA/Effects/Mesh/HowitzerCannonShell.obj",
-			"subMeshList": [
+			"mesh" : "$CONTENT_DATA/Particles/Mesh/HowitzerCannonShell.obj",
+			"subMeshList" : [
 				{
-					"material": "DifAsgNor",
-					"textureList": [
+					"material" : "DifAsgNor",
+					"textureList" : [
 						"$CONTENT_DATA/Objects/Textures/CP_default_dif.tga",
 						"$CONTENT_DATA/Objects/Textures/CP_default_asg.tga",
 						"$CONTENT_DATA/Objects/Textures/nonor_nor.tga"
