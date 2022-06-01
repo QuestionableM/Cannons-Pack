@@ -319,32 +319,33 @@ function SmartCannon:server_onFixedUpdate()
 	if #self.data_request_queue > 0 then
 		for k, player in pairs(self.data_request_queue) do
 			self.network:sendToClient(player, "client_receiveCannonData", {
-				number = {
-					[NumLogicTrTable.fire_spread] = fire_spread,
-					[NumLogicTrTable.fire_force] = fire_force,
-					[NumLogicTrTable.reload_time] = reload_time,
-					[NumLogicTrTable.cannon_recoil] = cannon_recoil,
-					[NumLogicTrTable.projectile_per_shot] = projectile_per_shot,
-					[NumLogicTrTable.expl_level] = expl_level,
-					[NumLogicTrTable.expl_radius] = expl_radius,
-					[NumLogicTrTable.expl_impulse_radius] = expl_impulse_radius,
+				[1] = {
+					[NumLogicTrTable.fire_spread          ] = fire_spread,
+					[NumLogicTrTable.fire_force           ] = fire_force,
+					[NumLogicTrTable.reload_time          ] = reload_time,
+					[NumLogicTrTable.cannon_recoil        ] = cannon_recoil,
+					[NumLogicTrTable.projectile_per_shot  ] = projectile_per_shot,
+					[NumLogicTrTable.expl_level           ] = expl_level,
+					[NumLogicTrTable.expl_radius          ] = expl_radius,
+					[NumLogicTrTable.expl_impulse_radius  ] = expl_impulse_radius,
 					[NumLogicTrTable.expl_impulse_strength] = expl_impulse_strength,
-					[NumLogicTrTable.projectile_gravity] = projectile_gravity,
-					[NumLogicTrTable.projectile_lifetime] = projectile_lifetime,
-					[NumLogicTrTable.projectile_type] = projectile_type,
-					[NumLogicTrTable.proximity_fuze] = proximity_fuze,
-					[NumLogicTrTable.x_offset] = x_offset,
-					[NumLogicTrTable.y_offset] = y_offset,
-					[NumLogicTrTable.z_offset] = z_offset
+					[NumLogicTrTable.projectile_gravity   ] = projectile_gravity,
+					[NumLogicTrTable.projectile_lifetime  ] = projectile_lifetime,
+					[NumLogicTrTable.projectile_type      ] = projectile_type,
+					[NumLogicTrTable.proximity_fuze       ] = proximity_fuze,
+					[NumLogicTrTable.x_offset             ] = x_offset,
+					[NumLogicTrTable.y_offset             ] = y_offset,
+					[NumLogicTrTable.z_offset             ] = z_offset
 				},
-				logic = {
-					[LogicTrTable.spudgun_mode] = spudgun_mode,
-					[LogicTrTable.no_friction_mode] = no_friction_mode,
+				[2] = {
+					[LogicTrTable.spudgun_mode        ] = spudgun_mode,
+					[LogicTrTable.no_friction_mode    ] = no_friction_mode,
 					[LogicTrTable.ignore_rotation_mode] = ignore_rotation_mode,
-					[LogicTrTable.no_recoil_mode] = no_recoil_mode,
-					[LogicTrTable.transfer_momentum] = transfer_momentum
+					[LogicTrTable.no_recoil_mode      ] = no_recoil_mode,
+					[LogicTrTable.transfer_momentum   ] = transfer_momentum
 				}
 			})
+
 			self.data_request_queue[k] = nil
 		end
 	end
@@ -359,18 +360,22 @@ function SmartCannon:server_requestNumberInputs(data, player)
 end
 
 function SmartCannon:server_requestCannonData(data, player)
-	local _ServerData = self.sv_settings
+	local sv_data = self.sv_settings
 
-	local _Data = {
-		logic = _ServerData.logic,
-		number = _ServerData.number,
-		snd = _ServerData[OtherTrTable.sound],
-		mzl_fls = _ServerData[OtherTrTable.muzzle_flash],
-		exp_eff = self.projConfig[ProjSettingEnum.explosionEffect],
-		rld_snd = _ServerData[OtherTrTable.reload_sound]
+	local output_data =
+	{
+		[1] = sv_data.number,
+		[2] = sv_data.logic,
+		[3] = --effect data
+		{
+			[1] = sv_data[OtherTrTable.sound],
+			[2] = sv_data[OtherTrTable.muzzle_flash],
+			[3] = sv_data[OtherTrTable.reload_sound],
+			[4] = sv_data[OtherTrTable.explosion_effect]
+		}
 	}
 
-	self.network:sendToClient(player, "client_receiveCannonData", _Data)
+	self.network:sendToClient(player, "client_receiveCannonData", output_data)
 end
 
 function SmartCannon:server_prepareEffectTable()
@@ -387,24 +392,32 @@ function SmartCannon:server_requestSound(data, caller)
 end
 
 function SmartCannon:server_setNewSettings(data)
-	local sv_logic = self.sv_settings.logic
-	for k, v in pairs(data.logic) do
-		if sv_logic[k] ~= nil then sv_logic[k] = v end
+	local sv_set = self.sv_settings
+
+	local sv_number = sv_set.number
+	for k, v in ipairs(data[1]) do --number logic
+		if sv_number[k] ~= nil then
+			sv_number[k] = v
+		end
 	end
 
-	local sv_number = self.sv_settings.number
-	for k, v in pairs(data.number) do
-		if sv_number[k] ~= nil then sv_number[k] = v end
+	local sv_logic = sv_set.logic
+	for k, v in ipairs(data[2]) do --logic
+		if sv_logic[k] ~= nil then
+			sv_logic[k] = v
+		end
 	end
 
-	self.projConfig[ProjSettingEnum.explosionEffect] = _ExplosionTrans[data.exp_eff + 1]
-	self.sv_settings[OtherTrTable.explosion_effect] = data.exp_eff
-	self.sv_settings[OtherTrTable.sound] = data.snd
-	self.sv_settings[OtherTrTable.reload_sound] = data.rld_snd
-	self.sv_settings[OtherTrTable.muzzle_flash] = data.mzl_fls
+	local eff_data = data[3]
+	local expl_eff_id = eff_data[OtherTrTable.explosion_effect]
+	
+	self.projConfig[ProjSettingEnum.explosionEffect] = _ExplosionTrans[expl_eff_id + 1]
+	sv_set[OtherTrTable.explosion_effect] = expl_eff_id
+	sv_set[OtherTrTable.sound           ] = eff_data[OtherTrTable.sound]
+	sv_set[OtherTrTable.reload_sound    ] = eff_data[OtherTrTable.reload_sound]
+	sv_set[OtherTrTable.muzzle_flash    ] = eff_data[OtherTrTable.muzzle_flash]
 
 	self.network:sendToClients("client_setEffects", self:server_prepareEffectTable())
-
 	self.storage:save(self.sv_settings)
 end
 
@@ -446,7 +459,6 @@ end
 local default_hypertext = "<p textShadow='false' bg='gui_keybinds_bg_orange' color='#66440C' spacing='9'>%s</p>"
 function SmartCannon:client_canInteract()
 	local k_Inter = _getKeyBinding("Use", true)
-
 	_setInteractionText("Press", k_Inter, "to open Smart Cannon GUI")
 
 	local instruction_hyper = default_hypertext:format("Check the workshop page of \"Cannons Pack\" for instructions")
@@ -536,28 +548,30 @@ function SmartCannon:client_GUI_onGetValueCallback()
 	self.network:sendToServer("server_requestNumberInputs")
 end
 
+local function temp_table_to_network_data(gui_temp, data_output)
+	for k, v in ipairs(gui_temp) do
+		data_output[v.id] = v.value
+	end
+end
+
 function SmartCannon:client_GUI_onSaveButtonCallback()
-	local _Table = {logic = {}, number = {}}
+	local data_output = {[1] = {}, [2] = {}, [3] = {}}
 
 	local gui = self.gui
 	local gui_int = gui.interface
 	local gui_temp = gui.temp
 
-	for k, v in ipairs(gui_temp[1]) do
-		_Table.number[v.id] = v.value
-	end
-
-	for k, v in ipairs(gui_temp[2]) do
-		_Table.logic[v.id] = v.value
-	end
+	temp_table_to_network_data(gui_temp[1], data_output[1]) --number data
+	temp_table_to_network_data(gui_temp[2], data_output[2]) --logic data
 
 	local tmp_eff = gui_temp[3]
-	_Table.snd = tmp_eff[4].value - 1
-	_Table.mzl_fls = tmp_eff[1].value - 1
-	_Table.exp_eff = tmp_eff[2].value - 1
-	_Table.rld_snd = tmp_eff[3].value - 1
+	local effect_data = data_output[3]
+	effect_data[OtherTrTable.muzzle_flash    ] = tmp_eff[1].value
+	effect_data[OtherTrTable.explosion_effect] = tmp_eff[2].value
+	effect_data[OtherTrTable.reload_sound    ] = tmp_eff[3].value
+	effect_data[OtherTrTable.sound           ] = tmp_eff[4].value
 
-	self.network:sendToServer("server_setNewSettings", _Table)
+	self.network:sendToServer("server_setNewSettings", data_output)
 	gui_int:setVisible("SaveChanges", false)
 	_audioPlay("Retrowildblip")
 end
@@ -603,7 +617,7 @@ function SmartCannon:client_GUI_CreateTempValTable()
 		[13] = {name = "X Projectile Offset"           , type = 1, id = NumLogicTrTable.x_offset             , value = 0, min = -99999999, max = 99999999},
 		[14] = {name = "Y Projectile Offset"           , type = 1, id = NumLogicTrTable.y_offset             , value = 0, min = -99999999, max = 99999999},
 		[15] = {name = "Z Projectile Offset"           , type = 1, id = NumLogicTrTable.z_offset             , value = 0, min = -99999999, max = 99999999},
-		[16] = {name = "Projectile Type (Spudgun Mode)", type = 3, id = NumLogicTrTable.projectile_type      , value = 1, min = 1, max = 17, list = {
+		[16] = {name = "Projectile Type (Spudgun Mode)", type = 3, id = NumLogicTrTable.projectile_type      , value = 0, min = 0, max = 16, list = {
 			[1]  = "Potato",    [2]  = "Small Potato", [3]  = "Fries",
 			[4]  = "Tomato",    [5]  = "Carrot",       [6]  = "Redbeet",
 			[7]  = "Broccoli",  [8]  = "Pineapple",    [9]  = "Orange",
@@ -624,20 +638,20 @@ function SmartCannon:client_GUI_CreateTempValTable()
 
 	temp[3] = --effects
 	{
-		[1] = {name = "Muzzle Flash", value = 1, max = 5, type = 3, list = { --1 muzzle flash
+		[1] = {name = "Muzzle Flash", value = 0, max = 4, type = 3, list = { --1 muzzle flash
 			[1] = "Default",       [2] = "Small Explosion",
 			[3] = "Big Explosion", [4] = "Frier Muzzle Flash",
 			[5] = "Spinner Muzzle Flash"
 		}},
-		[2] = {name = "Explosion Effect", value = 1, max = 5, type = 3, list = { --2 explosion effect
+		[2] = {name = "Explosion Effect", value = 0, max = 4, type = 3, list = { --2 explosion effect
 			[1] = "Default",         [2] = "Little Explosion",
 			[3] = "Big Explosion",   [4] = "Giant Explosion",
 			[5] = "Sparks"
 		}},
-		[3] = {name = "Reload Sound", value = 1, max = 2, type = 3, list = { --3 reloading effect
+		[3] = {name = "Reload Sound", value = 0, max = 1, type = 3, list = { --3 reloading effect
 			[1] = "Default", [2] = "Heavy Realoading"
 		}},
-		[4] = {name = "Shooting Sound", value = 1, max = 5, type = 3, list = { --4 shooting sound
+		[4] = {name = "Shooting Sound", value = 0, max = 4, type = 3, list = { --4 shooting sound
 			[1] = "Default",        [2] = "Sound 1",
 			[3] = "Potato Shotgun", [4] = "Spudling Gun",
 			[5] = "Explosion"
@@ -676,10 +690,10 @@ local function client_GUI_updateListBoxWidget(gui, slot, cur_func)
 	local max_val = cur_func.max
 
 	gui:setText("ListBoxName"..slot, cur_func.name)
-	gui:setText("ListBoxVal" ..slot, cur_func.list[cur_func.value])
+	gui:setText("ListBoxVal" ..slot, cur_func.list[c_value + 1])
 
 	gui:setVisible("R_ListBoxBtn"..slot, c_value < max_val)
-	gui:setVisible("L_ListBoxBtn"..slot, c_value > 1)
+	gui:setVisible("L_ListBoxBtn"..slot, c_value > 0)
 end
 
 local g_bool_string =
@@ -716,7 +730,7 @@ function SmartCannon:client_GUI_onListBoxChangeCallback(btn_name)
 	local s_gui = self.gui
 	local cur_set = self:client_GUI_getCurrentOption(btn_id)
 
-	local new_value = _utilClamp(cur_set.value + value_step, 1, cur_set.max)
+	local new_value = _utilClamp(cur_set.value + value_step, 0, cur_set.max)
 	if cur_set.value == new_value then return end
 	cur_set.value = new_value
 
@@ -831,55 +845,42 @@ function SmartCannon:client_GUI_updateCurrentPageText()
 	gui_int:setVisible("PageRight", cur_page < max_page)
 end
 
-local _ExplTranslation =
-{
-	[ExplEffectEnum.ExplSmall     ] = 1,
-	[ExplEffectEnum.AircraftCannon] = 2,
-	[ExplEffectEnum.ExplBig2      ] = 3,
-	[ExplEffectEnum.DoraCannon    ] = 4,
-	[ExplEffectEnum.EMPCannon     ] = 5
-}
-
 function SmartCannon:client_GUI_LoadNewData(data)
 	local gui = self.gui
 	if not gui then return end
 
 	local gui_temp = gui.temp
 
+	local s_num_logic = gui_temp[1]
+	local data_num_logic = data[1]
+	for k, v in ipairs(s_num_logic) do
+		local cur_num_log = data_num_logic[v.id]
+
+		if cur_num_log ~= nil then
+			local cur_data = s_num_logic[k]
+
+			cur_data.value = _mathMin(_mathMax(cur_num_log, cur_data.min), cur_data.max)
+		end
+	end
+
 	local s_logic = gui_temp[2]
-	local d_logic = data.logic
-	for k, v in pairs(s_logic) do
-		local cur_d_log = d_logic[v.id]
+	local d_logic = data[2]
+	for k, v in ipairs(s_logic) do
+		local cur_log = d_logic[v.id]
 
-		if cur_d_log ~= nil then
-			s_logic[k].value = cur_d_log
-		end
-	end
-	
-	local s_numLog = gui_temp[1]
-	local d_numLog = data.number
-	for k, v in pairs(s_numLog) do
-		local cur_dNumLog = d_numLog[v.id]
-
-		if cur_dNumLog ~= nil then
-			local cur_data = s_numLog[k]
-
-			cur_data.value = _mathMin(_mathMax(cur_dNumLog, cur_data.min), cur_data.max)
+		if cur_log ~= nil then
+			s_logic[k].value = cur_log
 		end
 	end
 
-	local m_flash = data.mzl_fls
-	local ex_eff = data.exp_eff
-	local rel_snd = data.rld_snd
-	local d_snd = data.snd
-
-	if m_flash and ex_eff and rel_snd and d_snd then
+	local effect_data = data[3]
+	if effect_data ~= nil then
 		local s_effects = gui_temp[3]
 
-		s_effects[1].value = m_flash + 1
-		s_effects[2].value = _ExplTranslation[ex_eff]
-		s_effects[3].value = rel_snd + 1
-		s_effects[4].value = d_snd   + 1
+		s_effects[1].value = effect_data[OtherTrTable.muzzle_flash]
+		s_effects[2].value = effect_data[OtherTrTable.explosion_effect]
+		s_effects[3].value = effect_data[OtherTrTable.reload_sound]
+		s_effects[4].value = effect_data[OtherTrTable.sound]
 	end
 
 	if gui.wait_for_data then
@@ -896,8 +897,8 @@ function SmartCannon:client_GUI_LoadNewData(data)
 		local gui_int = gui.interface
 		gui_int:setText("GetValues", "Get Input Values")
 		gui_int:setVisible("SaveChanges", true)
-		print("UPDATE LATER")
-		--self:client_GUI_SetCurrentTab(gui.cur_tab)
+		
+		self:client_GUI_updateCurrentTab()
 		_audioPlay("ConnectTool - Selected")
 	end
 end
