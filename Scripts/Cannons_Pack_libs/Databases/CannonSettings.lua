@@ -3,15 +3,6 @@
 	Questionable Mark
 ]]
 
-local SmartCannon_ProjTypes = {
-	[1] = "potato",		[2] = "smallpotato",	[3] = "fries",
-	[4] = "tomato",		[5] = "carrot",			[6] = "redbeet",
-	[7] = "broccoli",	[8] = "pineapple",		[9] = "orange",
-	[10] = "blueberry",	[11] = "banana",		[12] = "tape",
-	[13] = "water",		[14] = "fertilizer",	[15] = "chemical",
-	[16] = "pesticide",	[17] = "seed"
-}
-
 local cannon_settings = {
 	["86b45499-9a8f-45ce-b9f9-80b6912fcc06"] = { --AircraftCannon
 		server_settings = {
@@ -135,11 +126,9 @@ local cannon_settings = {
 		}
 	},
 	["35203ea3-8cc8-4ec9-9a26-c62c6eb5544d"] = { --SmartCannon
-		proj_types = SmartCannon_ProjTypes,
 		proj_data_id = ProjEnum.SmartCannon
 	},
 	["fd6130e4-261d-4875-a418-96fe33bb2714"] = { --SmallSmartCannon
-		proj_types = SmartCannon_ProjTypes,
 		proj_data_id = ProjEnum.SmallSmartCannon
 	},
 	["2bcd658f-6344-4e37-9fb5-ced1e2249c7b"] = {}, --OrbitalCannon

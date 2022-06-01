@@ -39,6 +39,7 @@ _getKeyBinding = sm.gui.getKeyBinding
 _setInteractionText = sm.gui.setInteractionText
 _utilClamp = sm.util.clamp
 _colorNew = sm.color.new
+_uuidNew = sm.uuid.new
 
 _connectionType = sm.interactable.connectionType
 

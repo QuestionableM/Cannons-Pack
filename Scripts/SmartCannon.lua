@@ -33,58 +33,82 @@ local _ExplosionTrans = {
 	[5] = ExplEffectEnum.EMPCannon
 }
 
-local NumLogicTrTable = {
-	fire_spread = 1,
-	fire_force = 2,
-	reload_time = 3,
-	cannon_recoil = 4,
-	projectile_per_shot = 5,
-	expl_level = 6,
-	expl_radius = 7,
-	expl_impulse_radius = 8,
+local NumLogicTrTable =
+{
+	fire_spread           = 1,
+	fire_force            = 2,
+	reload_time           = 3,
+	cannon_recoil         = 4,
+	projectile_per_shot   = 5,
+	expl_level            = 6,
+	expl_radius           = 7,
+	expl_impulse_radius   = 8,
 	expl_impulse_strength = 9,
-	projectile_gravity = 10,
-	projectile_lifetime = 11,
-	projectile_type = 12,
-	proximity_fuze = 13,
-	x_offset = 14,
-	y_offset = 15,
-	z_offset = 16
+	projectile_gravity    = 10,
+	projectile_lifetime   = 11,
+	projectile_type       = 12,
+	proximity_fuze        = 13,
+	x_offset              = 14,
+	y_offset              = 15,
+	z_offset              = 16
 }
 
 local LogicTrTable = {spudgun_mode = 1, no_friction_mode = 2, ignore_rotation_mode = 3, no_recoil_mode = 4, transfer_momentum = 5}
 local OtherTrTable = {sound = 1, muzzle_flash = 2, reload_sound = 3, explosion_effect = 4}
 
+local projectile_type_table =
+{
+	[1]  = { name = "Potato"      , uuid = _uuidNew("5e8eeaae-b5c1-4992-bb21-dec5254ce722") },
+	[2]  = { name = "Small Potato", uuid = _uuidNew("132c44d3-7436-419d-ac6b-fc178336dcb7") },
+	[3]  = { name = "Fries"       , uuid = _uuidNew("9b6b4c56-fba1-400f-94fa-23f9613c0423") },
+	[4]  = { name = "Tomato"      , uuid = _uuidNew("b72b01a5-59ad-4882-bbd3-3cbc9f357823") },
+	[5]  = { name = "Carrot"      , uuid = _uuidNew("69fc1a2b-77d2-40da-9a82-03fbe3c35a18") },
+	[6]  = { name = "Redbeet"     , uuid = _uuidNew("358700c1-7555-41dc-90d1-92374051f985") },
+	[7]  = { name = "Broccoli"    , uuid = _uuidNew("b6f296d0-bc03-4098-85b5-52546daad1d7") },
+	[8]  = { name = "Pineapple"   , uuid = _uuidNew("65d509b9-09f8-4e32-8b1a-0a6aa11f8660") },
+	[9]  = { name = "Orange"      , uuid = _uuidNew("9963fbc0-1314-4db4-8866-1237ace867c3") },
+	[10] = { name = "Blueberry"   , uuid = _uuidNew("599b112d-2ff9-4f14-9051-0f58bebb2c94") },
+	[11] = { name = "Banana"      , uuid = _uuidNew("4e259125-d1c0-4678-ae41-2652cf224692") },
+	[12] = { name = "Tape"        , uuid = _uuidNew("1a981b70-dc08-4105-89b1-79819511a2fb") },
+	[13] = { name = "Water"       , uuid = _uuidNew("2c3fc640-1a2e-4328-a872-f6d3f92d0fea") },
+	[14] = { name = "Fertilizer"  , uuid = _uuidNew("5610b246-774e-4c1c-9adc-f87b4d993c43") },
+	[15] = { name = "Chemical"    , uuid = _uuidNew("46292783-af41-49a5-91ef-092f22dfae91") },
+	[16] = { name = "Pesticide"   , uuid = _uuidNew("68029b35-2028-42a5-8509-286d78656561") },
+	[17] = { name = "Seed"        , uuid = _uuidNew("9512029a-3f1d-4aa2-92bf-cb876d5c8cb0") }
+}
+
+local projectile_type_count = #projectile_type_table - 1
+
 function SmartCannon:server_onCreate()
 	self.sv_settings = {
 		number = {
-			[NumLogicTrTable.fire_spread] = 0.2,
-			[NumLogicTrTable.fire_force] = 700,
-			[NumLogicTrTable.reload_time] = 8,
-			[NumLogicTrTable.cannon_recoil] = 0,
-			[NumLogicTrTable.projectile_per_shot] = 0,
-			[NumLogicTrTable.expl_level] = 5,
-			[NumLogicTrTable.expl_radius] = 0.5,
-			[NumLogicTrTable.expl_impulse_radius] = 15,
+			[NumLogicTrTable.fire_spread          ] = 0.2,
+			[NumLogicTrTable.fire_force           ] = 700,
+			[NumLogicTrTable.reload_time          ] = 8,
+			[NumLogicTrTable.cannon_recoil        ] = 0,
+			[NumLogicTrTable.projectile_per_shot  ] = 0,
+			[NumLogicTrTable.expl_level           ] = 5,
+			[NumLogicTrTable.expl_radius          ] = 0.5,
+			[NumLogicTrTable.expl_impulse_radius  ] = 15,
 			[NumLogicTrTable.expl_impulse_strength] = 2000,
-			[NumLogicTrTable.projectile_gravity] = 10,
-			[NumLogicTrTable.projectile_lifetime] = 15,
-			[NumLogicTrTable.projectile_type] = 0,
-			[NumLogicTrTable.proximity_fuze] = 0,
-			[NumLogicTrTable.x_offset] = 0,
-			[NumLogicTrTable.y_offset] = 0,
-			[NumLogicTrTable.z_offset] = 0
+			[NumLogicTrTable.projectile_gravity   ] = 10,
+			[NumLogicTrTable.projectile_lifetime  ] = 15,
+			[NumLogicTrTable.projectile_type      ] = 0,
+			[NumLogicTrTable.proximity_fuze       ] = 0,
+			[NumLogicTrTable.x_offset             ] = 0,
+			[NumLogicTrTable.y_offset             ] = 0,
+			[NumLogicTrTable.z_offset             ] = 0
 		},
 		logic = {
-			[LogicTrTable.spudgun_mode] = false,
-			[LogicTrTable.no_friction_mode] = false,
+			[LogicTrTable.spudgun_mode        ] = false,
+			[LogicTrTable.no_friction_mode    ] = false,
 			[LogicTrTable.ignore_rotation_mode] = false,
-			[LogicTrTable.no_recoil_mode] = false,
-			[LogicTrTable.transfer_momentum] = true
+			[LogicTrTable.no_recoil_mode      ] = false,
+			[LogicTrTable.transfer_momentum   ] = true
 		},
-		[OtherTrTable.sound] = 0,
-		[OtherTrTable.muzzle_flash] = 0,
-		[OtherTrTable.reload_sound] = 0,
+		[OtherTrTable.sound           ] = 0,
+		[OtherTrTable.muzzle_flash    ] = 0,
+		[OtherTrTable.reload_sound    ] = 0,
 		[OtherTrTable.explosion_effect] = 0,
 		version = 1
 	}
@@ -127,8 +151,6 @@ function SmartCannon:server_onCreate()
 
 	local cannon_info = _cpCannons_loadCannonInfo(self)
 	self.proj_data_id = cannon_info.proj_data_id
-	self.proj_types = cannon_info.proj_types
-	self.proj_type_amount = #self.proj_types
 
 	self.projConfig = _cpProj_GetProjectileSettings(self.proj_data_id)
 
@@ -165,35 +187,35 @@ function SmartCannon:server_onFixedUpdate()
 
 	local _NumSettings = self.sv_settings.number
 	--cannon settings
-	local fire_spread = _NumSettings[NumLogicTrTable.fire_spread]
-	local fire_force = _NumSettings[NumLogicTrTable.fire_force]
-	local reload_time = _NumSettings[NumLogicTrTable.reload_time]
-	local cannon_recoil = _NumSettings[NumLogicTrTable.cannon_recoil]
+	local fire_spread         = _NumSettings[NumLogicTrTable.fire_spread]
+	local fire_force          = _NumSettings[NumLogicTrTable.fire_force]
+	local reload_time         = _NumSettings[NumLogicTrTable.reload_time]
+	local cannon_recoil       = _NumSettings[NumLogicTrTable.cannon_recoil]
 	local projectile_per_shot = _NumSettings[NumLogicTrTable.projectile_per_shot]
 
 	--explosion settings
-	local expl_level = _NumSettings[NumLogicTrTable.expl_level]
-	local expl_radius = _NumSettings[NumLogicTrTable.expl_radius]
-	local expl_impulse_radius = _NumSettings[NumLogicTrTable.expl_impulse_radius]
+	local expl_level            = _NumSettings[NumLogicTrTable.expl_level]
+	local expl_radius           = _NumSettings[NumLogicTrTable.expl_radius]
+	local expl_impulse_radius   = _NumSettings[NumLogicTrTable.expl_impulse_radius]
 	local expl_impulse_strength = _NumSettings[NumLogicTrTable.expl_impulse_strength]
 
 	--projectile settings
 	local projectile_friction = 0.003
-	local projectile_gravity = _NumSettings[NumLogicTrTable.projectile_gravity]
+	local projectile_gravity  = _NumSettings[NumLogicTrTable.projectile_gravity]
 	local projectile_lifetime = _NumSettings[NumLogicTrTable.projectile_lifetime]
-	local projectile_type = _NumSettings[NumLogicTrTable.projectile_type]
-	local proximity_fuze = _NumSettings[NumLogicTrTable.proximity_fuze]
-	local x_offset = _NumSettings[NumLogicTrTable.x_offset]
-	local y_offset = _NumSettings[NumLogicTrTable.y_offset]
-	local z_offset = _NumSettings[NumLogicTrTable.z_offset]
+	local projectile_type     = _NumSettings[NumLogicTrTable.projectile_type]
+	local proximity_fuze      = _NumSettings[NumLogicTrTable.proximity_fuze]
+	local x_offset            = _NumSettings[NumLogicTrTable.x_offset]
+	local y_offset            = _NumSettings[NumLogicTrTable.y_offset]
+	local z_offset            = _NumSettings[NumLogicTrTable.z_offset]
 
 	local _LogicSettings = self.sv_settings.logic
 	--cannon modes
-	local spudgun_mode = _LogicSettings[LogicTrTable.spudgun_mode]
-	local no_friction_mode = _LogicSettings[LogicTrTable.no_friction_mode]
+	local spudgun_mode         = _LogicSettings[LogicTrTable.spudgun_mode]
+	local no_friction_mode     = _LogicSettings[LogicTrTable.no_friction_mode]
 	local ignore_rotation_mode = _LogicSettings[LogicTrTable.ignore_rotation_mode]
-	local no_recoil_mode = _LogicSettings[LogicTrTable.no_recoil_mode]
-	local transfer_momentum = _LogicSettings[LogicTrTable.transfer_momentum]
+	local no_recoil_mode       = _LogicSettings[LogicTrTable.no_recoil_mode]
+	local transfer_momentum    = _LogicSettings[LogicTrTable.transfer_momentum]
 	local cannon_active = false
 
 	local Parents = self.interactable:getParents()
@@ -235,7 +257,7 @@ function SmartCannon:server_onFixedUpdate()
 				if g_power >= 0 then projectile_per_shot = _mathMin(g_power, 20) end
 			elseif gate_color == "eeeeeeff" then --white
 				if g_power >= 0 then
-					projectile_type = _mathFloor(_mathMin(g_power, self.proj_type_amount - 1))
+					projectile_type = _mathFloor(_mathMin(g_power, projectile_type_count))
 				end
 			end
 		else
@@ -296,10 +318,10 @@ function SmartCannon:server_onFixedUpdate()
 				_VelVec.z = _VelVec.z + _mathAbs(s_Shape.up:dot(s_Shape.velocity))
 			end
 
-			local _ProjType = self.proj_types[projectile_type + 1]
+			local l_proj_type = projectile_type_table[projectile_type + 1].uuid
 			for i = 1, projectile_per_shot + 1, 1 do
 				local _Spread = _gunSpread(_VelVec, fire_spread)
-				_cp_shootProjectile(s_Shape, _ProjType, 28, _Offset, _Spread, ignore_rotation_mode)
+				_cp_shootProjectile(s_Shape, l_proj_type, 28, _Offset, _Spread, ignore_rotation_mode)
 			end
 		end
 
@@ -617,14 +639,7 @@ function SmartCannon:client_GUI_CreateTempValTable()
 		[13] = {name = "X Projectile Offset (m)"       , type = 1, id = NumLogicTrTable.x_offset             , value = 0, min = -99999999, max = 99999999},
 		[14] = {name = "Y Projectile Offset (m)"       , type = 1, id = NumLogicTrTable.y_offset             , value = 0, min = -99999999, max = 99999999},
 		[15] = {name = "Z Projectile Offset (m)"       , type = 1, id = NumLogicTrTable.z_offset             , value = 0, min = -99999999, max = 99999999},
-		[16] = {name = "Projectile Type (Spudgun Mode)", type = 3, id = NumLogicTrTable.projectile_type      , value = 0, min = 0, max = 16, list = {
-			[1]  = "Potato",    [2]  = "Small Potato", [3]  = "Fries",
-			[4]  = "Tomato",    [5]  = "Carrot",       [6]  = "Redbeet",
-			[7]  = "Broccoli",  [8]  = "Pineapple",    [9]  = "Orange",
-			[10] = "Blueberry", [11] = "Banana",       [12] = "Tape",
-			[13] = "Water",     [14] = "Fertilizer",   [15] = "Chemical",
-			[16] = "Pesticide", [17] = "Seed"
-		}}
+		[16] = {name = "Projectile Type (Spudgun Mode)", type = 3, id = NumLogicTrTable.projectile_type      , value = 0, min = 0, max = projectile_type_count, list = projectile_type_table}
 	}
 
 	temp[2] = --logic
@@ -639,22 +654,22 @@ function SmartCannon:client_GUI_CreateTempValTable()
 	temp[3] = --effects
 	{
 		[1] = {name = "Muzzle Flash", value = 0, max = 4, type = 3, list = { --1 muzzle flash
-			[1] = "Default",       [2] = "Small Explosion",
-			[3] = "Big Explosion", [4] = "Frier Muzzle Flash",
-			[5] = "Spinner Muzzle Flash"
+			[1] = { name = "Default"              }, [2] = { name = "Small Explosion"    },
+			[3] = { name = "Big Explosion"        }, [4] = { name = "Frier Muzzle Flash" },
+			[5] = { name = "Spinner Muzzle Flash" }
 		}},
 		[2] = {name = "Explosion Effect", value = 0, max = 4, type = 3, list = { --2 explosion effect
-			[1] = "Default",         [2] = "Little Explosion",
-			[3] = "Big Explosion",   [4] = "Giant Explosion",
-			[5] = "Sparks"
+			[1] = { name = "Default"       }, [2] = { name = "Little Explosion" },
+			[3] = { name = "Big Explosion" }, [4] = { name = "Giant Explosion"  },
+			[5] = { name = "Sparks"        }
 		}},
 		[3] = {name = "Reload Sound", value = 0, max = 1, type = 3, list = { --3 reloading effect
-			[1] = "Default", [2] = "Heavy Realoading"
+			[1] = { name = "Default" }, [2] = { name = "Heavy Realoading" }
 		}},
 		[4] = {name = "Shooting Sound", value = 0, max = 4, type = 3, list = { --4 shooting sound
-			[1] = "Default",        [2] = "Sound 1",
-			[3] = "Potato Shotgun", [4] = "Spudling Gun",
-			[5] = "Explosion"
+			[1] = { name = "Default"        }, [2] = { name = "Sound 1"      },
+			[3] = { name = "Potato Shotgun" }, [4] = { name = "Spudling Gun" },
+			[5] = { name = "Explosion"      }
 		}}
 	}
 
@@ -690,7 +705,7 @@ local function client_GUI_updateListBoxWidget(gui, slot, cur_func)
 	local max_val = cur_func.max
 
 	gui:setText("ListBoxName"..slot, cur_func.name)
-	gui:setText("ListBoxVal" ..slot, cur_func.list[c_value + 1])
+	gui:setText("ListBoxVal" ..slot, cur_func.list[c_value + 1].name)
 
 	gui:setVisible("R_ListBoxBtn"..slot, c_value < max_val)
 	gui:setVisible("L_ListBoxBtn"..slot, c_value > 0)
