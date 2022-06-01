@@ -3,7 +3,7 @@
 	Questionable Mark
 ]]
 
-if SmartCannon then return end
+--if SmartCannon then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 SmartCannon = class(GLOBAL_SCRIPT)
 SmartCannon.maxParentCount = -1
@@ -443,11 +443,14 @@ function SmartCannon:client_onFixedUpdate(dt)
 	self:client_GUI_UpdateDotAnim()
 end
 
+local default_hypertext = "<p textShadow='false' bg='gui_keybinds_bg_orange' color='#66440C' spacing='9'>%s</p>"
 function SmartCannon:client_canInteract()
 	local k_Inter = _getKeyBinding("Use", true)
 
 	_setInteractionText("Press", k_Inter, "to open Smart Cannon GUI")
-	_setInteractionText("", "Check the workshop page of \"Cannons Pack\" for instructions")
+
+	local instruction_hyper = default_hypertext:format("Check the workshop page of \"Cannons Pack\" for instructions")
+	_setInteractionText("", instruction_hyper)
 
 	return true
 end
@@ -467,56 +470,39 @@ end
 ---------------SMART CANNON GUI----------------
 -----------------------------------------------
 
-local _EffectCallbackTable = {
-	MFlash = {val = 1, name = "muzzle_flash"},
-	ExplEffect = {val = 2, name = "expl_effect"},
-	Reload = {val = 3, name = "reload_effect"},
-	ShtSound = {val = 4, name = "shoot_sound"}
-}
-
 function SmartCannon:client_GUI_Open()
-	local gui = _cpCreateGui("SmartCannonGUI.layout")
+	local gui = _cpCreateGui("SmartCannonGui.layout")
 
-	for k, tab in pairs({"NumLogic", "Logic", "Effects"}) do
-		gui:setButtonCallback(tab.."_Tab", "client_GUI_TabCallback")
-	end
-
-	for btn, k in pairs(_EffectCallbackTable) do
-		gui:setButtonCallback("LB_"..btn, "client_GUI_onEffectValueChange")
-		gui:setButtonCallback("RB_"..btn, "client_GUI_onEffectValueChange")
-	end
-
-	for k, btn in pairs({"Left", "Right"}) do
-		gui:setButtonCallback("Page"..btn, "client_GUI_onNumPageChange")
-	end
-
-	for i = 1, 8 do
-		gui:setButtonCallback("LogicBTN"..i, "client_GUI_onLogicValueChange")
-	end
-
-	for k, btn in pairs({"L", "R"}) do
-		gui:setButtonCallback(btn.."B_Mul", "client_GUI_onMultiplierChange")
-	end
+	gui:setButtonCallback("Tab1", "client_GUI_TabCallback")
+	gui:setButtonCallback("Tab2", "client_GUI_TabCallback")
+	gui:setButtonCallback("Tab3", "client_GUI_TabCallback")
 
 	for i = 1, 6 do
-		gui:setButtonCallback("RB_Val"..i, "client_GUI_onNumValueChange")
-		gui:setButtonCallback("LB_Val"..i, "client_GUI_onNumValueChange")
+		gui:setButtonCallback("R_ListBoxBtn"..i, "client_GUI_onListBoxChangeCallback")
+		gui:setButtonCallback("L_ListBoxBtn"..i, "client_GUI_onListBoxChangeCallback")
+
+		gui:setButtonCallback("Bool"..i, "client_GUI_onBooleanChangedCallback")
+
+		local num_val_id = "NumVal"..i
+		gui:setTextChangedCallback(num_val_id, "client_GUI_onTextChangedCallback")
+		gui:setTextAcceptedCallback(num_val_id, "client_GUI_onTextAcceptedCallback")
 	end
 
+	gui:setButtonCallback("PageLeft" , "client_GUI_onNumPageChange")
+	gui:setButtonCallback("PageRight", "client_GUI_onNumPageChange")
 	gui:setButtonCallback("SaveChanges", "client_GUI_onSaveButtonCallback")
 	gui:setButtonCallback("GetValues", "client_GUI_onGetValueCallback")
+
 	gui:setOnCloseCallback("client_GUI_onDestroyCallback")
 
 	self.gui = {}
 	self.gui.interface = gui
 	self:client_GUI_CreateTempValTable()
-	self.gui.cur_page = 0
-	self.gui.max_page = _mathCeil(#self.gui.temp.num_logic / 6)
-	self.gui.cur_mul_page = 3
-	self.gui.cur_mul = 1
+	self.gui.cur_tab = 1
+	self.gui.cur_page = 1
+	self.gui.max_page = 0
 
 	self:client_GUI_SetWaitingState(false)
-
 	self.network:sendToServer("server_requestCannonData")
 	
 	gui:open()
@@ -539,13 +525,13 @@ function SmartCannon:client_GUI_onDestroyCallback()
 end
 
 function SmartCannon:client_GUI_onGetValueCallback()
-	local gui = self.gui
+	local s_gui = self.gui
 
-	if gui.wait_for_number_data then return end
+	if s_gui.wait_for_number_data then return end
 
-	gui.wait_for_number_data = true
-	gui.dot_anim = 0
-	gui.interface:setText("GetValues", "Getting Data")
+	s_gui.wait_for_number_data = true
+	s_gui.dot_anim = 0
+	s_gui.interface:setText("GetValues", "Getting Data")
 
 	self.network:sendToServer("server_requestNumberInputs")
 end
@@ -557,257 +543,102 @@ function SmartCannon:client_GUI_onSaveButtonCallback()
 	local gui_int = gui.interface
 	local gui_temp = gui.temp
 
-	for k, v in pairs(gui_temp.num_logic) do _Table.number[v.id] = v.value end
-	for k, v in pairs(gui_temp.logic) do _Table.logic[v.id] = v.value end
+	for k, v in ipairs(gui_temp[1]) do
+		_Table.number[v.id] = v.value
+	end
 
+	for k, v in ipairs(gui_temp[2]) do
+		_Table.logic[v.id] = v.value
+	end
 
-	local tmp_eff = gui_temp.effects
-	_Table.snd = tmp_eff[4].value
-	_Table.mzl_fls = tmp_eff[1].value
-	_Table.exp_eff = tmp_eff[2].value
-	_Table.rld_snd = tmp_eff[3].value
+	local tmp_eff = gui_temp[3]
+	_Table.snd = tmp_eff[4].value - 1
+	_Table.mzl_fls = tmp_eff[1].value - 1
+	_Table.exp_eff = tmp_eff[2].value - 1
+	_Table.rld_snd = tmp_eff[3].value - 1
 
 	self.network:sendToServer("server_setNewSettings", _Table)
-	_audioPlay("Retrowildblip")
 	gui_int:setVisible("SaveChanges", false)
+	_audioPlay("Retrowildblip")
 end
-
-function SmartCannon:client_GUI_onEffectValueChange(btn_name)
-	local btn_id = btn_name:sub(0, 2)
-	local idx = (btn_id == "RB" and 1 or -1)
-	local eff_name = btn_name:sub(4)
-
-	local gui = self.gui
-	local gui_int = gui.interface
-	local temp_eff = gui.temp.effects
-
-	local cur_btn_idx = _EffectCallbackTable[eff_name].val
-
-	local cur_effect = temp_eff[cur_btn_idx]
-	local cur_eff_list = cur_effect.list
-
-	local new_eff_val = _utilClamp(cur_effect.value + idx, 0, #cur_eff_list - 1)
-	if new_eff_val == cur_effect.value then return end
-
-	cur_effect.value = new_eff_val
-	local cur_eff_name = cur_eff_list[new_eff_val + 1]
-
-	gui_int:setText(eff_name.."Value", cur_eff_name)
-	gui_int:setVisible("SaveChanges", true)
-	_audioPlay("GUI Item released")
-end
-
-local _BoolString = {
-	[true] = {bool = "#009900true#ffffff", sound = "Lever on"},
-	[false] = {bool = "#ff0000false#ffffff", sound = "Lever off"}
-}
-
-function SmartCannon:client_GUI_onLogicValueChange(btn_name)
-	local idx = tonumber(btn_name:sub(9))
-
-	local gui = self.gui
-	local gui_int = gui.interface
-	local temp_log = gui.temp.logic
-
-	local cur_btn = temp_log[idx]
-	cur_btn.value = not cur_btn.value
-
-	local cur_bool = _BoolString[cur_btn.value]
-
-	gui_int:setText(btn_name, ("%s: %s"):format(cur_btn.name, cur_bool.bool))
-	gui_int:setVisible("SaveChanges", true)
-	_audioPlay(cur_bool.sound)
-end
-
-local NumTable = {
-	[1] = 0.001,
-	[2] = 0.01,
-	[3] = 0.1,
-	[4] = 1,
-	[5] = 10,
-	[6] = 100,
-	[7] = 1000,
-	[8] = 10000,
-	[9] = 100000
-}
-function SmartCannon:client_GUI_onMultiplierChange(btn_name)
-	local btn_id = btn_name:sub(0, 2)
-	local idx = (btn_id == "RB" and 1 or -1)
-
-	local gui = self.gui
-	local new_mul = _utilClamp(gui.cur_mul_page + idx, 0, 8)
-	if new_mul == gui.cur_mul_page then return end
-
-	gui.cur_mul_page = new_mul
-	gui.cur_mul = NumTable[new_mul + 1]
-
-	gui.interface:setText("MultiplierVal", "Mul: "..gui.cur_mul)
-	_audioPlay("GUI Item drag")
-end
-
-function SmartCannon:client_GUI_onNumValueChange(btn_name)
-	local btn_idx = tonumber(btn_name:sub(7))
-
-	local gui = self.gui
-	local gui_int = gui.interface
-
-	local offset = (gui.cur_page * 6)
-	local cur_btn_idx = offset + btn_idx
-	local cur_btn = gui.temp.num_logic[cur_btn_idx]
-
-	local btn_id = btn_name:sub(0, 2)
-	local cur_btn_list = cur_btn.list
-	local cur_btn_int = cur_btn.int
-	local mul_val = ((cur_btn_list or cur_btn_int) and 1 or gui.cur_mul)
-	local idx = (btn_id == "RB" and 1 or -1) * mul_val
-
-	local new_value = _mathMin(_mathMax(cur_btn.value + idx, cur_btn.min), cur_btn.max)
-	if new_value == cur_btn.value then return end
-
-	cur_btn.value = new_value
-	gui_int:setVisible("SaveChanges", true)
-
-	local cur_val_name = ("NumVal"..btn_idx)
-	if cur_btn_list then
-		local cur_item = cur_btn_list[cur_btn.value + 1]
-
-		gui_int:setText(cur_val_name, cur_item)
-		_audioPlay("GUI Item released")
-	else
-		local val_txt = cur_btn_int and "%d" or "%.3f"
-		gui_int:setText(cur_val_name, (val_txt):format(cur_btn.value))
-		_audioPlay("GUI Inventory highlight")
-	end
-end
-
-local TabFunc = {
-	NumLogic_Tab = function(self)
-		local gui = self.gui
-		local cur_page = gui.cur_page
-		local gui_int = gui.interface
-		local offset = (cur_page * 6)
-
-		local temp_num = gui.temp.num_logic
-		for i = 1, 6 do
-			local cur_btn = temp_num[i + offset]
-			local has_data = (cur_btn ~= nil)
-
-			for k, btn in pairs({"NumName", "LB_Val", "RB_Val", "NumVal"}) do
-				gui_int:setVisible(btn..i, has_data)
-			end
-
-			if has_data then
-				local cur_list = cur_btn.list
-				local num_val_id = ("NumVal"..i)
-
-				if cur_list then
-					gui_int:setText(num_val_id, cur_list[cur_btn.value + 1])
-				else
-					local val_txt = cur_btn.int and "%d" or "%.3f"
-					gui_int:setText(num_val_id, (val_txt):format(cur_btn.value))
-				end
-
-				gui_int:setText("NumName"..i, cur_btn.name)
-			end
-		end
-
-		gui_int:setText("PageValue", "Page: "..(cur_page + 1).." / "..gui.max_page)
-	end,
-	Logic_Tab = function(self)
-		local gui = self.gui
-		local gui_int = gui.interface
-
-		local temp_log = gui.temp.logic
-		for i = 1, 8 do
-			local cur_btn = temp_log[i]
-			local has_data = (cur_btn ~= nil)
-
-			local btn_lbl = ("LogicBTN"..i)
-
-			gui_int:setVisible(btn_lbl, has_data)
-
-			if has_data then
-				local cur_bool = _BoolString[cur_btn.value]
-
-				gui_int:setText(btn_lbl, ("%s: %s"):format(cur_btn.name, cur_bool.bool))
-			end
-		end
-	end,
-	Effects_Tab = function(self)
-		local gui = self.gui
-
-		local temp_eff = gui.temp.effects
-		local gui_int = gui.interface
-		for k, v in pairs(_EffectCallbackTable) do
-			local CurList = temp_eff[v.val]
-			gui_int:setText(k.."Value", CurList.list[CurList.value + 1])
-		end
-	end
-}
 
 function SmartCannon:client_GUI_onNumPageChange(btn_name)
 	local btn_id = btn_name:sub(5)
-	local idx = (btn_id == "Left" and -1 or 1)
+	local value_step = (btn_id == "Left" and -1 or 1)
+	local s_gui = self.gui
 
-	local new_page = _utilClamp(self.gui.cur_page + idx, 0, self.gui.max_page - 1)
-	if new_page == self.gui.cur_page then return end
+	local new_page = _utilClamp(s_gui.cur_page + value_step, 1, s_gui.max_page)
+	if s_gui.cur_page ~= new_page then
+		s_gui.cur_page = new_page
 
-	self.gui.cur_page = new_page
-	_audioPlay("GUI Item drag")
+		self:client_GUI_updateCurrentTab()
 
-	TabFunc.NumLogic_Tab(self)
+		_audioPlay("GUI Item drag")
+	end
 end
+
+--[[
+	type data:
+	1 - number
+	2 - boolean
+	3 - list box
+]]
 
 function SmartCannon:client_GUI_CreateTempValTable()
 	local temp = {}
-	temp.num_logic = {
-		[1] = {name = "Fire Force", id = NumLogicTrTable.fire_force, value = 0, min = 1, max = math.huge},
-		[2] = {name = "Spread", id = NumLogicTrTable.fire_spread, value = 0, min = 0, max = 360},
-		[3] = {name = "Reload Time", id = NumLogicTrTable.reload_time, value = 0, min = 0, max = 1000000},
-		[4] = {name = "Explosion Level", id = NumLogicTrTable.expl_level, value = 0, min = 0.001, max = math.huge},
-		[5] = {name = "Explosion Radius", id  = NumLogicTrTable.expl_radius, value = 0, min = 0.001, max = 100},
-		[6] = {name = "Explosion Impulse Radius", id = NumLogicTrTable.expl_impulse_radius, value = 0, min = 0.001, max = math.huge},
-		[7] = {name = "Explosion Impulse Strength", id = NumLogicTrTable.expl_impulse_strength, value = 0, min = 0, max = math.huge},
-		[8] = {name = "Projectile Gravity", id = NumLogicTrTable.projectile_gravity, value = 0, min = -math.huge, max = math.huge},
-		[9] = {name = "Projectile Lifetime", id = NumLogicTrTable.projectile_lifetime, value = 0, min = 0.001, max = 30},
-		[10] = {name = "Recoil", id = NumLogicTrTable.cannon_recoil, value = 0, min = 0, max = math.huge},
-		[11] = {name = "Proximity Fuze", id = NumLogicTrTable.proximity_fuze, value = 0, min = 0, max = 20},
-		[12] = {name = "Projectiles Per Shot", id = NumLogicTrTable.projectile_per_shot, value = 0, min = 0, max = 20, int = true},
-		[13] = {name = "X Projectile Offset", id = NumLogicTrTable.x_offset, value = 0, min = -math.huge, max = math.huge},
-		[14] = {name = "Y Projectile Offset", id = NumLogicTrTable.y_offset, value = 0, min = -math.huge, max = math.huge},
-		[15] = {name = "Z Projectile Offset", id = NumLogicTrTable.z_offset, value = 0, min = -math.huge, max = math.huge},
-		[16] = {name = "Projectile Type (Spudgun Mode)", id = NumLogicTrTable.projectile_type, value = 0, min = 0, max = 16, list = {
-			[1] = "Potato",     [2] = "Small Potato", [3] = "Fries",
-			[4] = "Tomato",     [5] = "Carrot",      [6] = "Redbeet",
-			[7] = "Broccoli",   [8] = "Pineapple",   [9] = "Orange",
-			[10] = "Blueberry", [11] = "Banana",     [12] = "Tape",
-			[13] = "Water",     [14] = "Fertilizer", [15] = "Chemical",
+	temp[1] = --number logic
+	{
+		[1]  = {name = "Fire Force"                    , type = 1, id = NumLogicTrTable.fire_force           , value = 0, min = 1, max = 99999999},
+		[2]  = {name = "Spread"                        , type = 1, id = NumLogicTrTable.fire_spread          , value = 0, min = 0, max = 360},
+		[3]  = {name = "Reload Time"                   , type = 1, id = NumLogicTrTable.reload_time          , value = 0, min = 0, max = 1000000},
+		[4]  = {name = "Explosion Level"               , type = 1, id = NumLogicTrTable.expl_level           , value = 0, min = 0.001, max = 99999999},
+		[5]  = {name = "Explosion Radius"              , type = 1, id = NumLogicTrTable.expl_radius          , value = 0, min = 0.3, max = 100},
+		[6]  = {name = "Explosion Impulse Radius"      , type = 1, id = NumLogicTrTable.expl_impulse_radius  , value = 0, min = 0.001, max = 99999999},
+		[7]  = {name = "Explosion Impulse Strength"    , type = 1, id = NumLogicTrTable.expl_impulse_strength, value = 0, min = 0, max = 99999999},
+		[8]  = {name = "Projectile Gravity"            , type = 1, id = NumLogicTrTable.projectile_gravity   , value = 0, min = -99999999, max = 99999999},
+		[9]  = {name = "Projectile Lifetime"           , type = 1, id = NumLogicTrTable.projectile_lifetime  , value = 0, min = 0.001, max = 30},
+		[10] = {name = "Recoil"                        , type = 1, id = NumLogicTrTable.cannon_recoil        , value = 0, min = 0, max = 99999999},
+		[11] = {name = "Proximity Fuze"                , type = 1, id = NumLogicTrTable.proximity_fuze       , value = 0, min = 0, max = 20},
+		[12] = {name = "Projectiles Per Shot"          , type = 1, id = NumLogicTrTable.projectile_per_shot  , value = 0, min = 0, max = 20, int = true},
+		[13] = {name = "X Projectile Offset"           , type = 1, id = NumLogicTrTable.x_offset             , value = 0, min = -99999999, max = 99999999},
+		[14] = {name = "Y Projectile Offset"           , type = 1, id = NumLogicTrTable.y_offset             , value = 0, min = -99999999, max = 99999999},
+		[15] = {name = "Z Projectile Offset"           , type = 1, id = NumLogicTrTable.z_offset             , value = 0, min = -99999999, max = 99999999},
+		[16] = {name = "Projectile Type (Spudgun Mode)", type = 3, id = NumLogicTrTable.projectile_type      , value = 1, min = 1, max = 17, list = {
+			[1]  = "Potato",    [2]  = "Small Potato", [3]  = "Fries",
+			[4]  = "Tomato",    [5]  = "Carrot",       [6]  = "Redbeet",
+			[7]  = "Broccoli",  [8]  = "Pineapple",    [9]  = "Orange",
+			[10] = "Blueberry", [11] = "Banana",       [12] = "Tape",
+			[13] = "Water",     [14] = "Fertilizer",   [15] = "Chemical",
 			[16] = "Pesticide", [17] = "Seed"
 		}}
 	}
-	temp.logic = {
-		[1] = {name = "Ignore Cannon Rotation", id = LogicTrTable.ignore_rotation_mode, value = false},
-		[2] = {name = "No Projectile Friction", id = LogicTrTable.no_friction_mode, value = false},
-		[3] = {name = "Spudgun Mode", id = LogicTrTable.spudgun_mode, value = false},
-		[4] = {name = "No Recoil Mode", id = LogicTrTable.no_recoil_mode, value = false},
-		[5] = {name = "Transfer Momentum", id = LogicTrTable.transfer_momentum, value = false}
+
+	temp[2] = --logic
+	{
+		[1] = {name = "Ignore Cannon Rotation", type = 2, id = LogicTrTable.ignore_rotation_mode, value = false},
+		[2] = {name = "No Projectile Friction", type = 2, id = LogicTrTable.no_friction_mode    , value = false},
+		[3] = {name = "Spudgun Mode"          , type = 2, id = LogicTrTable.spudgun_mode        , value = false},
+		[4] = {name = "No Recoil Mode"        , type = 2, id = LogicTrTable.no_recoil_mode      , value = false},
+		[5] = {name = "Transfer Momentum"     , type = 2, id = LogicTrTable.transfer_momentum   , value = false}
 	}
-	temp.effects = {
-		[1] = {value = 0, list = { --1 muzzle flash
-			[1] = "Default", [2] = "Small Explosion",
+
+	temp[3] = --effects
+	{
+		[1] = {name = "Muzzle Flash", value = 1, max = 5, type = 3, list = { --1 muzzle flash
+			[1] = "Default",       [2] = "Small Explosion",
 			[3] = "Big Explosion", [4] = "Frier Muzzle Flash",
 			[5] = "Spinner Muzzle Flash"
 		}},
-		[2] = {value = 0, list = { --2 explosion effect
+		[2] = {name = "Explosion Effect", value = 1, max = 5, type = 3, list = { --2 explosion effect
 			[1] = "Default",         [2] = "Little Explosion",
 			[3] = "Big Explosion",   [4] = "Giant Explosion",
 			[5] = "Sparks"
 		}},
-		[3] = {value = 0, list = { --3 reloading effect
+		[3] = {name = "Reload Sound", value = 1, max = 2, type = 3, list = { --3 reloading effect
 			[1] = "Default", [2] = "Heavy Realoading"
 		}},
-		[4] = {value = 0, list = { --4 shooting sound
-			[1] = "Default", [2] = "Sound 1",
+		[4] = {name = "Shooting Sound", value = 1, max = 5, type = 3, list = { --4 shooting sound
+			[1] = "Default",        [2] = "Sound 1",
 			[3] = "Potato Shotgun", [4] = "Spudling Gun",
 			[5] = "Explosion"
 		}}
@@ -816,38 +647,197 @@ function SmartCannon:client_GUI_CreateTempValTable()
 	self.gui.temp = temp
 end
 
-local TabData = {
-	NumLogic_Tab = "NumLogicPage",
-	Logic_Tab = "LogicPage",
-	Effects_Tab = "EffectsPage"
-}
 function SmartCannon:client_GUI_TabCallback(tab_name)
-	if self.gui.cur_tab == tab_name then return end
-	_audioPlay("Handbook - Turn page")
+	local tab_idx = tonumber(tab_name:sub(-1))
 
-	self:client_GUI_SetCurrentTab(tab_name)
+	if self.gui.cur_tab ~= tab_idx then
+		self.gui.cur_tab = tab_idx
+		self.gui.cur_page = 1
+
+		self:client_GUI_updateTabButtons()
+		self:client_GUI_updateCurrentTab()
+
+		_audioPlay("Handbook - Turn page")
+	end
 end
 
-function SmartCannon:client_GUI_SetCurrentTab(tab_name)
-	self.gui.cur_tab = tab_name
-	local gui_int = self.gui.interface
+function SmartCannon:client_GUI_updateTabButtons()
+	local s_gui = self.gui
+	local cur_tab = s_gui.cur_tab
+	local gui_int = s_gui.interface
 
-	for tab, page in pairs(TabData) do
-		local tab_eq = (tab == tab_name)
+	for i = 1, 3 do
+		gui_int:setButtonState("Tab"..i, i == cur_tab)
+	end
+end
 
-		gui_int:setButtonState(tab, tab_eq)
-		gui_int:setVisible(page, tab_eq)
+local function client_GUI_updateListBoxWidget(gui, slot, cur_func)
+	local c_value = cur_func.value
+	local max_val = cur_func.max
+
+	gui:setText("ListBoxName"..slot, cur_func.name)
+	gui:setText("ListBoxVal" ..slot, cur_func.list[cur_func.value])
+
+	gui:setVisible("R_ListBoxBtn"..slot, c_value < max_val)
+	gui:setVisible("L_ListBoxBtn"..slot, c_value > 1)
+end
+
+local g_bool_string =
+{
+	[true ] = {bool = "#009900true#ffffff" , sound = "Lever on" },
+	[false] = {bool = "#ff0000false#ffffff", sound = "Lever off"}
+}
+
+local function client_GUI_updateBooleanWidget(gui, slot, cur_func)
+	local cur_bool = g_bool_string[cur_func.value]
+	gui:setText("Bool"..slot, ("%s: %s"):format(cur_func.name, cur_bool.bool))
+end
+
+local function client_GUI_updateNumberValueWidget(gui, slot, cur_func)
+	gui:setText("NumName"..slot, cur_func.name)
+
+	local val_txt = cur_func.int and "%d" or "%.3f"
+	gui:setText("NumVal"..slot, (val_txt):format(cur_func.value))
+end
+
+function SmartCannon:client_GUI_getCurrentOption(btn_id)
+	local s_gui = self.gui
+	local cur_temp = s_gui.temp[s_gui.cur_tab]
+
+	local page_offset = (s_gui.cur_page - 1) * 6
+
+	return cur_temp[page_offset + btn_id]
+end
+
+function SmartCannon:client_GUI_onListBoxChangeCallback(btn_name)
+	local value_step = (btn_name:sub(0, 1) == "R" and 1 or -1)
+	local btn_id = tonumber(btn_name:sub(-1))
+
+	local s_gui = self.gui
+	local cur_set = self:client_GUI_getCurrentOption(btn_id)
+
+	local new_value = _utilClamp(cur_set.value + value_step, 1, cur_set.max)
+	if cur_set.value == new_value then return end
+	cur_set.value = new_value
+
+	local gui_int = s_gui.interface
+	gui_int:setVisible("SaveChanges", true)
+
+	client_GUI_updateListBoxWidget(gui_int, btn_id, cur_set)
+	_audioPlay("GUI Item released")
+end
+
+function SmartCannon:client_GUI_onBooleanChangedCallback(btn_name)
+	local btn_id = tonumber(btn_name:sub(-1))
+
+	local s_gui = self.gui
+	local cur_set = self:client_GUI_getCurrentOption(btn_id)
+
+	cur_set.value = not cur_set.value
+	
+	local gui_int = s_gui.interface
+	gui_int:setVisible("SaveChanges", true)
+
+	client_GUI_updateBooleanWidget(gui_int, btn_id, cur_set)
+
+	local cur_bool = g_bool_string[cur_set.value]
+	_audioPlay(cur_bool.sound)
+end
+
+function SmartCannon:client_GUI_onTextChangedCallback(widget, text)
+	local widget_id = tonumber(widget:sub(-1))
+
+	local s_gui = self.gui
+	local gui_int = s_gui.interface
+	local cur_set = self:client_GUI_getCurrentOption(widget_id)
+
+	local hex_color_str
+	local num_value = tonumber(text)
+	if num_value ~= nil then
+		hex_color_str = (cur_set.value == num_value) and "#ffffff" or "#999999"
+	else
+		hex_color_str = "#ff0000"
 	end
 
-	TabFunc[tab_name](self)
+	gui_int:setText("NumName"..widget_id, hex_color_str..cur_set.name.."#ffffff")
 end
 
-local _ExplTranslation = {
-	[ExplEffectEnum.ExplSmall] = 0,
-	[ExplEffectEnum.AircraftCannon] = 1,
-	[ExplEffectEnum.ExplBig2] = 2,
-	[ExplEffectEnum.DoraCannon] = 3,
-	[ExplEffectEnum.EMPCannon] = 4
+function SmartCannon:client_GUI_onTextAcceptedCallback(widget, text)
+	local widget_id = tonumber(widget:sub(-1))
+
+	local s_gui = self.gui
+	local gui_int = s_gui.interface
+	local cur_set = self:client_GUI_getCurrentOption(widget_id)
+	
+	local num_value = tonumber(text)
+	if num_value ~= nil then
+		if num_value == cur_set.value then return end
+
+		local clamped_new = _utilClamp(num_value, cur_set.min, cur_set.max)
+		if cur_set.int then
+			clamped_new = _mathFloor(clamped_new)
+		end
+
+		cur_set.value = clamped_new
+
+		client_GUI_updateNumberValueWidget(gui_int, widget_id, cur_set)
+		gui_int:setVisible("SaveChanges", true)
+	else
+		_audioPlay("WeldTool - Error")
+	end
+end
+
+local value_update_functions =
+{
+	[1] = client_GUI_updateNumberValueWidget,
+	[2] = client_GUI_updateBooleanWidget,
+	[3] = client_GUI_updateListBoxWidget
+}
+
+function SmartCannon:client_GUI_updateCurrentTab()
+	local s_gui = self.gui
+	local cur_temp = s_gui.temp[s_gui.cur_tab]
+	local cur_page = s_gui.cur_page
+	local gui_int = s_gui.interface
+
+	s_gui.max_page = _mathCeil(#cur_temp / 6)
+
+	local page_offset_idx = (s_gui.cur_page - 1) * 6
+	for i = 1, 6 do
+		local cur_idx = page_offset_idx + i
+		local cur_opt = cur_temp[cur_idx]
+
+		local opt_id = (cur_opt and cur_opt.type or 0)
+		gui_int:setVisible("NumInputBG"..i, opt_id == 1)
+		gui_int:setVisible("Bool"      ..i, opt_id == 2)
+		gui_int:setVisible("ListBoxBG" ..i, opt_id == 3)
+
+		if cur_opt ~= nil then
+			value_update_functions[cur_opt.type](gui_int, i, cur_opt)
+		end
+	end
+
+	self:client_GUI_updateCurrentPageText()
+end
+
+function SmartCannon:client_GUI_updateCurrentPageText()
+	local s_gui = self.gui
+	local gui_int = s_gui.interface
+	local cur_page = s_gui.cur_page
+	local max_page = s_gui.max_page
+
+	gui_int:setText("PageValue", ("%d / %d"):format(cur_page, max_page))
+	gui_int:setVisible("PageLeft" , cur_page > 1)
+	gui_int:setVisible("PageRight", cur_page < max_page)
+end
+
+local _ExplTranslation =
+{
+	[ExplEffectEnum.ExplSmall     ] = 1,
+	[ExplEffectEnum.AircraftCannon] = 2,
+	[ExplEffectEnum.ExplBig2      ] = 3,
+	[ExplEffectEnum.DoraCannon    ] = 4,
+	[ExplEffectEnum.EMPCannon     ] = 5
 }
 
 function SmartCannon:client_GUI_LoadNewData(data)
@@ -856,7 +846,7 @@ function SmartCannon:client_GUI_LoadNewData(data)
 
 	local gui_temp = gui.temp
 
-	local s_logic = gui_temp.logic
+	local s_logic = gui_temp[2]
 	local d_logic = data.logic
 	for k, v in pairs(s_logic) do
 		local cur_d_log = d_logic[v.id]
@@ -866,7 +856,7 @@ function SmartCannon:client_GUI_LoadNewData(data)
 		end
 	end
 	
-	local s_numLog = gui_temp.num_logic
+	local s_numLog = gui_temp[1]
 	local d_numLog = data.number
 	for k, v in pairs(s_numLog) do
 		local cur_dNumLog = d_numLog[v.id]
@@ -884,16 +874,18 @@ function SmartCannon:client_GUI_LoadNewData(data)
 	local d_snd = data.snd
 
 	if m_flash and ex_eff and rel_snd and d_snd then
-		local s_effects = gui_temp.effects
+		local s_effects = gui_temp[3]
 
-		s_effects[1].value = m_flash
+		s_effects[1].value = m_flash + 1
 		s_effects[2].value = _ExplTranslation[ex_eff]
-		s_effects[3].value = rel_snd
-		s_effects[4].value = d_snd
+		s_effects[3].value = rel_snd + 1
+		s_effects[4].value = d_snd   + 1
 	end
 
 	if gui.wait_for_data then
-		self:client_GUI_SetCurrentTab("NumLogic_Tab")
+		self.gui.cur_tab = 1 --number logic tab
+		self:client_GUI_updateCurrentTab()
+		self:client_GUI_updateTabButtons()
 		self:client_GUI_SetWaitingState(true)
 	end
 
@@ -904,7 +896,8 @@ function SmartCannon:client_GUI_LoadNewData(data)
 		local gui_int = gui.interface
 		gui_int:setText("GetValues", "Get Input Values")
 		gui_int:setVisible("SaveChanges", true)
-		self:client_GUI_SetCurrentTab(gui.cur_tab)
+		print("UPDATE LATER")
+		--self:client_GUI_SetCurrentTab(gui.cur_tab)
 		_audioPlay("ConnectTool - Selected")
 	end
 end
@@ -915,15 +908,15 @@ function SmartCannon:client_GUI_SetWaitingState(state)
 
 	local n_state = not state
 	gui_int:setVisible("LoadingScreen", n_state)
-	for k, btn in pairs({"NumLogic_Tab", "Logic_Tab", "Effects_Tab", "MultiplierVal", "RB_Mul", "LB_Mul", "GetValues", "NumLogicPage"}) do
+	for k, btn in pairs({"Tab1", "Tab2", "Tab3", "GetValues", "MainPage", "GuiTitle"}) do
 		gui_int:setVisible(btn, state)
 	end
 
 	gui.wait_for_data = (n_state and true or nil)
-	gui.dot_anim = (n_state and 0 or nil)
+	gui.dot_anim      = (n_state and 0    or nil)
 end
 
-local _DotAnimation = {[1] = "", [2] = ".", [3] = "..", [4] = "..."}
+local g_dot_animation = {[1] = "", [2] = ".", [3] = "..", [4] = "..."}
 function SmartCannon:client_GUI_UpdateDotAnim()
 	local gui = self.gui
 	if not gui then return end
@@ -936,7 +929,7 @@ function SmartCannon:client_GUI_UpdateDotAnim()
 
 		if cur_tick == 25 then
 			gui.dot_anim = (gui.dot_anim + 1) % 4
-			local cur_step = _DotAnimation[gui.dot_anim + 1]
+			local cur_step = g_dot_animation[gui.dot_anim + 1]
 
 			local gui_int = gui.interface
 
