@@ -602,21 +602,21 @@ function SmartCannon:client_GUI_CreateTempValTable()
 	local temp = {}
 	temp[1] = --number logic
 	{
-		[1]  = {name = "Fire Force"                    , type = 1, id = NumLogicTrTable.fire_force           , value = 0, min = 1, max = 99999999},
-		[2]  = {name = "Spread"                        , type = 1, id = NumLogicTrTable.fire_spread          , value = 0, min = 0, max = 360},
-		[3]  = {name = "Reload Time"                   , type = 1, id = NumLogicTrTable.reload_time          , value = 0, min = 0, max = 1000000},
+		[1]  = {name = "Fire Force (m/s)"              , type = 1, id = NumLogicTrTable.fire_force           , value = 0, min = 1, max = 99999999},
+		[2]  = {name = "Spread (deg)"                  , type = 1, id = NumLogicTrTable.fire_spread          , value = 0, min = 0, max = 360},
+		[3]  = {name = "Reload Time (ticks)"           , type = 1, id = NumLogicTrTable.reload_time          , value = 0, min = 0, max = 1000000},
 		[4]  = {name = "Explosion Level"               , type = 1, id = NumLogicTrTable.expl_level           , value = 0, min = 0.001, max = 99999999},
-		[5]  = {name = "Explosion Radius"              , type = 1, id = NumLogicTrTable.expl_radius          , value = 0, min = 0.3, max = 100},
-		[6]  = {name = "Explosion Impulse Radius"      , type = 1, id = NumLogicTrTable.expl_impulse_radius  , value = 0, min = 0.001, max = 99999999},
+		[5]  = {name = "Explosion Radius (m)"          , type = 1, id = NumLogicTrTable.expl_radius          , value = 0, min = 0.3, max = 100},
+		[6]  = {name = "Explosion Impulse Radius (m)"  , type = 1, id = NumLogicTrTable.expl_impulse_radius  , value = 0, min = 0.001, max = 99999999},
 		[7]  = {name = "Explosion Impulse Strength"    , type = 1, id = NumLogicTrTable.expl_impulse_strength, value = 0, min = 0, max = 99999999},
 		[8]  = {name = "Projectile Gravity"            , type = 1, id = NumLogicTrTable.projectile_gravity   , value = 0, min = -99999999, max = 99999999},
-		[9]  = {name = "Projectile Lifetime"           , type = 1, id = NumLogicTrTable.projectile_lifetime  , value = 0, min = 0.001, max = 30},
+		[9]  = {name = "Projectile Lifetime (s)"       , type = 1, id = NumLogicTrTable.projectile_lifetime  , value = 0, min = 0.001, max = 30},
 		[10] = {name = "Recoil"                        , type = 1, id = NumLogicTrTable.cannon_recoil        , value = 0, min = 0, max = 99999999},
-		[11] = {name = "Proximity Fuze"                , type = 1, id = NumLogicTrTable.proximity_fuze       , value = 0, min = 0, max = 20},
+		[11] = {name = "Proximity Fuze (m)"            , type = 1, id = NumLogicTrTable.proximity_fuze       , value = 0, min = 0, max = 20},
 		[12] = {name = "Projectiles Per Shot"          , type = 1, id = NumLogicTrTable.projectile_per_shot  , value = 0, min = 0, max = 20, int = true},
-		[13] = {name = "X Projectile Offset"           , type = 1, id = NumLogicTrTable.x_offset             , value = 0, min = -99999999, max = 99999999},
-		[14] = {name = "Y Projectile Offset"           , type = 1, id = NumLogicTrTable.y_offset             , value = 0, min = -99999999, max = 99999999},
-		[15] = {name = "Z Projectile Offset"           , type = 1, id = NumLogicTrTable.z_offset             , value = 0, min = -99999999, max = 99999999},
+		[13] = {name = "X Projectile Offset (m)"       , type = 1, id = NumLogicTrTable.x_offset             , value = 0, min = -99999999, max = 99999999},
+		[14] = {name = "Y Projectile Offset (m)"       , type = 1, id = NumLogicTrTable.y_offset             , value = 0, min = -99999999, max = 99999999},
+		[15] = {name = "Z Projectile Offset (m)"       , type = 1, id = NumLogicTrTable.z_offset             , value = 0, min = -99999999, max = 99999999},
 		[16] = {name = "Projectile Type (Spudgun Mode)", type = 3, id = NumLogicTrTable.projectile_type      , value = 0, min = 0, max = 16, list = {
 			[1]  = "Potato",    [2]  = "Small Potato", [3]  = "Fries",
 			[4]  = "Tomato",    [5]  = "Carrot",       [6]  = "Redbeet",
@@ -796,6 +796,8 @@ function SmartCannon:client_GUI_onTextAcceptedCallback(widget, text)
 
 		client_GUI_updateNumberValueWidget(gui_int, widget_id, cur_set)
 		gui_int:setVisible("SaveChanges", true)
+
+		_audioPlay("GUI Item drag")
 	else
 		_audioPlay("WeldTool - Error")
 	end
@@ -897,7 +899,7 @@ function SmartCannon:client_GUI_LoadNewData(data)
 		local gui_int = gui.interface
 		gui_int:setText("GetValues", "Get Input Values")
 		gui_int:setVisible("SaveChanges", true)
-		
+
 		self:client_GUI_updateCurrentTab()
 		_audioPlay("ConnectTool - Selected")
 	end
