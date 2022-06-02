@@ -417,7 +417,6 @@ local function assign_new_data_to_settings(setting_table, new_data)
 	for k, v in ipairs(new_data) do
 		if setting_table[k] ~= nil then
 			setting_table[k] = v
-			print(setting_table[k], k, v)
 		end
 	end
 end

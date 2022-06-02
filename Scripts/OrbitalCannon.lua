@@ -70,7 +70,7 @@ function OrbitalCannon:server_onFixedUpdate()
 	if not self.reload then
 		local s_WorldPos = self.shape.worldPosition
 		local hit, result = _physRaycast(s_WorldPos, s_WorldPos + self.shape.up * 2500)
-		if hit and result.type ~= "invalid" and result.pointWorld.z < 900 then
+		if hit and result.type ~= "limiter" and result.pointWorld.z < 900 then
 			if active then
 				if not self.hold then
 					self.network:sendToClients("client_getUvData", {OC_ModeEnum.hld})
