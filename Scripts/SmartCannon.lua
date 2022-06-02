@@ -413,22 +413,20 @@ function SmartCannon:server_requestSound(data, caller)
 	self.network:sendToClient(caller, "client_setEffects", self:server_prepareEffectTable())
 end
 
+local function assign_new_data_to_settings(setting_table, new_data)
+	for k, v in ipairs(new_data) do
+		if setting_table[k] ~= nil then
+			setting_table[k] = v
+			print(setting_table[k], k, v)
+		end
+	end
+end
+
 function SmartCannon:server_setNewSettings(data)
 	local sv_set = self.sv_settings
 
-	local sv_number = sv_set.number
-	for k, v in ipairs(data[1]) do --number logic
-		if sv_number[k] ~= nil then
-			sv_number[k] = v
-		end
-	end
-
-	local sv_logic = sv_set.logic
-	for k, v in ipairs(data[2]) do --logic
-		if sv_logic[k] ~= nil then
-			sv_logic[k] = v
-		end
-	end
+	assign_new_data_to_settings(sv_set.number, data[1]) --number logic
+	assign_new_data_to_settings(sv_set.logic, data[2]) --logic
 
 	local eff_data = data[3]
 	local expl_eff_id = eff_data[OtherTrTable.explosion_effect]
