@@ -525,6 +525,7 @@ function SmartCannon:client_GUI_Open()
 	gui:setButtonCallback("PageLeft" , "client_GUI_onNumPageChange")
 	gui:setButtonCallback("PageRight", "client_GUI_onNumPageChange")
 	gui:setButtonCallback("SaveChanges", "client_GUI_onSaveButtonCallback")
+	gui:setButtonCallback("ResetDefaults", "client_GUI_onResetDefaultsCallback")
 	gui:setButtonCallback("GetValues", "client_GUI_onGetValueCallback")
 
 	gui:setOnCloseCallback("client_GUI_onDestroyCallback")
@@ -585,17 +586,33 @@ function SmartCannon:client_GUI_onSaveButtonCallback()
 
 	temp_table_to_network_data(gui_temp[1], data_output[1]) --number data
 	temp_table_to_network_data(gui_temp[2], data_output[2]) --logic data
-
-	local tmp_eff = gui_temp[3]
-	local effect_data = data_output[3]
-	effect_data[OtherTrTable.muzzle_flash    ] = tmp_eff[1].value
-	effect_data[OtherTrTable.explosion_effect] = tmp_eff[2].value
-	effect_data[OtherTrTable.reload_sound    ] = tmp_eff[3].value
-	effect_data[OtherTrTable.sound           ] = tmp_eff[4].value
+	temp_table_to_network_data(gui_temp[3], data_output[3]) --effect data
 
 	self.network:sendToServer("server_setNewSettings", data_output)
 	gui_int:setVisible("SaveChanges", false)
+
 	_audioPlay("Retrowildblip")
+end
+
+local function reset_table_to_defaults(gui_table)
+	for k, cur_set in ipairs(gui_table) do
+		cur_set.value = cur_set.default
+	end
+end
+
+function SmartCannon:client_GUI_onResetDefaultsCallback()
+	local s_gui = self.gui
+	local gui_temp = s_gui.temp
+	local gui_int = s_gui.interface
+
+	reset_table_to_defaults(gui_temp[1]) --reset number logic values
+	reset_table_to_defaults(gui_temp[2]) --reset logic values
+	reset_table_to_defaults(gui_temp[3]) --reset effect values
+
+	self:client_GUI_updateCurrentTab()
+	gui_int:setVisible("SaveChanges", true)
+
+	_audioPlay("PaintTool - Erase")
 end
 
 function SmartCannon:client_GUI_onNumPageChange(btn_name)
@@ -648,25 +665,25 @@ function SmartCannon:client_GUI_CreateTempValTable()
 		[2] = {name = "No Projectile Friction", type = 2, id = LogicTrTable.no_friction_mode    , value = false, default = false},
 		[3] = {name = "Spudgun Mode"          , type = 2, id = LogicTrTable.spudgun_mode        , value = false, default = false},
 		[4] = {name = "No Recoil Mode"        , type = 2, id = LogicTrTable.no_recoil_mode      , value = false, default = false},
-		[5] = {name = "Transfer Momentum"     , type = 2, id = LogicTrTable.transfer_momentum   , value = false, default = false}
+		[5] = {name = "Transfer Momentum"     , type = 2, id = LogicTrTable.transfer_momentum   , value = false, default = true }
 	}
 
 	temp[3] = --effects
 	{
-		[1] = {name = "Muzzle Flash", value = 0, default = 0, max = 4, type = 3, list = { --1 muzzle flash
+		[1] = {name = "Muzzle Flash", value = 0, default = 0, max = 4, type = 3, id = OtherTrTable.muzzle_flash, list = { --1 muzzle flash
 			[1] = { name = "Default"              }, [2] = { name = "Small Explosion"    },
 			[3] = { name = "Big Explosion"        }, [4] = { name = "Frier Muzzle Flash" },
 			[5] = { name = "Spinner Muzzle Flash" }
 		}},
-		[2] = {name = "Explosion Effect", value = 0, default = 0, max = 4, type = 3, list = { --2 explosion effect
+		[2] = {name = "Explosion Effect", value = 0, default = 0, max = 4, type = 3, id = OtherTrTable.explosion_effect, list = { --2 explosion effect
 			[1] = { name = "Default"       }, [2] = { name = "Little Explosion" },
 			[3] = { name = "Big Explosion" }, [4] = { name = "Giant Explosion"  },
 			[5] = { name = "Sparks"        }
 		}},
-		[3] = {name = "Reload Sound", value = 0, default = 0, max = 1, type = 3, list = { --3 reloading effect
+		[3] = {name = "Reload Sound", value = 0, default = 0, max = 1, type = 3, id = OtherTrTable.reload_sound, list = { --3 reloading effect
 			[1] = { name = "Default" }, [2] = { name = "Heavy Realoading" }
 		}},
-		[4] = {name = "Shooting Sound", value = 0, default = 0, max = 4, type = 3, list = { --4 shooting sound
+		[4] = {name = "Shooting Sound", value = 0, default = 0, max = 4, type = 3, id = OtherTrTable.sound, list = { --4 shooting sound
 			[1] = { name = "Default"        }, [2] = { name = "Sound 1"      },
 			[3] = { name = "Potato Shotgun" }, [4] = { name = "Spudling Gun" },
 			[5] = { name = "Explosion"      }
@@ -862,42 +879,28 @@ function SmartCannon:client_GUI_updateCurrentPageText()
 	gui_int:setVisible("PageRight", cur_page < max_page)
 end
 
+local function load_new_data_table(gui_table, new_data)
+	for k, cur_set in ipairs(gui_table) do
+		local cur_data_val = new_data[cur_set.id]
+
+		if cur_data_val ~= nil then
+			cur_set.value = cur_data_val
+		end
+	end
+end
+
 function SmartCannon:client_GUI_LoadNewData(data)
 	local gui = self.gui
 	if not gui then return end
 
 	local gui_temp = gui.temp
 
-	local s_num_logic = gui_temp[1]
-	local data_num_logic = data[1]
-	for k, v in ipairs(s_num_logic) do
-		local cur_num_log = data_num_logic[v.id]
-
-		if cur_num_log ~= nil then
-			local cur_data = s_num_logic[k]
-
-			cur_data.value = _mathMin(_mathMax(cur_num_log, cur_data.min), cur_data.max)
-		end
-	end
-
-	local s_logic = gui_temp[2]
-	local d_logic = data[2]
-	for k, v in ipairs(s_logic) do
-		local cur_log = d_logic[v.id]
-
-		if cur_log ~= nil then
-			s_logic[k].value = cur_log
-		end
-	end
+	load_new_data_table(gui_temp[1], data[1]) --load number logic data
+	load_new_data_table(gui_temp[2], data[2]) --load logic data
 
 	local effect_data = data[3]
 	if effect_data ~= nil then
-		local s_effects = gui_temp[3]
-
-		s_effects[1].value = effect_data[OtherTrTable.muzzle_flash]
-		s_effects[2].value = effect_data[OtherTrTable.explosion_effect]
-		s_effects[3].value = effect_data[OtherTrTable.reload_sound]
-		s_effects[4].value = effect_data[OtherTrTable.sound]
+		load_new_data_table(gui_temp[3], effect_data) --load effect data
 	end
 
 	if gui.wait_for_data then

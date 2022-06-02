@@ -275,7 +275,6 @@
 				<Property key="Caption" value="Reset Defaults"/>
 				<Property key="FontName" value="SM_Button"/>
 				<Property key="TextAlign" value="Center"/>
-				<Property key="Visible" value="false"/>
 			</Widget>
 		</Widget>
 		<Widget type="Button" skin="PrimaryButton" position_real="0.64634146341463417 0.1111111111111111 0.32926829268292684 0.07407407407407407" align="Right Top" name="GetValues">
