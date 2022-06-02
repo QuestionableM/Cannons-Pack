@@ -390,10 +390,10 @@ function SmartCannon:server_requestCannonData(data, player)
 		[2] = sv_data.logic,
 		[3] = --effect data
 		{
-			[1] = sv_data[OtherTrTable.sound],
-			[2] = sv_data[OtherTrTable.muzzle_flash],
-			[3] = sv_data[OtherTrTable.reload_sound],
-			[4] = sv_data[OtherTrTable.explosion_effect]
+			[OtherTrTable.sound           ] = sv_data[OtherTrTable.sound],
+			[OtherTrTable.muzzle_flash    ] = sv_data[OtherTrTable.muzzle_flash],
+			[OtherTrTable.reload_sound    ] = sv_data[OtherTrTable.reload_sound],
+			[OtherTrTable.explosion_effect] = sv_data[OtherTrTable.explosion_effect]
 		}
 	}
 
@@ -624,49 +624,49 @@ function SmartCannon:client_GUI_CreateTempValTable()
 	local temp = {}
 	temp[1] = --number logic
 	{
-		[1]  = {name = "Fire Force (m/s)"              , type = 1, id = NumLogicTrTable.fire_force           , value = 0, min = 1, max = 99999999},
-		[2]  = {name = "Spread (deg)"                  , type = 1, id = NumLogicTrTable.fire_spread          , value = 0, min = 0, max = 360},
-		[3]  = {name = "Reload Time (ticks)"           , type = 1, id = NumLogicTrTable.reload_time          , value = 0, min = 0, max = 1000000},
-		[4]  = {name = "Explosion Level"               , type = 1, id = NumLogicTrTable.expl_level           , value = 0, min = 0.001, max = 99999999},
-		[5]  = {name = "Explosion Radius (m)"          , type = 1, id = NumLogicTrTable.expl_radius          , value = 0, min = 0.3, max = 100},
-		[6]  = {name = "Explosion Impulse Radius (m)"  , type = 1, id = NumLogicTrTable.expl_impulse_radius  , value = 0, min = 0.001, max = 99999999},
-		[7]  = {name = "Explosion Impulse Strength"    , type = 1, id = NumLogicTrTable.expl_impulse_strength, value = 0, min = 0, max = 99999999},
-		[8]  = {name = "Projectile Gravity"            , type = 1, id = NumLogicTrTable.projectile_gravity   , value = 0, min = -99999999, max = 99999999},
-		[9]  = {name = "Projectile Lifetime (s)"       , type = 1, id = NumLogicTrTable.projectile_lifetime  , value = 0, min = 0.001, max = 30},
-		[10] = {name = "Recoil"                        , type = 1, id = NumLogicTrTable.cannon_recoil        , value = 0, min = 0, max = 99999999},
-		[11] = {name = "Proximity Fuze (m)"            , type = 1, id = NumLogicTrTable.proximity_fuze       , value = 0, min = 0, max = 20},
-		[12] = {name = "Projectiles Per Shot"          , type = 1, id = NumLogicTrTable.projectile_per_shot  , value = 0, min = 0, max = 20, int = true},
-		[13] = {name = "X Projectile Offset (m)"       , type = 1, id = NumLogicTrTable.x_offset             , value = 0, min = -99999999, max = 99999999},
-		[14] = {name = "Y Projectile Offset (m)"       , type = 1, id = NumLogicTrTable.y_offset             , value = 0, min = -99999999, max = 99999999},
-		[15] = {name = "Z Projectile Offset (m)"       , type = 1, id = NumLogicTrTable.z_offset             , value = 0, min = -99999999, max = 99999999},
-		[16] = {name = "Projectile Type (Spudgun Mode)", type = 3, id = NumLogicTrTable.projectile_type      , value = 0, min = 0, max = projectile_type_count, list = projectile_type_table}
+		[1]  = {name = "Fire Force (m/s)"              , type = 1, id = NumLogicTrTable.fire_force           , value = 0, default = 700 , min = 1, max = 99999999},
+		[2]  = {name = "Spread (deg)"                  , type = 1, id = NumLogicTrTable.fire_spread          , value = 0, default = 0.2 , min = 0, max = 360},
+		[3]  = {name = "Reload Time (ticks)"           , type = 1, id = NumLogicTrTable.reload_time          , value = 0, default = 8   , min = 0, max = 1000000},
+		[4]  = {name = "Explosion Level"               , type = 1, id = NumLogicTrTable.expl_level           , value = 0, default = 5   , min = 0.001, max = 99999999},
+		[5]  = {name = "Explosion Radius (m)"          , type = 1, id = NumLogicTrTable.expl_radius          , value = 0, default = 0.5 , min = 0.3, max = 100},
+		[6]  = {name = "Explosion Impulse Radius (m)"  , type = 1, id = NumLogicTrTable.expl_impulse_radius  , value = 0, default = 15.0, min = 0.001, max = 99999999},
+		[7]  = {name = "Explosion Impulse Strength"    , type = 1, id = NumLogicTrTable.expl_impulse_strength, value = 0, default = 2000, min = 0, max = 99999999},
+		[8]  = {name = "Projectile Gravity"            , type = 1, id = NumLogicTrTable.projectile_gravity   , value = 0, default = 10  , min = -99999999, max = 99999999},
+		[9]  = {name = "Projectile Lifetime (s)"       , type = 1, id = NumLogicTrTable.projectile_lifetime  , value = 0, default = 15  , min = 0.001, max = 30},
+		[10] = {name = "Recoil"                        , type = 1, id = NumLogicTrTable.cannon_recoil        , value = 0, default = 0   , min = 0, max = 99999999},
+		[11] = {name = "Proximity Fuze (m)"            , type = 1, id = NumLogicTrTable.proximity_fuze       , value = 0, default = 0   , min = 0, max = 20},
+		[12] = {name = "Projectiles Per Shot"          , type = 1, id = NumLogicTrTable.projectile_per_shot  , value = 0, default = 0   , min = 0, max = 20, int = true},
+		[13] = {name = "X Projectile Offset (m)"       , type = 1, id = NumLogicTrTable.x_offset             , value = 0, default = 0   , min = -99999999, max = 99999999},
+		[14] = {name = "Y Projectile Offset (m)"       , type = 1, id = NumLogicTrTable.y_offset             , value = 0, default = 0   , min = -99999999, max = 99999999},
+		[15] = {name = "Z Projectile Offset (m)"       , type = 1, id = NumLogicTrTable.z_offset             , value = 0, default = 0   , min = -99999999, max = 99999999},
+		[16] = {name = "Projectile Type (Spudgun Mode)", type = 3, id = NumLogicTrTable.projectile_type      , value = 0, default = 0   , min = 0, max = projectile_type_count, list = projectile_type_table}
 	}
 
 	temp[2] = --logic
 	{
-		[1] = {name = "Ignore Cannon Rotation", type = 2, id = LogicTrTable.ignore_rotation_mode, value = false},
-		[2] = {name = "No Projectile Friction", type = 2, id = LogicTrTable.no_friction_mode    , value = false},
-		[3] = {name = "Spudgun Mode"          , type = 2, id = LogicTrTable.spudgun_mode        , value = false},
-		[4] = {name = "No Recoil Mode"        , type = 2, id = LogicTrTable.no_recoil_mode      , value = false},
-		[5] = {name = "Transfer Momentum"     , type = 2, id = LogicTrTable.transfer_momentum   , value = false}
+		[1] = {name = "Ignore Cannon Rotation", type = 2, id = LogicTrTable.ignore_rotation_mode, value = false, default = false},
+		[2] = {name = "No Projectile Friction", type = 2, id = LogicTrTable.no_friction_mode    , value = false, default = false},
+		[3] = {name = "Spudgun Mode"          , type = 2, id = LogicTrTable.spudgun_mode        , value = false, default = false},
+		[4] = {name = "No Recoil Mode"        , type = 2, id = LogicTrTable.no_recoil_mode      , value = false, default = false},
+		[5] = {name = "Transfer Momentum"     , type = 2, id = LogicTrTable.transfer_momentum   , value = false, default = false}
 	}
 
 	temp[3] = --effects
 	{
-		[1] = {name = "Muzzle Flash", value = 0, max = 4, type = 3, list = { --1 muzzle flash
+		[1] = {name = "Muzzle Flash", value = 0, default = 0, max = 4, type = 3, list = { --1 muzzle flash
 			[1] = { name = "Default"              }, [2] = { name = "Small Explosion"    },
 			[3] = { name = "Big Explosion"        }, [4] = { name = "Frier Muzzle Flash" },
 			[5] = { name = "Spinner Muzzle Flash" }
 		}},
-		[2] = {name = "Explosion Effect", value = 0, max = 4, type = 3, list = { --2 explosion effect
+		[2] = {name = "Explosion Effect", value = 0, default = 0, max = 4, type = 3, list = { --2 explosion effect
 			[1] = { name = "Default"       }, [2] = { name = "Little Explosion" },
 			[3] = { name = "Big Explosion" }, [4] = { name = "Giant Explosion"  },
 			[5] = { name = "Sparks"        }
 		}},
-		[3] = {name = "Reload Sound", value = 0, max = 1, type = 3, list = { --3 reloading effect
+		[3] = {name = "Reload Sound", value = 0, default = 0, max = 1, type = 3, list = { --3 reloading effect
 			[1] = { name = "Default" }, [2] = { name = "Heavy Realoading" }
 		}},
-		[4] = {name = "Shooting Sound", value = 0, max = 4, type = 3, list = { --4 shooting sound
+		[4] = {name = "Shooting Sound", value = 0, default = 0, max = 4, type = 3, list = { --4 shooting sound
 			[1] = { name = "Default"        }, [2] = { name = "Sound 1"      },
 			[3] = { name = "Potato Shotgun" }, [4] = { name = "Spudling Gun" },
 			[5] = { name = "Explosion"      }
