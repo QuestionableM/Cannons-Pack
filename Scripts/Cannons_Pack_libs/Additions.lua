@@ -242,7 +242,7 @@ if sm.gui then
 		_cpGuiSupported = true
 
 		_cpCreateGui = function(path)
-			return create_layout_func("$CONTENT_c0344d93-7492-46c8-88be-a61699e57041/Gui/Layouts/"..path)
+			return create_layout_func("$CONTENT_c0344d93-7492-46c8-88be-a61699e57041/Gui/Layouts/"..path, false, { backgroundAlpha = 0.5, hidesHotbar = true })
 		end
 	end
 end
