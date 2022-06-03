@@ -6,6 +6,7 @@ Cannons Pack version 4.6 changelog:
 3. Improved smoke effects for rockets
 4. Improved smoke effects for Smart Rocket Launcher
 5. Improved smoke for flares
+6. Added a new projectile to the smart cannon's spudgun mode: Powerful Potato
 
 Made by:
 Questionable Mark - creator of all the textures, UV maps and also some scripts and cannon models.
