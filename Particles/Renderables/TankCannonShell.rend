@@ -1,14 +1,13 @@
 {
-	"lodList" : [
+	"lodList":[
 		{
-			"mesh" : "$CONTENT_DATA/Particles/Mesh/TankCannonShell.obj",
-			"subMeshList" : [
+			"mesh":"$CONTENT_DATA/Particles/Mesh/TankCannonShell.obj",
+			"subMeshList":[
 				{
-					"material" : "DifAsgNor",
-					"textureList" : [
+					"material":"DifAsg",
+					"textureList":[
 						"$CONTENT_DATA/Objects/Textures/CP_default_dif.tga",
-						"$CONTENT_DATA/Objects/Textures/CP_default_asg.tga",
-						"$CONTENT_DATA/Objects/Textures/nonor_nor.tga"
+						"$CONTENT_DATA/Objects/Textures/CP_default_asg.tga"
 					]
 				}
 			]

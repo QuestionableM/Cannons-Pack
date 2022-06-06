@@ -4,20 +4,18 @@
 			"mesh":"$CONTENT_DATA/Objects/Mesh/SmartRocketDetector.fbx",
 			"subMeshList":[
 				{
-					"material":"DifAsgNor",
+					"material":"DifAsg",
 					"textureList":[
 						"$CONTENT_DATA/Objects/Textures/CP_default_dif.tga",
-						"$CONTENT_DATA/Objects/Textures/CP_default_asg.tga",
-						"$CONTENT_DATA/Objects/Textures/nonor_nor.tga"
+						"$CONTENT_DATA/Objects/Textures/CP_default_asg.tga"
 					]
 				},
 				{
-					"material":"UVAnimDifAsgNor",
+					"material":"UVAnimDifAsg",
 					"custom":{"uv0":{"u":0.001,"v":0.001}},
 					"textureList":[
 						"$CONTENT_DATA/Objects/Textures/CP_default_dif.tga",
-						"$CONTENT_DATA/Objects/Textures/CP_default_asg.tga",
-						"$CONTENT_DATA/Objects/Textures/nonor_nor.tga"
+						"$CONTENT_DATA/Objects/Textures/CP_default_asg.tga"
 					]
 				}
 			]

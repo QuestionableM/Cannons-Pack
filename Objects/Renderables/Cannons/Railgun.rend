@@ -5,20 +5,18 @@
 			"includes":[ "POSITION", "UV0", "NORMAL", "TANGENT", "BLEND_INDICES", "BLEND_WEIGHTS" ],
 			"subMeshList":[
 				{
-					"material":"DifAsgNor",
+					"material":"DifAsg",
 					"textureList":[
 						"$CONTENT_DATA/Objects/Textures/CP_default_dif.tga",
-						"$CONTENT_DATA/Objects/Textures/CP_default_asg.tga",
-						"$CONTENT_DATA/Objects/Textures/nonor_nor.tga"
+						"$CONTENT_DATA/Objects/Textures/CP_default_asg.tga"
 					]
 				},
 				{
-					"material":"UVAnimDifAsgNor",
+					"material":"UVAnimDifAsg",
 					"custom":{"uv0":{"u":0.01,"v":0.01}},
 					"textureList":[
 						"$CONTENT_DATA/Objects/Textures/CP_default_dif.tga",
-						"$CONTENT_DATA/Objects/Textures/CP_default_asg.tga",
-						"$CONTENT_DATA/Objects/Textures/nonor_nor.tga"
+						"$CONTENT_DATA/Objects/Textures/CP_default_asg.tga"
 					]
 				}
 			]
