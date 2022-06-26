@@ -42,17 +42,16 @@ function BasicCannon:client_getAvailableParentConnectionCount(connectionType)
 	return 0
 end
 
-function BasicCannon:server_updateAndCheckChild(port_uuid)
+function BasicCannon:server_updateAndCheckChild(port_uuids)
 	local sInteractable = self.interactable
 
 	local child = sInteractable:getChildren()[1]
 	if self.sv_saved_child ~= child then
 		self.sv_saved_child = child
 
-		if child and tostring(child.shape.uuid) ~= port_uuid then
+		if child and port_uuids[tostring(child.shape.uuid)] ~= true then
 			self.sv_saved_child = nil
 			sInteractable:disconnect(child)
-			return
 		end
 	end
 end
@@ -64,7 +63,7 @@ function BasicCannon:server_onFixedUpdate()
 	local active = parent and parent.active
 
 	local s_set = self.settings
-	self:server_updateAndCheckChild(s_set.port_uuid)
+	self:server_updateAndCheckChild(s_set.port_uuids)
 
 	if active and not self.reload then
 		self.reload = _cp_Shoot(self, s_set.reload, "client_shoot", EffectEnum.sht, s_set.impulse_dir * s_set.impulse_str)
@@ -73,7 +72,11 @@ function BasicCannon:server_onFixedUpdate()
 		self.proj_scr:server_sendProjectile(self, self.projectileConfig, s_set.proj_data_id)
 		
 		if self.sv_saved_child then
-			self.sv_saved_child:setActive(true)
+			local s_pub_data = self.sv_saved_child.publicData
+			if s_pub_data then
+				s_pub_data.canShoot = true
+				s_pub_data.reloadTime = self.reload
+			end
 		end
 	end
 	

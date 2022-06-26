@@ -7,7 +7,9 @@ local cannon_settings = {
 	["86b45499-9a8f-45ce-b9f9-80b6912fcc06"] = { --AircraftCannon
 		server_settings = {
 			cannon_config = {
-				port_uuid = "5164495e-b681-4647-b622-031317e6f6b4",
+				port_uuids = {
+					["5164495e-b681-4647-b622-031317e6f6b4"] = true
+				},
 				impulse_dir = _newVec(0, 0, -1),
 				auto_reload = true,
 				impulse_str = 700,
@@ -27,7 +29,9 @@ local cannon_settings = {
 	["49de462c-2f36-4ad5-802c-c4add235dc53"] = { --FlakCannon
 		server_settings = {
 			cannon_config = {
-				port_uuid = "5164495e-b681-4647-b622-031317e6f6b4",
+				port_uuids = {
+					["5164495e-b681-4647-b622-031317e6f6b4"] = true
+				},
 				impulse_dir = _newVec(0, 0, -1),
 				auto_reload = true,
 				impulse_str = 800,
@@ -48,7 +52,9 @@ local cannon_settings = {
 	["bd428d5e-c519-43fe-a75f-76cfddb5b700"] = { --HowitzerCannon
 		server_settings = {
 			cannon_config = {
-				port_uuid = "5164495e-b681-4647-b622-031317e6f6b4",
+				port_uuids = {
+					["5164495e-b681-4647-b622-031317e6f6b4"] = true
+				},
 				impulse_dir = _newVec(0, 0, -1),
 				auto_reload = false,
 				impulse_str = 50000,
@@ -68,7 +74,10 @@ local cannon_settings = {
 	["03e1ecbd-17ee-4045-a5d8-366f6e656555"] = { --M1AbramsCannon
 		server_settings = {
 			cannon_config = {
-				port_uuid = "5164495e-b681-4647-b622-031317e6f6b4",
+				port_uuids = {
+					["5164495e-b681-4647-b622-031317e6f6b4"] = true,
+					["3d410289-0079-4989-ba21-b211562147d5"] = true --breech from Machine Guns Pack
+				},
 				impulse_dir = _newVec(0, 0, -1),
 				auto_reload = false,
 				impulse_str = 7000,
@@ -88,7 +97,9 @@ local cannon_settings = {
 	["6c0bbf06-364f-4d51-98c2-1631b2d09cd5"] = { --NavalCannon
 		server_settings = {
 			cannon_config = {
-				port_uuid = "5164495e-b681-4647-b622-031317e6f6b4",
+				port_uuids = {
+					["5164495e-b681-4647-b622-031317e6f6b4"] = true
+				},
 				impulse_dir = _newVec(0, 0, -1),
 				auto_reload = false,
 				impulse_str = 42000,
@@ -108,7 +119,9 @@ local cannon_settings = {
 	["d0352961-c071-4278-8f23-99fcb8a7a377"] = { --NavalCannon2
 		server_settings = {
 			cannon_config = {
-				port_uuid = "5164495e-b681-4647-b622-031317e6f6b4",
+				port_uuids = {
+					["5164495e-b681-4647-b622-031317e6f6b4"] = true
+				},
 				impulse_dir = _newVec(0, 0, -1),
 				auto_reload = false,
 				impulse_str = 20000,
@@ -126,10 +139,16 @@ local cannon_settings = {
 		}
 	},
 	["35203ea3-8cc8-4ec9-9a26-c62c6eb5544d"] = { --SmartCannon
-		proj_data_id = ProjEnum.SmartCannon
+		proj_data_id = ProjEnum.SmartCannon,
+		port_uuids = {
+			["5164495e-b681-4647-b622-031317e6f6b4"] = true
+		}
 	},
 	["fd6130e4-261d-4875-a418-96fe33bb2714"] = { --SmallSmartCannon
-		proj_data_id = ProjEnum.SmallSmartCannon
+		proj_data_id = ProjEnum.SmallSmartCannon,
+		port_uuids = {
+			["5164495e-b681-4647-b622-031317e6f6b4"] = true
+		}
 	},
 	["2bcd658f-6344-4e37-9fb5-ced1e2249c7b"] = {}, --OrbitalCannon
 	["fac1f66a-a01c-4d8d-a838-e887455c38ae"] = {}, --Railgun
@@ -137,7 +156,6 @@ local cannon_settings = {
 	["04c1c87f-da87-4f5e-8d70-1ca452314728"] = { --RocketLauncher
 		server_settings = {
 			cannon_config = {
-				port_uuid = nil,
 				impulse_dir = _newVec(0, 0, -1),
 				auto_reload = true,
 				impulse_str = 2625,
@@ -158,7 +176,9 @@ local cannon_settings = {
 	["f85af057-f779-4eca-ad1c-58d2828d3404"] = { --SchwererGustavCannon
 		server_settings = {
 			cannon_config = {
-				port_uuid = "5164495e-b681-4647-b622-031317e6f6b4",
+				port_uuids = {
+					["5164495e-b681-4647-b622-031317e6f6b4"] = true
+				},
 				impulse_dir = _newVec(0, 0, -1),
 				auto_reload = false,
 				impulse_str = 200000,
@@ -178,7 +198,9 @@ local cannon_settings = {
 	["bc8178a9-8a38-4c43-a0d0-8a0f242a59c7"] = { --TankCannon
 		server_settings = {
 			cannon_config = {
-				port_uuid = "5164495e-b681-4647-b622-031317e6f6b4",
+				port_uuids ={
+					["5164495e-b681-4647-b622-031317e6f6b4"] = true
+				},
 				impulse_dir = _newVec(0, 0, -1),
 				auto_reload = false,
 				impulse_str = 4000,
@@ -198,7 +220,9 @@ local cannon_settings = {
 	["4295196d-cbd6-40c6-badc-ff9011208ad5"] = { --TankCannon2
 		server_settings = {
 			cannon_config = {
-				port_uuid = "5164495e-b681-4647-b622-031317e6f6b4",
+				port_uuids = {
+					["5164495e-b681-4647-b622-031317e6f6b4"] = true
+				},
 				impulse_dir = _newVec(0, 0, -1),
 				auto_reload = false,
 				impulse_str = 4000,
@@ -218,7 +242,9 @@ local cannon_settings = {
 	["388ccd57-1be9-40cc-b96b-69dd16eb4f32"] = { --TankCannon3
 		server_settings = {
 			cannon_config = {
-				port_uuid = "5164495e-b681-4647-b622-031317e6f6b4",
+				port_uuids = {
+					["5164495e-b681-4647-b622-031317e6f6b4"] = true
+				},
 				impulse_dir = _newVec(0, 0, -1),
 				auto_reload = false,
 				impulse_str = 6000,

@@ -152,6 +152,7 @@ function SmartCannon:server_onCreate()
 
 	local cannon_info = _cpCannons_loadCannonInfo(self)
 	self.proj_data_id = cannon_info.proj_data_id
+	self.ejector_uuids = cannon_info.port_uuids
 
 	self.projConfig = _cpProj_GetProjectileSettings(self.proj_data_id)
 
@@ -281,9 +282,22 @@ function SmartCannon:server_onFixedUpdate()
 	end
 
 	local child = self.interactable:getChildren()[1]
-	if child and tostring(child.shape.uuid) ~= "5164495e-b681-4647-b622-031317e6f6b4" then self.interactable:disconnect(child) end
+	if child ~= self.sv_saved_child then
+		self.sv_saved_child = child
+
+		if self.sv_saved_child and self.ejector_uuids[tostring(child.shape.uuid)] ~= true then
+			self.interactable:disconnect(child)
+			self.sv_saved_child = nil
+		end
+	end
+
 	if cannon_active and not self.reload then
-		if child then child:setActive(true) end
+		if self.sv_saved_child then
+			local s_pub_data = self.sv_saved_child.publicData
+			if s_pub_data then
+				s_pub_data.canShoot = true
+			end
+		end
 
 		self.reload = reload_time
 		self.network:sendToClients("client_displayEffect", EffectEnum.sht)
@@ -336,6 +350,7 @@ function SmartCannon:server_onFixedUpdate()
 		if reload_time >= _ReloadConfig.min_rld and self.reload == _ReloadConfig.val then
 			self.network:sendToClients("client_displayEffect", EffectEnum.rld)
 		end
+
 		self.reload = (self.reload > 1 and self.reload - 1) or nil
 	end
 

@@ -37,6 +37,8 @@ function ShellEjector:server_onCreate()
 	self.sv_anim = false
 	self.sv_anim_clock = 0
 	self.animStateBool = false
+
+	self.interactable.publicData = {}
 end
 
 function ShellEjector:server_resetAnimVals(state)
@@ -97,8 +99,9 @@ function ShellEjector:server_onFixedUpdate(dt)
 		end
 	end
 
-	if sInteractable.active and self.sv_cur_eff_data then
-		sInteractable:setActive(false)
+	local s_pub_data = sInteractable.publicData
+	if s_pub_data.canShoot and self.sv_cur_eff_data then
+		s_pub_data.canShoot = false
 		self:server_resetAnimVals(true)
 
 		_tableInsert(self.sv_shell_queue, self.sv_cur_eff_data)
