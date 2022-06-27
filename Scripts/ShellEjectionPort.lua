@@ -26,9 +26,6 @@ function ShellEjector:server_requestAnimData(data, caller)
 end
 
 function ShellEjector:server_onCreate()
-	local config = _cpCannons_loadCannonInfo(self)
-	self.sv_eff_table = config.effect_table
-
 	self.sv_shell_queue = {}
 	self.sv_queue_size = 0
 
@@ -62,9 +59,10 @@ end
 
 local proj_id_to_shell_data =
 {
-	[ShellEjectorEnum.SmallShell ] = { uuid = sm.uuid.new("c47f3479-9398-41ad-a75b-c4a254a14cff"), offset = 0.25, max_rot = 20 },
-	[ShellEjectorEnum.MediumShell] = { uuid = sm.uuid.new("850d690c-b4df-48d2-943a-f04b9a57a8b0"), offset = 0.25, max_rot = 10 },
-	[ShellEjectorEnum.LargeShell ] = { uuid = sm.uuid.new("6de55e3e-03ba-4b9c-80be-4fefa1f9a59b"), offset = 0.25, max_rot = 5  }
+	[ShellEjectorEnum.SmallShell ] = { uuid = sm.uuid.new("c47f3479-9398-41ad-a75b-c4a254a14cff"), offset = 0.25, max_rot = 25 },
+	[ShellEjectorEnum.MediumShell] = { uuid = sm.uuid.new("8d7c3cc8-864b-4ae6-ae3c-859d2fd72027"), offset = 0.25, max_rot = 20 },
+	[ShellEjectorEnum.LargeShell ] = { uuid = sm.uuid.new("850d690c-b4df-48d2-943a-f04b9a57a8b0"), offset = 0.25, max_rot = 10 },
+	[ShellEjectorEnum.GiantShell ] = { uuid = sm.uuid.new("6de55e3e-03ba-4b9c-80be-4fefa1f9a59b"), offset = 0.25, max_rot = 5  }
 }
 
 function ShellEjector:client_ejectShell(shell_id)
@@ -112,11 +110,17 @@ function ShellEjector:server_onFixedUpdate(dt)
 		self.sv_saved_parent = parent
 
 		if parent then
-			self.sv_cur_eff_data = self.sv_eff_table[tostring(parent.shape.uuid)]
-			if self.sv_cur_eff_data == nil then
-				self.sv_saved_parent = nil
-				parent:disconnect(sInteractable)
+			local p_pub_data = parent.publicData
+			if p_pub_data then
+				local ejected_shell_id = p_pub_data.ejectedShellId
+				if ejected_shell_id ~= nil then
+					self.sv_cur_eff_data = ejected_shell_id
+					return
+				end
 			end
+
+			parent:disconnect(sInteractable)
+			self.sv_saved_parent = nil
 		else
 			self.sv_cur_eff_data = nil
 		end

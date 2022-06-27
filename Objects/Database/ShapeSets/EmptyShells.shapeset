@@ -1,42 +1,55 @@
 {
-	"partList" : [
+	"partList": [
 		{
-			"name" : "AircraftCannonCase",
-			"uuid" : "c47f3479-9398-41ad-a75b-c4a254a14cff",
-			"renderable" : "$CONTENT_DATA/Objects/Renderables/EmptyShells/AircraftCannonCase.rend",
-			"rotationSet" : "PropZ",
-			"physicsMaterial" : "Metal",
-			"hull" : {
-				"col" : "$CONTENT_DATA/Objects/Collisions/EmptyShells/AircraftCannonShellCase.obj",
-				"x" : 1,
-				"y" : 1,
-				"z" : 1
+			"name": "SmallCannonCase",
+			"uuid": "c47f3479-9398-41ad-a75b-c4a254a14cff",
+			"renderable": "$CONTENT_DATA/Objects/Renderables/EmptyShells/SmallCannonCase.rend",
+			"rotationSet": "PropZ",
+			"physicsMaterial": "Metal",
+			"hull": {
+				"col": "$CONTENT_DATA/Objects/Collisions/EmptyShells/SmallCannonShellCase.obj",
+				"x": 1,
+				"y": 1,
+				"z": 1
 			}
 		},
 		{
-			"name" : "BigCannonCase",
-			"uuid" : "850d690c-b4df-48d2-943a-f04b9a57a8b0",
-			"renderable" : "$CONTENT_DATA/Objects/Renderables/EmptyShells/BigCannonCase.rend",
-			"rotationSet" : "PropZ",
-			"physicsMaterial" : "Metal",
-			"hull" : {
-				"col" : "$CONTENT_DATA/Objects/Collisions/EmptyShells/BigCannonShellCase.obj",
-				"x" : 4,
-				"y" : 2,
-				"z" : 2
+			"name": "MediumCannonCase",
+			"uuid": "8d7c3cc8-864b-4ae6-ae3c-859d2fd72027",
+			"renderable": "$CONTENT_DATA/Objects/Renderables/EmptyShells/MediumCannonCase.rend",
+			"rotationSet": "PropZ",
+			"physicsMaterial": "Metal",
+			"hull": {
+				"col": "$CONTENT_DATA/Objects/Collisions/EmptyShells/MediumCannonShellCase.obj",
+				"x": 2,
+				"y": 1,
+				"z": 1
 			}
 		},
 		{
-			"name" : "GiantCannonCase",
-			"uuid" : "6de55e3e-03ba-4b9c-80be-4fefa1f9a59b",
-			"renderable" : "$CONTENT_DATA/Objects/Renderables/EmptyShells/GiantCannonCase.rend",
-			"rotationSet" : "PropZ",
-			"physicsMaterial" : "Metal",
-			"hull" : {
-				"col" : "$CONTENT_DATA/Objects/Collisions/EmptyShells/GiantCannonShellCase.obj",
-				"x" : 6,
-				"y" : 2,
-				"z" : 2
+			"name": "BigCannonCase",
+			"uuid": "850d690c-b4df-48d2-943a-f04b9a57a8b0",
+			"renderable": "$CONTENT_DATA/Objects/Renderables/EmptyShells/BigCannonCase.rend",
+			"rotationSet": "PropZ",
+			"physicsMaterial": "Metal",
+			"hull": {
+				"col": "$CONTENT_DATA/Objects/Collisions/EmptyShells/BigCannonShellCase.obj",
+				"x": 4,
+				"y": 2,
+				"z": 2
+			}
+		},
+		{
+			"name": "GiantCannonCase",
+			"uuid": "6de55e3e-03ba-4b9c-80be-4fefa1f9a59b",
+			"renderable": "$CONTENT_DATA/Objects/Renderables/EmptyShells/GiantCannonCase.rend",
+			"rotationSet": "PropZ",
+			"physicsMaterial": "Metal",
+			"hull": {
+				"col": "$CONTENT_DATA/Objects/Collisions/EmptyShells/GiantCannonShellCase.obj",
+				"x": 6,
+				"y": 2,
+				"z": 2
 			}
 		}
 	]

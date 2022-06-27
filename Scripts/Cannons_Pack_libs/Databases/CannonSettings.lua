@@ -16,6 +16,7 @@ local cannon_settings = {
 	["86b45499-9a8f-45ce-b9f9-80b6912fcc06"] = { --AircraftCannon
 		server_settings = {
 			cannon_config = {
+				ejected_shell_id = ShellEjectorEnum.SmallShell,
 				port_uuids = port_whitelist_normal,
 				impulse_dir = _newVec(0, 0, -1),
 				auto_reload = true,
@@ -36,6 +37,7 @@ local cannon_settings = {
 	["49de462c-2f36-4ad5-802c-c4add235dc53"] = { --FlakCannon
 		server_settings = {
 			cannon_config = {
+				ejected_shell_id = ShellEjectorEnum.MediumShell,
 				port_uuids = {
 					[port_cp_shell_ejector] = true
 				},
@@ -59,6 +61,7 @@ local cannon_settings = {
 	["bd428d5e-c519-43fe-a75f-76cfddb5b700"] = { --HowitzerCannon
 		server_settings = {
 			cannon_config = {
+				ejected_shell_id = ShellEjectorEnum.LargeShell,
 				port_uuids = port_whitelist_normal,
 				impulse_dir = _newVec(0, 0, -1),
 				auto_reload = false,
@@ -79,6 +82,7 @@ local cannon_settings = {
 	["03e1ecbd-17ee-4045-a5d8-366f6e656555"] = { --M1AbramsCannon
 		server_settings = {
 			cannon_config = {
+				ejected_shell_id = ShellEjectorEnum.LargeShell,
 				port_uuids = port_whitelist_normal,
 				impulse_dir = _newVec(0, 0, -1),
 				auto_reload = false,
@@ -99,6 +103,7 @@ local cannon_settings = {
 	["6c0bbf06-364f-4d51-98c2-1631b2d09cd5"] = { --NavalCannon
 		server_settings = {
 			cannon_config = {
+				ejected_shell_id = ShellEjectorEnum.LargeShell,
 				port_uuids = port_whitelist_normal,
 				impulse_dir = _newVec(0, 0, -1),
 				auto_reload = false,
@@ -119,6 +124,7 @@ local cannon_settings = {
 	["d0352961-c071-4278-8f23-99fcb8a7a377"] = { --NavalCannon2
 		server_settings = {
 			cannon_config = {
+				ejected_shell_id = ShellEjectorEnum.LargeShell,
 				port_uuids = port_whitelist_normal,
 				impulse_dir = _newVec(0, 0, -1),
 				auto_reload = false,
@@ -137,10 +143,12 @@ local cannon_settings = {
 		}
 	},
 	["35203ea3-8cc8-4ec9-9a26-c62c6eb5544d"] = { --SmartCannon
+		ejected_shell_id = ShellEjectorEnum.MediumShell,
 		proj_data_id = ProjEnum.SmartCannon,
 		port_uuids = port_whitelist_normal
 	},
 	["fd6130e4-261d-4875-a418-96fe33bb2714"] = { --SmallSmartCannon
+		ejected_shell_id = ShellEjectorEnum.SmallShell,
 		proj_data_id = ProjEnum.SmallSmartCannon,
 		port_uuids = port_whitelist_normal
 	},
@@ -170,6 +178,7 @@ local cannon_settings = {
 	["f85af057-f779-4eca-ad1c-58d2828d3404"] = { --SchwererGustavCannon
 		server_settings = {
 			cannon_config = {
+				ejected_shell_id = ShellEjectorEnum.GiantShell,
 				port_uuids = {
 					[port_cp_shell_ejector] = true
 				},
@@ -192,7 +201,8 @@ local cannon_settings = {
 	["bc8178a9-8a38-4c43-a0d0-8a0f242a59c7"] = { --TankCannon
 		server_settings = {
 			cannon_config = {
-				port_uuids ={
+				ejected_shell_id = ShellEjectorEnum.LargeShell,
+				port_uuids = {
 					[port_cp_shell_ejector] = true
 				},
 				impulse_dir = _newVec(0, 0, -1),
@@ -214,6 +224,7 @@ local cannon_settings = {
 	["4295196d-cbd6-40c6-badc-ff9011208ad5"] = { --TankCannon2
 		server_settings = {
 			cannon_config = {
+				ejected_shell_id = ShellEjectorEnum.LargeShell,
 				port_uuids = {
 					[port_cp_shell_ejector] = true
 				},
@@ -236,6 +247,7 @@ local cannon_settings = {
 	["388ccd57-1be9-40cc-b96b-69dd16eb4f32"] = { --TankCannon3
 		server_settings = {
 			cannon_config = {
+				ejected_shell_id = ShellEjectorEnum.LargeShell,
 				port_uuids = port_whitelist_normal,
 				impulse_dir = _newVec(0, 0, -1),
 				auto_reload = false,
@@ -253,22 +265,7 @@ local cannon_settings = {
 			effect_distance = 150
 		}
 	},
-	[port_cp_shell_ejector] = { --ShellEjector
-		effect_table = {
-			["86b45499-9a8f-45ce-b9f9-80b6912fcc06"] = ShellEjectorEnum.SmallShell,  --AircraftCannon
-			["35203ea3-8cc8-4ec9-9a26-c62c6eb5544d"] = ShellEjectorEnum.SmallShell,  --SmartCannon
-			["fd6130e4-261d-4875-a418-96fe33bb2714"] = ShellEjectorEnum.SmallShell,  --SmallSmartCannon
-			["49de462c-2f36-4ad5-802c-c4add235dc53"] = ShellEjectorEnum.SmallShell,  --FlakCannon
-			["bd428d5e-c519-43fe-a75f-76cfddb5b700"] = ShellEjectorEnum.MediumShell, --HowitzerCannon
-			["bc8178a9-8a38-4c43-a0d0-8a0f242a59c7"] = ShellEjectorEnum.MediumShell, --TankCannon
-			["4295196d-cbd6-40c6-badc-ff9011208ad5"] = ShellEjectorEnum.MediumShell, --TankCannon2
-			["388ccd57-1be9-40cc-b96b-69dd16eb4f32"] = ShellEjectorEnum.MediumShell, --TankCannon3
-			["03e1ecbd-17ee-4045-a5d8-366f6e656555"] = ShellEjectorEnum.MediumShell, --M1AbramsCannon
-			["6c0bbf06-364f-4d51-98c2-1631b2d09cd5"] = ShellEjectorEnum.MediumShell, --NavalCannon
-			["d0352961-c071-4278-8f23-99fcb8a7a377"] = ShellEjectorEnum.MediumShell, --NavalCannon2
-			["f85af057-f779-4eca-ad1c-58d2828d3404"] = ShellEjectorEnum.LargeShell   --SchwererGustavCannon
-		}
-	},
+	[port_cp_shell_ejector] = {}, --ShellEjector
 	["0d30954b-4f81-4e4b-99c6-cbdef5eb6c76"] = { --LaserCannon
 		script_type = "LaserProjectile",
 		server_settings = {

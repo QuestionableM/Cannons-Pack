@@ -153,6 +153,7 @@ function SmartCannon:server_onCreate()
 	local cannon_info = _cpCannons_loadCannonInfo(self)
 	self.proj_data_id = cannon_info.proj_data_id
 	self.ejector_uuids = cannon_info.port_uuids
+	self.interactable.publicData = { ejectedShellId = cannon_info.ejected_shell_id }
 
 	self.projConfig = _cpProj_GetProjectileSettings(self.proj_data_id)
 

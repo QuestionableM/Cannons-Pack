@@ -31,7 +31,8 @@ ShellEjectorEnum =
 {
 	SmallShell  = 1,
 	MediumShell = 2,
-	LargeShell  = 3
+	LargeShell  = 3,
+	GiantShell  = 4
 }
 
 ProjSettingEnum =
