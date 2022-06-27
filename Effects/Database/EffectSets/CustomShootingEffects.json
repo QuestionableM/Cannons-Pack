@@ -11,7 +11,8 @@
 			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":2.0},"parameters":["size"],"delay":0.0},
 			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":2.0},"parameters":["shakeStrength","shakeRadius"],"duration":0.6,"delay":0.0},
 			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":2.0},"parameters":["color","radius","intensity"],"duration":0.6,"delay":0.0},
-			{"type":"particle","name":"Explosion_small_01","offset":{"x":0.0,"y":0.0,"z":2.0},"delay":0.0}
+			{"type":"particle","name":"Explosion_small_01","offset":{"x":0.0,"y":0.0,"z":2.0},"delay":0.0},
+			{"type":"particle","name":"barrel_smoke_naval_cannon","offset":{"x":0.0,"y":0.0,"z":2.0},"delay":0.0}
 		]
 	},
 	"TankCannon - Shoot":{
@@ -26,7 +27,8 @@
 			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":0.6},"delay":0.0},
 			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":0.6},"parameters":["shakeStrength","shakeRadius"],"duration":0.6,"delay":0.0},
 			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.6},"parameters":["color","radius","intensity"],"duration":0.6,"delay":0.0},
-			{"type":"particle","name":"Explosion_small_01","offset":{"x":0.0,"y":0.0,"z":1.0},"delay":0.0}
+			{"type":"particle","name":"Explosion_small_01","offset":{"x":0.0,"y":0.0,"z":1.0},"delay":0.0},
+			{"type":"particle","name":"barrel_smoke_tank_cannon","offset":{"x":0.0,"y":0.0,"z":0.5},"delay":0.0}
 		]
 	},
 	"FlakCannon - Shoot":{
@@ -56,7 +58,8 @@
 			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":2.0},"parameters":["size"],"delay":0.0},
 			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":2.0},"parameters":["shakeStrength","shakeRadius"],"duration":0.6,"delay":0.0},
 			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":2.0},"parameters":["color","radius","intensity"],"duration":0.6,"delay":0.0},
-			{"type":"particle","name":"Explosion_small_01","offset":{"x":0.0,"y":0.0,"z":2.0},"attached":true,"delay":0.0}
+			{"type":"particle","name":"Explosion_small_01","offset":{"x":0.0,"y":0.0,"z":2.0},"attached":true,"delay":0.0},
+			{"type":"particle","name":"barrel_smoke_tank_cannon3","offset":{"x":0.0,"y":0.0,"z":1.4},"delay":0.0}
 		]
 	},
 	"DoraCannon - Shoot":{
@@ -71,7 +74,8 @@
 			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":4.0},"parameters":["size"],"delay":0.0},
 			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":4.0},"parameters":["shakeStrength","shakeRadius"],"duration":1.0,"delay":0.0},
 			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":4.0},"parameters":["color","radius","intensity"],"duration":1.0,"delay":0.0},
-			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":0.0,"z":4.0},"attached":true,"delay":0.0}
+			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":0.0,"z":4.0},"attached":true,"delay":0.0},
+			{"type":"particle","name":"barrel_smoke_schwerer_gustav","offset":{"x":0.0,"y":0.0,"z":3.4,"delay":0.0}}
 		]
 	},
 	"AircraftCannon - Shoot":{
@@ -101,7 +105,8 @@
 			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":1.8},"parameters":["size"],"delay":0.0},
 			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":1.8},"parameters":["shakeStrength","shakeRadius"],"duration":0.6,"delay":0.0},
 			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":1.8},"parameters":["color","radius","intensity"],"duration":0.6,"delay":0.0},
-			{"type":"particle","name":"Explosion_small_01","offset":{"x":0.0,"y":0.0,"z":1.8},"attached":true,"delay":0.0}
+			{"type":"particle","name":"Explosion_small_01","offset":{"x":0.0,"y":0.0,"z":1.8},"attached":true,"delay":0.0},
+			{"type":"particle","name":"barrel_smoke_tank_cannon3","offset":{"x":0.0,"y":-0.1,"z":1.1},"delay":0.0}
 		]
 	},
 	"Railgun - Charge":{
@@ -176,7 +181,8 @@
 			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":1.5},"parameters":["size"],"delay":0.0},
 			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":1.5},"parameters":["shakeStrength","shakeRadius"],"duration":0.6,"delay":0.0},
 			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":1.5},"parameters":["color","radius","intensity"],"duration":0.6,"delay":0.0},
-			{"type":"particle","name":"Explosion_small_01","offset":{"x":0.0,"y":0.0,"z":1.5},"attached":true,"delay":0.0}
+			{"type":"particle","name":"Explosion_small_01","offset":{"x":0.0,"y":0.0,"z":1.5},"attached":true,"delay":0.0},
+			{"type":"particle","name":"barrel_smoke_tank_cannon3","offset":{"x":0.0,"y":0.0,"z":1.1},"delay":0.0}
 		]
 	},
 	"HowitzerCannon - Shoot":{
@@ -191,7 +197,8 @@
 			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":3.8},"parameters":["size"],"delay":0.0},
 			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":3.8},"parameters":["shakeStrength","shakeRadius"],"duration":0.8,"delay":0.0},
 			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":3.8},"parameters":["color","radius","intensity"],"duration":0.8,"delay":0.0},
-			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":0.0,"z":3.8},"attached":true,"delay":0.0}
+			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":0.0,"z":3.8},"attached":true,"delay":0.0},
+			{"type":"particle","name":"barrel_smoke_naval_cannon","offset":{"x":0.0,"y":0.0,"z":2.3},"delay":0.0}
 		]
 	},
 	"Railgun2Cannon - Shoot":{

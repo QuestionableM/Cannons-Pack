@@ -33,6 +33,12 @@
 		"ParticleEffects/NumberLogicCannonShell.json",
 		"ParticleEffects/Flare/FlareShell.json",
 		"ParticleEffects/SmallSmartCannonShell.json",
-		"ParticleEffects/LaserCannon/LaserCannonShell.json"
+		"ParticleEffects/LaserCannon/LaserCannonShell.json",
+
+		//Barrel smoke effects
+		"ParticleEffects/BarrelSmoke/barrel_smoke_naval_cannon.json",
+		"ParticleEffects/BarrelSmoke/barrel_smoke_tank_cannon.json",
+		"ParticleEffects/BarrelSmoke/barrel_smoke_tank_cannon3.json",
+		"ParticleEffects/BarrelSmoke/barrel_smoke_schwerer_gustav.json"
 	]
 }
