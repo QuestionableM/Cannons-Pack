@@ -3,7 +3,7 @@
 	Questionable Mark
 ]]
 
---if ShellEjector then return end
+if ShellEjector then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 ShellEjector = class(GLOBAL_SCRIPT)
 ShellEjector.maxParentCount = 1
@@ -105,30 +105,29 @@ function ShellEjector:server_TryEjectShell()
 	end
 end
 
+function ShellEjector:server_updateParent(s_interactable)
+	local parent = s_interactable:getSingleParent()
+	if parent then
+		local p_pub_data = parent.publicData
+		if p_pub_data then
+			local ejected_shell_id = p_pub_data.ejectedShellId
+			if ejected_shell_id ~= nil then
+				self.sv_cur_eff_data = ejected_shell_id
+				return
+			end
+		end
+
+		parent:disconnect(s_interactable)
+	else
+		self.sv_cur_eff_data = nil
+	end
+end
+
 function ShellEjector:server_onFixedUpdate(dt)
 	local sInteractable = self.interactable
 	if not _smExists(sInteractable) then return end
 
-	local parent = sInteractable:getSingleParent()
-	if self.sv_saved_parent ~= parent then
-		self.sv_saved_parent = parent
-
-		if parent then
-			local p_pub_data = parent.publicData
-			if p_pub_data then
-				local ejected_shell_id = p_pub_data.ejectedShellId
-				if ejected_shell_id ~= nil then
-					self.sv_cur_eff_data = ejected_shell_id
-					return
-				end
-			end
-
-			parent:disconnect(sInteractable)
-			self.sv_saved_parent = nil
-		else
-			self.sv_cur_eff_data = nil
-		end
-	end
+	self:server_updateParent(sInteractable)
 
 	local s_pub_data = sInteractable.publicData
 	if s_pub_data.canShoot and self.sv_cur_eff_data then

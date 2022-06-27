@@ -3,7 +3,7 @@
 	Questionable Mark
 ]]
 
---if SmartCannon then return end
+if SmartCannon then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 SmartCannon = class(GLOBAL_SCRIPT)
 SmartCannon.maxParentCount = -1
@@ -111,6 +111,7 @@ function SmartCannon:server_onCreate()
 		[OtherTrTable.muzzle_flash    ] = 0,
 		[OtherTrTable.reload_sound    ] = 0,
 		[OtherTrTable.explosion_effect] = 0,
+		[OtherTrTable.ejected_shell_id] = -1,
 		version = 1
 	}
 
@@ -157,14 +158,14 @@ function SmartCannon:server_onCreate()
 	--Load the current ejected shell id
 	local saved_ejected_shell_id = self.sv_settings[OtherTrTable.ejected_shell_id]
 	local current_shell_id = nil
-	if saved_ejected_shell_id == "number" then
-		current_shell_id = saved_ejected_shell_id
-	else
+	if saved_ejected_shell_id == -1 then
 		current_shell_id = cannon_info.ejected_shell_id
+	else
+		current_shell_id = saved_ejected_shell_id + 1
 	end
 
-	self.interactable.publicData = { ejectedShellId = current_shell_id }
-	
+	self.interactable.publicData = { ejectedShellId = current_shell_id, allowedPorts = cannon_info.port_uuids }
+
 	--Read projectile config
 	self.projConfig = _cpProj_GetProjectileSettings(self.proj_data_id)
 

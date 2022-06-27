@@ -5,11 +5,13 @@
 
 local port_cp_shell_ejector = "5164495e-b681-4647-b622-031317e6f6b4" --Shell ejector from Cannons Pack
 local port_mgp_breech01     = "3d410289-0079-4989-ba21-b211562147d5" --Breech from Machine Guns Pack
+local port_mgp_breech02     = "379449f7-27ca-4aea-b723-f841406bbacc" --Breech from Machine Guns Pack
 
 local port_whitelist_normal =
 {
 	[port_cp_shell_ejector] = true,
-	[port_mgp_breech01] = true
+	[port_mgp_breech01] = true,
+	[port_mgp_breech02] = true
 }
 
 local cannon_settings = {
