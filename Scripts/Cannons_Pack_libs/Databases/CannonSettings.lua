@@ -59,9 +59,7 @@ local cannon_settings = {
 	["bd428d5e-c519-43fe-a75f-76cfddb5b700"] = { --HowitzerCannon
 		server_settings = {
 			cannon_config = {
-				port_uuids = {
-					[port_cp_shell_ejector] = true
-				},
+				port_uuids = port_whitelist_normal,
 				impulse_dir = _newVec(0, 0, -1),
 				auto_reload = false,
 				impulse_str = 50000,
