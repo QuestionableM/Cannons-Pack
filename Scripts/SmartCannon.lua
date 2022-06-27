@@ -3,7 +3,7 @@
 	Questionable Mark
 ]]
 
-if SmartCannon then return end
+--if SmartCannon then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 SmartCannon = class(GLOBAL_SCRIPT)
 SmartCannon.maxParentCount = -1
@@ -54,7 +54,7 @@ local NumLogicTrTable =
 }
 
 local LogicTrTable = {spudgun_mode = 1, no_friction_mode = 2, ignore_rotation_mode = 3, no_recoil_mode = 4, transfer_momentum = 5}
-local OtherTrTable = {sound = 1, muzzle_flash = 2, reload_sound = 3, explosion_effect = 4}
+local OtherTrTable = {sound = 1, muzzle_flash = 2, reload_sound = 3, explosion_effect = 4, ejected_shell_id = 5}
 
 local projectile_type_table =
 {
@@ -153,8 +153,19 @@ function SmartCannon:server_onCreate()
 	local cannon_info = _cpCannons_loadCannonInfo(self)
 	self.proj_data_id = cannon_info.proj_data_id
 	self.ejector_uuids = cannon_info.port_uuids
-	self.interactable.publicData = { ejectedShellId = cannon_info.ejected_shell_id }
 
+	--Load the current ejected shell id
+	local saved_ejected_shell_id = self.sv_settings[OtherTrTable.ejected_shell_id]
+	local current_shell_id = nil
+	if saved_ejected_shell_id == "number" then
+		current_shell_id = saved_ejected_shell_id
+	else
+		current_shell_id = cannon_info.ejected_shell_id
+	end
+
+	self.interactable.publicData = { ejectedShellId = current_shell_id }
+	
+	--Read projectile config
 	self.projConfig = _cpProj_GetProjectileSettings(self.proj_data_id)
 
 	local sv_expl_eff = self.sv_settings[OtherTrTable.explosion_effect]
@@ -411,7 +422,8 @@ function SmartCannon:server_requestCannonData(data, player)
 			[OtherTrTable.sound           ] = sv_data[OtherTrTable.sound],
 			[OtherTrTable.muzzle_flash    ] = sv_data[OtherTrTable.muzzle_flash],
 			[OtherTrTable.reload_sound    ] = sv_data[OtherTrTable.reload_sound],
-			[OtherTrTable.explosion_effect] = sv_data[OtherTrTable.explosion_effect]
+			[OtherTrTable.explosion_effect] = sv_data[OtherTrTable.explosion_effect],
+			[OtherTrTable.ejected_shell_id] = self.interactable.publicData.ejectedShellId - 1
 		}
 	}
 
@@ -453,6 +465,8 @@ function SmartCannon:server_setNewSettings(data)
 	sv_set[OtherTrTable.sound           ] = eff_data[OtherTrTable.sound]
 	sv_set[OtherTrTable.reload_sound    ] = eff_data[OtherTrTable.reload_sound]
 	sv_set[OtherTrTable.muzzle_flash    ] = eff_data[OtherTrTable.muzzle_flash]
+	sv_set[OtherTrTable.ejected_shell_id] = eff_data[OtherTrTable.ejected_shell_id]
+	self.interactable.publicData.ejectedShellId = eff_data[OtherTrTable.ejected_shell_id] + 1
 
 	self.network:sendToClients("client_setEffects", self:server_prepareEffectTable())
 	self.storage:save(self.sv_settings)
@@ -702,6 +716,10 @@ function SmartCannon:client_GUI_CreateTempValTable()
 			[1] = { name = "Default"        }, [2] = { name = "Sound 1"      },
 			[3] = { name = "Potato Shotgun" }, [4] = { name = "Spudling Gun" },
 			[5] = { name = "Explosion"      }
+		}},
+		[5] = {name = "Ejector Shell Model", value = 0, default = 0, max = 3, type = 3, id = OtherTrTable.ejected_shell_id, list = { --5 ejected shell model
+			[1] = { name = "Small Shell" }, [2] = { name = "Medium Shell" },
+			[3] = { name = "Large Shell" }, [4] = { name = "Giant Shell"  }
 		}}
 	}
 

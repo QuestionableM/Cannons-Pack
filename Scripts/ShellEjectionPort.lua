@@ -3,7 +3,7 @@
 	Questionable Mark
 ]]
 
-if ShellEjector then return end
+--if ShellEjector then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 ShellEjector = class(GLOBAL_SCRIPT)
 ShellEjector.maxParentCount = 1
@@ -65,18 +65,22 @@ local proj_id_to_shell_data =
 	[ShellEjectorEnum.GiantShell ] = { uuid = sm.uuid.new("6de55e3e-03ba-4b9c-80be-4fefa1f9a59b"), offset = 0.25, max_rot = 5  }
 }
 
-function ShellEjector:client_ejectShell(shell_id)
+function ShellEjector:client_ejectShell(shell_id, dt)
 	local shell_data = proj_id_to_shell_data[shell_id]
 
 	--Calculate the shell rotation
 	local angle_axis = sm.quat.angleAxis(math.rad(90), sm.vec3.new(0, 1, 0))
 	local final_quat = self.shape.worldRotation * angle_axis
 
+	local shape_velocity = self.shape.velocity
 	--Calculate the shell position
-	local shell_pos = self.shape.worldPosition + self.shape.at * shell_data.offset
+	local dt_time = self.cl_delta_time or 0
+	local pos_prediction = (shape_velocity * dt_time) * 1.9
+	local shell_pos = (self.shape.worldPosition + self.shape.at * shell_data.offset) + pos_prediction
 
 	--Calculate the shell velocity
-	local shell_vel = sm.noise.gunSpread(self.shape.at, 20) * 5
+	local shell_vel_val = math.random(40, 50) / 10
+	local shell_vel = (sm.noise.gunSpread(self.shape.at, 20) * shell_vel_val) + shape_velocity
 
 	local max_rot = shell_data.max_rot
 	local angular_vel = sm.vec3.new(0, math.random(-max_rot, max_rot), math.random(-max_rot, max_rot))
@@ -140,6 +144,8 @@ function ShellEjector:server_onFixedUpdate(dt)
 end
 
 function ShellEjector:client_onUpdate(dt)
+	self.cl_delta_time = dt
+
 	local sInteractable = self.interactable
 	if not _smExists(sInteractable) then return end
 
