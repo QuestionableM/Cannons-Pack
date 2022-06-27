@@ -1,7 +1,7 @@
 {
 	"lodList":[
 		{
-			"mesh":"$CONTENT_DATA/Effects/Mesh/ShellCases/GiantCannonCase.obj",
+			"mesh":"$CONTENT_DATA/Objects/Mesh/EmptyShells/AircraftCannonCase.obj",
 			"subMeshList":[
 				{
 					"material":"DifAsg",

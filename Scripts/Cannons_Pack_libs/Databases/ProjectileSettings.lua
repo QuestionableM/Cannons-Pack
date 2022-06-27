@@ -3,58 +3,62 @@
 	Questionable Mark
 ]]
 
-ProjEnum = {
-	AircraftCannon = 1,
-	FlakCannon = 2,
-	HowitzerCannon = 3,
-	M1AbramsCannon = 4,
-	NavalCannon = 5,
-	NavalCannon2 = 6,
-	RocketLauncher = 7,
+ProjEnum =
+{
+	AircraftCannon       = 1,
+	FlakCannon           = 2,
+	HowitzerCannon       = 3,
+	M1AbramsCannon       = 4,
+	NavalCannon          = 5,
+	NavalCannon2         = 6,
+	RocketLauncher       = 7,
 	SchwererGustavCannon = 8,
-	TankCannon = 9,
-	TankCannon2 = 10,
-	TankCannon3 = 11,
-	OrbitalCannon = 12,
+	TankCannon           = 9,
+	TankCannon2          = 10,
+	TankCannon3          = 11,
+	OrbitalCannon        = 12,
 	OrbitalCannonPowShot = 13,
-	LaserCannon = 14,
-
-	ShellEjectorSmall = 15,
-	ShellEjectorMedium = 16,
-	ShellEjectorLarge = 17,
-
-	EMPCannon = 18,
-	SmartRocketLauncher = 19,
-	Railgun = 20,
-	Railgun2 = 21,
-	SmartCannon = 22,
-	SmallSmartCannon = 23
+	LaserCannon          = 14,
+	EMPCannon            = 15,
+	SmartRocketLauncher  = 16,
+	Railgun              = 17,
+	Railgun2             = 18,
+	SmartCannon          = 19,
+	SmallSmartCannon     = 20
 }
 
-ProjSettingEnum = {
-	localPosition = 1,
-	localVelocity = 2,
-	position = 3,
-	velocity = 4,
-	friction = 5,
-	gravity = 6,
-	shellEffect = 7,
-	lifetime = 8,
-	explosionEffect = 9,
-	explosionLevel = 10,
-	explosionRadius = 11,
-	explosionImpulseRadius = 12,
+ShellEjectorEnum =
+{
+	SmallShell  = 1,
+	MediumShell = 2,
+	LargeShell  = 3
+}
+
+ProjSettingEnum =
+{
+	localPosition            = 1,
+	localVelocity            = 2,
+	position                 = 3,
+	velocity                 = 4,
+	friction                 = 5,
+	gravity                  = 6,
+	shellEffect              = 7,
+	lifetime                 = 8,
+	explosionEffect          = 9,
+	explosionLevel           = 10,
+	explosionRadius          = 11,
+	explosionImpulseRadius   = 12,
 	explosionImpulseStrength = 13,
-	syncEffect = 14,
-	proxFuze = 15,
-	keep_effect = 16,
-	collision_size = 17,
-	disconnectRadius = 18,
-	player = 19,
-	mode = 20,
-	speed = 21,
-	count = 22,
-	obstacleAvoidance = 23
+	syncEffect               = 14,
+	proxFuze                 = 15,
+	keep_effect              = 16,
+	collision_size           = 17,
+	disconnectRadius         = 18,
+	player                   = 19,
+	mode                     = 20,
+	speed                    = 21,
+	count                    = 22,
+	obstacleAvoidance        = 23
 }
 
 local function TranslateSettings(set_table)
@@ -188,24 +192,6 @@ local ProjSettings = {
 	[ProjEnum.LaserCannon] = TranslateSettings({
 		position = _newVec(0, 0, 0.6),
 		lifetime = 10
-	}),
-	[ProjEnum.ShellEjectorSmall] = TranslateSettings({
-		position = _newVec(0, 0.15, 0),			velocity = 7,
-		friction = 0.007,						gravity = 10,
-		shellEffect = "AircraftCannon - Case",	lifetime = 8,
-		collision_size = 2
-	}),
-	[ProjEnum.ShellEjectorMedium] = TranslateSettings({
-		position = _newVec(0, 0.15, 0),			velocity = 7,
-		friction = 0.007,						gravity = 10,
-		shellEffect = "BigCannonCase",	lifetime = 8,
-		collision_size = 4
-	}),
-	[ProjEnum.ShellEjectorLarge] = TranslateSettings({
-		position = _newVec(0, 0.15, 0),		velocity = 7,
-		friction = 0.007,					gravity = 10,
-		shellEffect = "GiantCannonCase",	lifetime = 8,
-		collision_size = 8
 	}),
 	[ProjEnum.EMPCannon] = TranslateSettings({
 		position = _newVec(0, 0, 0),

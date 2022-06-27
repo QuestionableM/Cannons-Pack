@@ -255,18 +255,18 @@ local cannon_settings = {
 	},
 	[port_cp_shell_ejector] = { --ShellEjector
 		effect_table = {
-			["86b45499-9a8f-45ce-b9f9-80b6912fcc06"] = ProjEnum.ShellEjectorSmall, --AircraftCannon
-			["35203ea3-8cc8-4ec9-9a26-c62c6eb5544d"] = ProjEnum.ShellEjectorSmall, --SmartCannon
-			["fd6130e4-261d-4875-a418-96fe33bb2714"] = ProjEnum.ShellEjectorSmall, --SmallSmartCannon
-			["49de462c-2f36-4ad5-802c-c4add235dc53"] = ProjEnum.ShellEjectorSmall, --FlakCannon
-			["bd428d5e-c519-43fe-a75f-76cfddb5b700"] = ProjEnum.ShellEjectorMedium, --HowitzerCannon
-			["bc8178a9-8a38-4c43-a0d0-8a0f242a59c7"] = ProjEnum.ShellEjectorMedium, --TankCannon
-			["4295196d-cbd6-40c6-badc-ff9011208ad5"] = ProjEnum.ShellEjectorMedium, --TankCannon2
-			["388ccd57-1be9-40cc-b96b-69dd16eb4f32"] = ProjEnum.ShellEjectorMedium, --TankCannon3
-			["03e1ecbd-17ee-4045-a5d8-366f6e656555"] = ProjEnum.ShellEjectorMedium, --M1AbramsCannon
-			["6c0bbf06-364f-4d51-98c2-1631b2d09cd5"] = ProjEnum.ShellEjectorMedium, --NavalCannon
-			["d0352961-c071-4278-8f23-99fcb8a7a377"] = ProjEnum.ShellEjectorMedium, --NavalCannon2
-			["f85af057-f779-4eca-ad1c-58d2828d3404"] = ProjEnum.ShellEjectorLarge --SchwererGustavCannon
+			["86b45499-9a8f-45ce-b9f9-80b6912fcc06"] = ShellEjectorEnum.SmallShell,  --AircraftCannon
+			["35203ea3-8cc8-4ec9-9a26-c62c6eb5544d"] = ShellEjectorEnum.SmallShell,  --SmartCannon
+			["fd6130e4-261d-4875-a418-96fe33bb2714"] = ShellEjectorEnum.SmallShell,  --SmallSmartCannon
+			["49de462c-2f36-4ad5-802c-c4add235dc53"] = ShellEjectorEnum.SmallShell,  --FlakCannon
+			["bd428d5e-c519-43fe-a75f-76cfddb5b700"] = ShellEjectorEnum.MediumShell, --HowitzerCannon
+			["bc8178a9-8a38-4c43-a0d0-8a0f242a59c7"] = ShellEjectorEnum.MediumShell, --TankCannon
+			["4295196d-cbd6-40c6-badc-ff9011208ad5"] = ShellEjectorEnum.MediumShell, --TankCannon2
+			["388ccd57-1be9-40cc-b96b-69dd16eb4f32"] = ShellEjectorEnum.MediumShell, --TankCannon3
+			["03e1ecbd-17ee-4045-a5d8-366f6e656555"] = ShellEjectorEnum.MediumShell, --M1AbramsCannon
+			["6c0bbf06-364f-4d51-98c2-1631b2d09cd5"] = ShellEjectorEnum.MediumShell, --NavalCannon
+			["d0352961-c071-4278-8f23-99fcb8a7a377"] = ShellEjectorEnum.MediumShell, --NavalCannon2
+			["f85af057-f779-4eca-ad1c-58d2828d3404"] = ShellEjectorEnum.LargeShell   --SchwererGustavCannon
 		}
 	},
 	["0d30954b-4f81-4e4b-99c6-cbdef5eb6c76"] = { --LaserCannon

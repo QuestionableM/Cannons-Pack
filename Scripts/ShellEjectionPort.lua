@@ -15,8 +15,6 @@ ShellEjector.colorNormal    = _colorNew(0x8a0038ff)
 ShellEjector.colorHighlight = _colorNew(0xff0067ff)
 
 function ShellEjector:client_onCreate()
-	self:client_injectScript("BulletShell")
-
 	self.cl_anim = false
 	self.cl_anim_val = 0.0
 
@@ -62,13 +60,38 @@ function ShellEjector:server_updateAnimVals(dt)
 	end
 end
 
+local proj_id_to_shell_data =
+{
+	[ShellEjectorEnum.SmallShell ] = { uuid = sm.uuid.new("c47f3479-9398-41ad-a75b-c4a254a14cff"), offset = 0.25, max_rot = 20 },
+	[ShellEjectorEnum.MediumShell] = { uuid = sm.uuid.new("850d690c-b4df-48d2-943a-f04b9a57a8b0"), offset = 0.25, max_rot = 10 },
+	[ShellEjectorEnum.LargeShell ] = { uuid = sm.uuid.new("6de55e3e-03ba-4b9c-80be-4fefa1f9a59b"), offset = 0.25, max_rot = 5  }
+}
+
+function ShellEjector:client_ejectShell(shell_id)
+	local shell_data = proj_id_to_shell_data[shell_id]
+
+	--Calculate the shell rotation
+	local angle_axis = sm.quat.angleAxis(math.rad(90), sm.vec3.new(0, 1, 0))
+	local final_quat = self.shape.worldRotation * angle_axis
+
+	--Calculate the shell position
+	local shell_pos = self.shape.worldPosition + self.shape.at * shell_data.offset
+
+	--Calculate the shell velocity
+	local shell_vel = sm.noise.gunSpread(self.shape.at, 20) * 5
+
+	local max_rot = shell_data.max_rot
+	local angular_vel = sm.vec3.new(0, math.random(-max_rot, max_rot), math.random(-max_rot, max_rot))
+	local shell_lifetime = math.random(2, 10)
+
+	sm.debris.createDebris(shell_data.uuid, shell_pos, final_quat, shell_vel, angular_vel, sm.color.new(0xffff00ff), shell_lifetime)
+end
+
 function ShellEjector:server_TryEjectShell()
 	if self.sv_queue_size > 0 and not self.shell_launch_delay and self.cl_anim_val == 1.0 then
 		self.shell_launch_delay = 1
 		
-		local _cur_shell = self.sv_shell_queue[1]
-		BulletShell:server_sendProjectile(self, _cur_shell)
-
+		self.network:sendToClients("client_ejectShell", self.sv_shell_queue[1])
 		self:server_resetAnimVals(true)
 
 		_tableRemove(self.sv_shell_queue, 1)

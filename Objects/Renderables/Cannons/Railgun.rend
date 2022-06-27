@@ -1,20 +1,20 @@
 {
-	"lodList":[
+	"lodList": [
 		{
-			"mesh":"$CONTENT_DATA/Objects/Mesh/Railgun.fbx",
-			"includes":[ "POSITION", "UV0", "NORMAL", "TANGENT", "BLEND_INDICES", "BLEND_WEIGHTS" ],
-			"subMeshList":[
+			"includes": [ "POSITION", "UV0", "NORMAL", "TANGENTS", "BLEND_INDICES", "BLEND_WEIGHTS" ],
+			"mesh": "$CONTENT_DATA/Objects/Mesh/Railgun.fbx",
+			"subMeshList": [
 				{
-					"material":"DifAsg",
-					"textureList":[
+					"material": "DifAsg",
+					"textureList": [
 						"$CONTENT_DATA/Objects/Textures/CP_default_dif.tga",
 						"$CONTENT_DATA/Objects/Textures/CP_default_asg.tga"
 					]
 				},
 				{
-					"material":"UVAnimDifAsg",
-					"custom":{"uv0":{"u":0.01,"v":0.01}},
-					"textureList":[
+					"custom": {"uv0":{"u":0.01,"v":0.01}},
+					"material": "UVAnimDifAsg",
+					"textureList": [
 						"$CONTENT_DATA/Objects/Textures/CP_default_dif.tga",
 						"$CONTENT_DATA/Objects/Textures/CP_default_asg.tga"
 					]
