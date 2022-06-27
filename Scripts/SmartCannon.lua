@@ -295,7 +295,8 @@ function SmartCannon:server_onFixedUpdate()
 		if self.sv_saved_child then
 			local s_pub_data = self.sv_saved_child.publicData
 			if s_pub_data then
-				s_pub_data.canShoot = true
+				s_pub_data.canShoot   = true
+				s_pub_data.reloadTime = reload_time
 			end
 		end
 

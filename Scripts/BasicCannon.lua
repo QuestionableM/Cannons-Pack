@@ -24,6 +24,7 @@ function BasicCannon:server_onCreate()
 	self.projectileConfig = settings.proj_config or {}
 	self.settings = settings.cannon_config
 	self.proj_scr = _CP_gScript[settings.t_script]
+	self.interactable.publicData = { allowedPorts = self.settings.port_uuids }
 end
 
 function BasicCannon:client_getAvailableChildConnectionCount(connectionType)
