@@ -7,14 +7,16 @@
 				"type":"particle",
 				"name":"TankShell",
 				"offset":{"x":0.65,"y":0.0,"z":0.0},
-				"delay":0.0
+				"delay":0.0,
+				"duration":30.0
 			},
 			{
 				"type":"pointLight",
 				"name":"",
 				"offset":{"x":0.65,"y":0.0,"z":0.0},
 				"parameters":["color","radius","intensity"],
-				"delay":0.03
+				"delay":0.03,
+				"duration":30.0
 			}
 		]
 	},
@@ -26,14 +28,16 @@
 				"type":"particle",
 				"name":"FlakCannonShell",
 				"offset":{"x":0.65,"y":0.0,"z":0.0},
-				"delay":0.0
+				"delay":0.0,
+				"duration":30.0
 			},
 			{
 				"type":"pointLight",
 				"name":"",
 				"offset":{"x":0.55,"y":0.0,"z":0.0},
 				"parameters":["color","radius","intensity"],
-				"delay":0.03
+				"delay":0.03,
+				"duration":30.0
 			}
 		]
 	},
@@ -45,14 +49,16 @@
 				"type":"particle",
 				"name":"NavalCannonShell",
 				"offset":{"x":1.0,"y":0.0,"z":0.0},
-				"delay":0.0
+				"delay":0.0,
+				"duration":30.0
 			},
 			{
 				"type":"pointLight",
 				"name":"",
 				"offset":{"x":1.0,"y":0.0,"z":0.0},
 				"parameters":["color","radius","intensity"],
-				"delay":0.08
+				"delay":0.08,
+				"duration":30.0
 			}
 		]
 	},
@@ -64,14 +70,16 @@
 				"type":"particle",
 				"name":"M1AbramsCannonShell",
 				"offset":{"x":1.55,"y":0.0,"z":0.0},
-				"delay":0.0
+				"delay":0.0,
+				"duration":30.0
 			},
 			{
 				"type":"pointLight",
 				"name":"",
 				"offset":{"x":1.55,"y":0.0,"z":0.0},
 				"parameters":["color","radius","intensity"],
-				"delay":0.06
+				"delay":0.06,
+				"duration":30.0
 			}
 		]
 	},
@@ -83,14 +91,16 @@
 				"type":"particle",
 				"name":"DoraCannonShell",
 				"offset":{"x":1.9,"y":0.0,"z": 0.0},
-				"delay": 0.0
+				"delay": 0.0,
+				"duration":30.0
 			},
 			{
 				"type":"pointLight",
 				"name":"",
 				"offset":{"x":1.9,"y":0.0,"z":0.0},
 				"parameters":["color","radius","intensity"],
-				"delay":0.08
+				"delay":0.08,
+				"duration":30.0
 			}
 		]
 	},
@@ -102,14 +112,16 @@
 				"type":"particle",
 				"name":"AircraftCannonShell",
 				"offset":{"x":0.65,"y":0.0,"z":0.0},
-				"delay":0.0
+				"delay":0.0,
+				"duration":30.0
 			},
 			{
 				"type":"pointLight",
 				"name":"",
 				"offset":{"x":0.65,"y":0.0,"z":0.0},
 				"parameters":["color","radius","intensity"],
-				"delay":0.04
+				"delay":0.04,
+				"duration":30.0
 			}
 		]
 	},
@@ -121,14 +133,16 @@
 				"type":"particle",
 				"name":"NavalCannon2Shell",
 				"offset":{"x":1.9,"y":0.0,"z":0.0},
-				"delay":0.0
+				"delay":0.0,
+				"duration":30.0
 			},
 			{
 				"type":"pointLight",
 				"name":"",
 				"offset":{"x":1.9,"y":0.0,"z":0.0},
 				"parameters":["color","radius","intensity"],
-				"delay":0.02
+				"delay":0.02,
+				"duration":30.0
 			}
 		]
 	},
@@ -140,14 +154,16 @@
 				"type":"particle",
 				"name":"RailgunCannonShell",
 				"offset":{"x":2.4,"y":0.0,"z":0.0},
-				"delay":0.0
+				"delay":0.0,
+				"duration":30.0
 			},
 			{
 				"type":"pointLight",
 				"name":"",
 				"offset":{"x":1.8,"y":0.0,"z":0.0},
 				"parameters":["color","radius","intensity"],
-				"delay":0.02
+				"delay":0.02,
+				"duration":30.0
 			}
 		]
 	},
@@ -159,14 +175,16 @@
 				"type":"particle",
 				"name":"HowitzerCannonShell",
 				"offset":{"x":1.4,"y":0.0,"z":0.0},
-				"delay":0.0
+				"delay":0.0,
+				"duration":30.0
 			},
 			{
 				"type":"pointLight",
 				"name":"",
 				"offset":{"x":1.4,"y":0.0,"z":0.0},
 				"parameters":["color","radius","intensity"],
-				"delay":0.04
+				"delay":0.04,
+				"duration":30.0
 			}
 		]
 	},
@@ -179,34 +197,39 @@
 				"name":"event:/vehicle/thrusters/thruster01",
 				"offset":{"x":0.15,"y":0.0,"z":0.0},
 				"parameters":["velocity","power"],
-				"delay":0.0
+				"delay":0.0,
+				"duration":30.0
 			},
 			{
 				"type":"particle",
 				"name":"RocketLauncherShell",
 				"offset":{"x":0.75,"y":0.0,"z":0.0},
-				"delay":0.0
+				"delay":0.0,
+				"duration":30.0
 			},
 			{
 				"type":"particle",
 				"name":"RocketShellFlames",
 				"offset":{"x":0.15,"y":0.0,"z":0.0},
 				"direction":{"x":-1,"y":0,"z":0},
-				"delay":0.0
+				"delay":0.0,
+				"duration":30.0
 			},
 			{
 				"type":"particle",
 				"name":"RocketFumes",
 				"offset":{"x":-0.15,"y":0.0,"z":0.0},
 				"direction":{"x":-1,"y":0,"z":0},
-				"delay":0.0
+				"delay":0.0,
+				"duration":30.0
 			},
 			{
 				"type":"pointLight",
 				"name":"",
 				"offset":{"x":0.15,"y":0.0,"z":0.0},
 				"parameters":["color","radius","intensity"],
-				"delay":0.08
+				"delay":0.08,
+				"duration":30.0
 			}
 		]
 	},
@@ -218,14 +241,16 @@
 				"type":"particle",
 				"name":"NumberLogicCannonShell",
 				"offset":{"x":0.5,"y":0.0,"z":0.0},
-				"delay":0.0
+				"delay":0.0,
+				"duration":30.0
 			},
 			{
 				"type":"pointLight",
 				"name":"",
 				"offset":{"x":0.4,"y":0.0,"z":0.0},
 				"parameters":["color","radius","intensity"],
-				"delay":0
+				"delay":0,
+				"duration":30.0
 			}
 		]
 	},
@@ -237,13 +262,15 @@
 				"type":"particle",
 				"name":"FlareShell",
 				"offset":{"x":0.0,"y":0.0,"z":0.0},
-				"delay":0.0
+				"delay":0.0,
+				"duration":30.0
 			},
 			{
 				"type":"particle",
 				"name":"FlareFumes",
 				"offset":{"x":0.0,"y":0.0,"z":0.0},
-				"delay":0.0
+				"delay":0.0,
+				"duration":30.0
 			},
 			{
 				"type":"pointLight",
@@ -251,7 +278,8 @@
 				"offset":{"x":-0.100,"y":0.0,"z":0.0},
 				"parameters":["color","radius","intensity"],
 				"delay":0.08,
-				"attached":true
+				"attached":true,
+				"duration":30.0
 			}
 		]
 	},
@@ -263,13 +291,15 @@
 				"type":"particle",
 				"name":"EMPCannonShell",
 				"offset":{"x":1.0,"y":0.0,"z":0.0},
-				"delay":0.0
+				"delay":0.0,
+				"duration":30.0
 			},
 			{
 				"type":"particle",
 				"name":"EMPCannonShellEffect",
 				"offset":{"x":1.0,"y":0.0,"z":0.0},
-				"delay":0.0
+				"delay":0.0,
+				"duration":30.0
 			},
 			{
 				"type":"pointLight",
@@ -277,7 +307,8 @@
 				"offset":{"x":0.9,"y":0.0,"z":0.0},
 				"parameters":["color","radius","intensity"],
 				"delay":0.08,
-				"attached":true
+				"attached":true,
+				"duration":30.0
 			}
 		]
 	},
@@ -289,14 +320,16 @@
 				"type":"particle",
 				"name":"SmallSmartCannonShell",
 				"offset":{"x":0.5,"y":0.0,"z":0.0},
-				"delay":0.0
+				"delay":0.0,
+				"duration":30.0
 			},
 			{
 				"type":"pointLight",
 				"name":"",
 				"offset":{"x":0.5,"y":0.0,"z":0.0},
 				"parameters":["color","radius","intensity"],
-				"delay":0
+				"delay":0,
+				"duration":30.0
 			}
 		]
 	},
@@ -308,14 +341,16 @@
 				"type":"particle",
 				"name":"LaserCannonShell",
 				"offset":{"x":2.7,"y":0.0,"z":0.0},
-				"delay":0.0
+				"delay":0.0,
+				"duration":30.0
 			},
 			{
 				"type":"pointLight",
 				"name":"",
 				"offset":{"x":2.7,"y":0.0,"z":0.0},
 				"parameters":["color","radius","intensity"],
-				"delay":0
+				"delay":0,
+				"duration":30.0
 			}
 		]
 	}
