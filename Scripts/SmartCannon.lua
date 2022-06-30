@@ -3,7 +3,7 @@
 	Questionable Mark
 ]]
 
---if SmartCannon then return end
+if SmartCannon then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 SmartCannon = class(GLOBAL_SCRIPT)
 SmartCannon.maxParentCount = -1
@@ -534,6 +534,19 @@ end
 ---------------SMART CANNON GUI----------------
 -----------------------------------------------
 
+--Gui input value types
+local sc_gui_num_val = 1
+local sc_gui_bool_val = 2
+local sc_gui_list_val = 3
+
+local sc_gui_col_value_issame = "#ffffff"
+local sc_gui_col_value_changed = "#999999"
+local sc_gui_col_value_invalid = "#ff0000"
+
+local function client_GUI_getValueColor(cur_set)
+	return (cur_set.value == cur_set.cur_val) and sc_gui_col_value_issame or sc_gui_col_value_changed
+end
+
 function SmartCannon:client_GUI_Open()
 	local gui = _cpCreateGui("SmartCannonGui.layout")
 
@@ -547,9 +560,7 @@ function SmartCannon:client_GUI_Open()
 
 		gui:setButtonCallback("Bool"..i, "client_GUI_onBooleanChangedCallback")
 
-		local num_val_id = "NumVal"..i
-		gui:setTextChangedCallback(num_val_id, "client_GUI_onTextChangedCallback")
-		gui:setTextAcceptedCallback(num_val_id, "client_GUI_onTextAcceptedCallback")
+		gui:setTextChangedCallback("NumVal"..i, "client_GUI_onTextChangedCallback")
 	end
 
 	gui:setButtonCallback("PageLeft" , "client_GUI_onNumPageChange")
@@ -603,6 +614,8 @@ end
 
 local function temp_table_to_network_data(gui_temp, data_output)
 	for k, v in ipairs(gui_temp) do
+		v.value = v.cur_val
+
 		data_output[v.id] = v.value
 	end
 end
@@ -619,14 +632,16 @@ function SmartCannon:client_GUI_onSaveButtonCallback()
 	temp_table_to_network_data(gui_temp[3], data_output[3]) --effect data
 
 	self.network:sendToServer("server_setNewSettings", data_output)
+
 	gui_int:setVisible("SaveChanges", false)
+	self:client_GUI_updateCurrentTab()
 
 	_audioPlay("Retrowildblip")
 end
 
 local function reset_table_to_defaults(gui_table)
 	for k, cur_set in ipairs(gui_table) do
-		cur_set.value = cur_set.default
+		cur_set.cur_val = cur_set.default
 	end
 end
 
@@ -639,8 +654,8 @@ function SmartCannon:client_GUI_onResetDefaultsCallback()
 	reset_table_to_defaults(gui_temp[2]) --reset logic values
 	reset_table_to_defaults(gui_temp[3]) --reset effect values
 
-	self:client_GUI_updateCurrentTab()
 	gui_int:setVisible("SaveChanges", true)
+	self:client_GUI_updateCurrentTab()
 
 	_audioPlay("PaintTool - Erase")
 end
@@ -660,65 +675,58 @@ function SmartCannon:client_GUI_onNumPageChange(btn_name)
 	end
 end
 
---[[
-	type data:
-	1 - number
-	2 - boolean
-	3 - list box
-]]
-
 function SmartCannon:client_GUI_CreateTempValTable()
 	local temp = {}
 	temp[1] = --number logic
 	{
-		[1]  = {name = "Fire Force (m/s)"              , type = 1, id = NumLogicTrTable.fire_force           , value = 0, default = 700 , min = 1, max = 99999999},
-		[2]  = {name = "Spread (deg)"                  , type = 1, id = NumLogicTrTable.fire_spread          , value = 0, default = 0.2 , min = 0, max = 360},
-		[3]  = {name = "Reload Time (ticks)"           , type = 1, id = NumLogicTrTable.reload_time          , value = 0, default = 8   , min = 0, max = 1000000},
-		[4]  = {name = "Explosion Level"               , type = 1, id = NumLogicTrTable.expl_level           , value = 0, default = 5   , min = 0.001, max = 99999999},
-		[5]  = {name = "Explosion Radius (m)"          , type = 1, id = NumLogicTrTable.expl_radius          , value = 0, default = 0.5 , min = 0.3, max = 100},
-		[6]  = {name = "Explosion Impulse Radius (m)"  , type = 1, id = NumLogicTrTable.expl_impulse_radius  , value = 0, default = 15.0, min = 0.001, max = 99999999},
-		[7]  = {name = "Explosion Impulse Strength"    , type = 1, id = NumLogicTrTable.expl_impulse_strength, value = 0, default = 2000, min = 0, max = 99999999},
-		[8]  = {name = "Projectile Gravity"            , type = 1, id = NumLogicTrTable.projectile_gravity   , value = 0, default = 10  , min = -99999999, max = 99999999},
-		[9]  = {name = "Projectile Lifetime (s)"       , type = 1, id = NumLogicTrTable.projectile_lifetime  , value = 0, default = 15  , min = 0.001, max = 30},
-		[10] = {name = "Recoil"                        , type = 1, id = NumLogicTrTable.cannon_recoil        , value = 0, default = 0   , min = 0, max = 99999999},
-		[11] = {name = "Proximity Fuze (m)"            , type = 1, id = NumLogicTrTable.proximity_fuze       , value = 0, default = 0   , min = 0, max = 20},
-		[12] = {name = "Projectiles Per Shot"          , type = 1, id = NumLogicTrTable.projectile_per_shot  , value = 0, default = 0   , min = 0, max = 20, int = true},
-		[13] = {name = "X Projectile Offset (m)"       , type = 1, id = NumLogicTrTable.x_offset             , value = 0, default = 0   , min = -99999999, max = 99999999},
-		[14] = {name = "Y Projectile Offset (m)"       , type = 1, id = NumLogicTrTable.y_offset             , value = 0, default = 0   , min = -99999999, max = 99999999},
-		[15] = {name = "Z Projectile Offset (m)"       , type = 1, id = NumLogicTrTable.z_offset             , value = 0, default = 0   , min = -99999999, max = 99999999},
-		[16] = {name = "Projectile Type (Spudgun Mode)", type = 3, id = NumLogicTrTable.projectile_type      , value = 0, default = 0   , min = 0, max = projectile_type_count, list = projectile_type_table}
+		[1]  = {name = "Fire Force (m/s)"              , type = sc_gui_num_val , id = NumLogicTrTable.fire_force           , value = 0, default = 700 , min = 1, max = 99999999},
+		[2]  = {name = "Spread (deg)"                  , type = sc_gui_num_val , id = NumLogicTrTable.fire_spread          , value = 0, default = 0.2 , min = 0, max = 360},
+		[3]  = {name = "Reload Time (ticks)"           , type = sc_gui_num_val , id = NumLogicTrTable.reload_time          , value = 0, default = 8   , min = 0, max = 1000000},
+		[4]  = {name = "Explosion Level"               , type = sc_gui_num_val , id = NumLogicTrTable.expl_level           , value = 0, default = 5   , min = 0.001, max = 99999999},
+		[5]  = {name = "Explosion Radius (m)"          , type = sc_gui_num_val , id = NumLogicTrTable.expl_radius          , value = 0, default = 0.5 , min = 0.3, max = 100},
+		[6]  = {name = "Explosion Impulse Radius (m)"  , type = sc_gui_num_val , id = NumLogicTrTable.expl_impulse_radius  , value = 0, default = 15.0, min = 0.001, max = 99999999},
+		[7]  = {name = "Explosion Impulse Strength"    , type = sc_gui_num_val , id = NumLogicTrTable.expl_impulse_strength, value = 0, default = 2000, min = 0, max = 99999999},
+		[8]  = {name = "Projectile Gravity"            , type = sc_gui_num_val , id = NumLogicTrTable.projectile_gravity   , value = 0, default = 10  , min = -99999999, max = 99999999},
+		[9]  = {name = "Projectile Lifetime (s)"       , type = sc_gui_num_val , id = NumLogicTrTable.projectile_lifetime  , value = 0, default = 15  , min = 0.001, max = 30},
+		[10] = {name = "Recoil"                        , type = sc_gui_num_val , id = NumLogicTrTable.cannon_recoil        , value = 0, default = 0   , min = 0, max = 99999999},
+		[11] = {name = "Proximity Fuze (m)"            , type = sc_gui_num_val , id = NumLogicTrTable.proximity_fuze       , value = 0, default = 0   , min = 0, max = 20},
+		[12] = {name = "Projectiles Per Shot"          , type = sc_gui_num_val , id = NumLogicTrTable.projectile_per_shot  , value = 0, default = 0   , min = 0, max = 20, int = true},
+		[13] = {name = "X Projectile Offset (m)"       , type = sc_gui_num_val , id = NumLogicTrTable.x_offset             , value = 0, default = 0   , min = -99999999, max = 99999999},
+		[14] = {name = "Y Projectile Offset (m)"       , type = sc_gui_num_val , id = NumLogicTrTable.y_offset             , value = 0, default = 0   , min = -99999999, max = 99999999},
+		[15] = {name = "Z Projectile Offset (m)"       , type = sc_gui_num_val , id = NumLogicTrTable.z_offset             , value = 0, default = 0   , min = -99999999, max = 99999999},
+		[16] = {name = "Projectile Type (Spudgun Mode)", type = sc_gui_list_val, id = NumLogicTrTable.projectile_type      , value = 0, default = 0   , min = 0, max = projectile_type_count, list = projectile_type_table}
 	}
 
 	temp[2] = --logic
 	{
-		[1] = {name = "Ignore Cannon Rotation", type = 2, id = LogicTrTable.ignore_rotation_mode, value = false, default = false},
-		[2] = {name = "No Projectile Friction", type = 2, id = LogicTrTable.no_friction_mode    , value = false, default = false},
-		[3] = {name = "Spudgun Mode"          , type = 2, id = LogicTrTable.spudgun_mode        , value = false, default = false},
-		[4] = {name = "No Recoil Mode"        , type = 2, id = LogicTrTable.no_recoil_mode      , value = false, default = false},
-		[5] = {name = "Transfer Momentum"     , type = 2, id = LogicTrTable.transfer_momentum   , value = false, default = true }
+		[1] = {name = "Ignore Cannon Rotation", type = sc_gui_bool_val, id = LogicTrTable.ignore_rotation_mode, value = false, default = false},
+		[2] = {name = "No Projectile Friction", type = sc_gui_bool_val, id = LogicTrTable.no_friction_mode    , value = false, default = false},
+		[3] = {name = "Spudgun Mode"          , type = sc_gui_bool_val, id = LogicTrTable.spudgun_mode        , value = false, default = false},
+		[4] = {name = "No Recoil Mode"        , type = sc_gui_bool_val, id = LogicTrTable.no_recoil_mode      , value = false, default = false},
+		[5] = {name = "Transfer Momentum"     , type = sc_gui_bool_val, id = LogicTrTable.transfer_momentum   , value = false, default = true }
 	}
 
 	temp[3] = --effects
 	{
-		[1] = {name = "Muzzle Flash", value = 0, default = 0, max = 4, type = 3, id = OtherTrTable.muzzle_flash, list = { --1 muzzle flash
+		[1] = {name = "Muzzle Flash", value = 0, default = 0, max = 4, type = sc_gui_list_val, id = OtherTrTable.muzzle_flash, list = { --1 muzzle flash
 			[1] = { name = "Default"              }, [2] = { name = "Small Explosion"    },
 			[3] = { name = "Big Explosion"        }, [4] = { name = "Frier Muzzle Flash" },
 			[5] = { name = "Spinner Muzzle Flash" }
 		}},
-		[2] = {name = "Explosion Effect", value = 0, default = 0, max = 4, type = 3, id = OtherTrTable.explosion_effect, list = { --2 explosion effect
+		[2] = {name = "Explosion Effect", value = 0, default = 0, max = 4, type = sc_gui_list_val, id = OtherTrTable.explosion_effect, list = { --2 explosion effect
 			[1] = { name = "Default"       }, [2] = { name = "Little Explosion" },
 			[3] = { name = "Big Explosion" }, [4] = { name = "Giant Explosion"  },
 			[5] = { name = "Sparks"        }
 		}},
-		[3] = {name = "Reload Sound", value = 0, default = 0, max = 1, type = 3, id = OtherTrTable.reload_sound, list = { --3 reloading effect
+		[3] = {name = "Reload Sound", value = 0, default = 0, max = 1, type = sc_gui_list_val, id = OtherTrTable.reload_sound, list = { --3 reloading effect
 			[1] = { name = "Default" }, [2] = { name = "Heavy Realoading" }
 		}},
-		[4] = {name = "Shooting Sound", value = 0, default = 0, max = 4, type = 3, id = OtherTrTable.sound, list = { --4 shooting sound
+		[4] = {name = "Shooting Sound", value = 0, default = 0, max = 4, type = sc_gui_list_val, id = OtherTrTable.sound, list = { --4 shooting sound
 			[1] = { name = "Default"        }, [2] = { name = "Sound 1"      },
 			[3] = { name = "Potato Shotgun" }, [4] = { name = "Spudling Gun" },
 			[5] = { name = "Explosion"      }
 		}},
-		[5] = {name = "Ejector Shell Model", value = 0, default = 0, max = 3, type = 3, id = OtherTrTable.ejected_shell_id, list = { --5 ejected shell model
+		[5] = {name = "Ejector Shell Model", value = 0, default = 0, max = 3, type = sc_gui_list_val, id = OtherTrTable.ejected_shell_id, list = { --5 ejected shell model
 			[1] = { name = "Small Shell" }, [2] = { name = "Medium Shell" },
 			[3] = { name = "Large Shell" }, [4] = { name = "Giant Shell"  }
 		}}
@@ -752,10 +760,12 @@ function SmartCannon:client_GUI_updateTabButtons()
 end
 
 local function client_GUI_updateListBoxWidget(gui, slot, cur_func)
-	local c_value = cur_func.value
+	local c_value = cur_func.cur_val
 	local max_val = cur_func.max
 
-	gui:setText("ListBoxName"..slot, cur_func.name)
+	local tex_col = client_GUI_getValueColor(cur_func)
+
+	gui:setText("ListBoxName"..slot, tex_col..cur_func.name)
 	gui:setText("ListBoxVal" ..slot, cur_func.list[c_value + 1].name)
 
 	gui:setVisible("R_ListBoxBtn"..slot, c_value < max_val)
@@ -769,15 +779,18 @@ local g_bool_string =
 }
 
 local function client_GUI_updateBooleanWidget(gui, slot, cur_func)
-	local cur_bool = g_bool_string[cur_func.value]
-	gui:setText("Bool"..slot, ("%s: %s"):format(cur_func.name, cur_bool.bool))
+	local val_changed = (cur_func.value == cur_func.cur_val) and "" or "*"
+	local cur_bool = g_bool_string[cur_func.cur_val]
+
+	gui:setText("Bool"..slot, ("%s%s: %s"):format(val_changed, cur_func.name, cur_bool.bool))
 end
 
 local function client_GUI_updateNumberValueWidget(gui, slot, cur_func)
-	gui:setText("NumName"..slot, cur_func.name)
+	local text_col = client_GUI_getValueColor(cur_func)
+	gui:setText("NumName"..slot, ("%s%s"):format(text_col, cur_func.name))
 
 	local val_txt = cur_func.int and "%d" or "%.3f"
-	gui:setText("NumVal"..slot, (val_txt):format(cur_func.value))
+	gui:setText("NumVal"..slot, (val_txt):format(cur_func.cur_val))
 end
 
 function SmartCannon:client_GUI_getCurrentOption(btn_id)
@@ -796,9 +809,9 @@ function SmartCannon:client_GUI_onListBoxChangeCallback(btn_name)
 	local s_gui = self.gui
 	local cur_set = self:client_GUI_getCurrentOption(btn_id)
 
-	local new_value = _utilClamp(cur_set.value + value_step, 0, cur_set.max)
-	if cur_set.value == new_value then return end
-	cur_set.value = new_value
+	local new_value = _utilClamp(cur_set.cur_val + value_step, 0, cur_set.max)
+	if cur_set.cur_val == new_value then return end
+	cur_set.cur_val = new_value
 
 	local gui_int = s_gui.interface
 	gui_int:setVisible("SaveChanges", true)
@@ -813,14 +826,14 @@ function SmartCannon:client_GUI_onBooleanChangedCallback(btn_name)
 	local s_gui = self.gui
 	local cur_set = self:client_GUI_getCurrentOption(btn_id)
 
-	cur_set.value = not cur_set.value
+	cur_set.cur_val = not cur_set.cur_val
 	
 	local gui_int = s_gui.interface
 	gui_int:setVisible("SaveChanges", true)
 
 	client_GUI_updateBooleanWidget(gui_int, btn_id, cur_set)
 
-	local cur_bool = g_bool_string[cur_set.value]
+	local cur_bool = g_bool_string[cur_set.cur_val]
 	_audioPlay(cur_bool.sound)
 end
 
@@ -834,39 +847,21 @@ function SmartCannon:client_GUI_onTextChangedCallback(widget, text)
 	local hex_color_str
 	local num_value = tonumber(text)
 	if num_value ~= nil then
-		hex_color_str = (cur_set.value == num_value) and "#ffffff" or "#999999"
-	else
-		hex_color_str = "#ff0000"
-	end
-
-	gui_int:setText("NumName"..widget_id, hex_color_str..cur_set.name.."#ffffff")
-end
-
-function SmartCannon:client_GUI_onTextAcceptedCallback(widget, text)
-	local widget_id = tonumber(widget:sub(-1))
-
-	local s_gui = self.gui
-	local gui_int = s_gui.interface
-	local cur_set = self:client_GUI_getCurrentOption(widget_id)
-	
-	local num_value = tonumber(text)
-	if num_value ~= nil then
-		if num_value == cur_set.value then return end
-
 		local clamped_new = _utilClamp(num_value, cur_set.min, cur_set.max)
 		if cur_set.int then
 			clamped_new = _mathFloor(clamped_new)
 		end
 
-		cur_set.value = clamped_new
+		cur_set.cur_val = clamped_new
+		hex_color_str = client_GUI_getValueColor(cur_set)
 
-		client_GUI_updateNumberValueWidget(gui_int, widget_id, cur_set)
 		gui_int:setVisible("SaveChanges", true)
-
-		_audioPlay("GUI Item drag")
 	else
-		_audioPlay("WeldTool - Error")
+		hex_color_str = sc_gui_col_value_invalid
+		cur_set.cur_val = cur_set.value
 	end
+
+	gui_int:setText("NumName"..widget_id, hex_color_str..cur_set.name)
 end
 
 local value_update_functions =
@@ -919,6 +914,7 @@ local function load_new_data_table(gui_table, new_data)
 
 		if cur_data_val ~= nil then
 			cur_set.value = cur_data_val
+			cur_set.cur_val = cur_data_val
 		end
 	end
 end

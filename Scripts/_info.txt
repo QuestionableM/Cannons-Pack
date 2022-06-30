@@ -4,6 +4,7 @@ Cannons Pack version 4.71 changelog:
 1. Fixed a script crash for Shell Ejector
 2. You no longer have to press Enter in order to set the value in Smart Cannon GUI
 3. Limited the max text size in Smart Cannon GUI to 30 characters
+4. Added unsaved value indicators to all the variables in Smart Cannon GUI
 
 Made by:
 Questionable Mark - creator of all the textures, UV maps and also some scripts and cannon models.
@@ -16,9 +17,9 @@ Driver - creator of the EMP Cannon model and polish language translator.
 Seemomster - creator of the 2nd tank cannon model.
 
 Links:
-Questionable Mark - https://steamcommunity.com/id/QuestionMarko/
-Gratiskatze - https://steamcommunity.com/id/Gratis_katze
-Brent Batch - https://steamcommunity.com/id/BrentBatch/
-Driver - https://steamcommunity.com/profiles/76561198280635682
-Kein Anderer - https://steamcommunity.com/profiles/76561198350208505/
-Seemomster - https://steamcommunity.com/profiles/76561198196145217/
+Questionable Mark - https://steamcommunity.com/profiles/76561198361178618
+Gratiskatze       - https://steamcommunity.com/profiles/76561198134257237
+Brent Batch       - https://steamcommunity.com/profiles/76561198296305997
+Driver            - https://steamcommunity.com/profiles/76561198280635682
+Kein Anderer      - https://steamcommunity.com/profiles/76561198350208505
+Seemomster        - https://steamcommunity.com/profiles/76561198196145217
