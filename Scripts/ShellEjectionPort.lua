@@ -108,12 +108,14 @@ end
 function ShellEjector:server_updateParent(s_interactable)
 	local parent = s_interactable:getSingleParent()
 	if parent then
-		local p_pub_data = parent.publicData
-		if p_pub_data then
-			local ejected_shell_id = p_pub_data.ejectedShellId
-			if ejected_shell_id ~= nil then
-				self.sv_cur_eff_data = ejected_shell_id
-				return
+		if parent.type == "scripted" then
+			local p_pub_data = parent.publicData
+			if p_pub_data then
+				local ejected_shell_id = p_pub_data.ejectedShellId
+				if ejected_shell_id ~= nil then
+					self.sv_cur_eff_data = ejected_shell_id
+					return
+				end
 			end
 		end
 

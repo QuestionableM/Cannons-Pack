@@ -1,11 +1,8 @@
 What are u doing here? you little thief
 
-Cannons Pack version 4.7 changelog:
-1. Added a barrel smoke effect for some cannons
-2. Improved shell ejector
-3. Breeches from Machine Guns Pack are now supported by matching cannons
-4. It is now possible to select the ejected shell model in Smart Cannon GUI
-5. Improved fire effects for Smart Rocket and Flare
+Cannons Pack version 4.71 changelog:
+1. Fixed a script crash for Shell Ejector
+2. You no longer have to press Enter in order to set the value in Smart Cannon GUI
 
 Made by:
 Questionable Mark - creator of all the textures, UV maps and also some scripts and cannon models.

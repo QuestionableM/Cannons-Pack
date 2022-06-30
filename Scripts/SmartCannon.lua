@@ -3,7 +3,7 @@
 	Questionable Mark
 ]]
 
-if SmartCannon then return end
+--if SmartCannon then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 SmartCannon = class(GLOBAL_SCRIPT)
 SmartCannon.maxParentCount = -1
