@@ -3,6 +3,7 @@ What are u doing here? you little thief
 Cannons Pack version 4.71 changelog:
 1. Fixed a script crash for Shell Ejector
 2. You no longer have to press Enter in order to set the value in Smart Cannon GUI
+3. Limited the max text size in Smart Cannon GUI to 30 characters
 
 Made by:
 Questionable Mark - creator of all the textures, UV maps and also some scripts and cannon models.

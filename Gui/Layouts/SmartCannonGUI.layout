@@ -50,6 +50,7 @@
 				</Widget>
 				<Widget type="Widget" skin="SearchBarBackground" position_real="0 0.5 1 0.5" align="HStretch Top">
 					<Widget type="EditBox" skin="EditBoxEmpty" position_real="0.0085714285714285719 0.059999999999999998 0.98285714285714287 0.88" align="HStretch VStretch" name="NumVal1">
+						<Property key="MaxTextLength" value="30"/>
 						<Property key="TextShadow" value="true"/>
 						<Property key="TextAlign" value="Center"/>
 						<Property key="FontName" value="SM_Button"/>
@@ -65,6 +66,7 @@
 				</Widget>
 				<Widget type="Widget" skin="SearchBarBackground" position_real="0 0.5 1 0.5" align="HStretch Top">
 					<Widget type="EditBox" skin="EditBoxEmpty" position_real="0.0085714285714285719 0.059999999999999998 0.98285714285714287 0.88" align="HStretch VStretch" name="NumVal2">
+						<Property key="MaxTextLength" value="30"/>
 						<Property key="FontName" value="SM_Button"/>
 						<Property key="TextAlign" value="Center"/>
 						<Property key="TextShadow" value="true"/>
@@ -80,6 +82,7 @@
 				</Widget>
 				<Widget type="Widget" skin="SearchBarBackground" position_real="0 0.5 1 0.5" align="HStretch Top">
 					<Widget type="EditBox" skin="EditBoxEmpty" position_real="0.0085714285714285719 0.059999999999999998 0.98285714285714287 0.88" align="HStretch VStretch" name="NumVal3">
+						<Property key="MaxTextLength" value="30"/>
 						<Property key="TextShadow" value="true"/>
 						<Property key="TextAlign" value="Center"/>
 						<Property key="FontName" value="SM_Button"/>
@@ -95,6 +98,7 @@
 				</Widget>
 				<Widget type="Widget" skin="SearchBarBackground" position_real="0 0.5 1 0.5" align="HStretch Top">
 					<Widget type="EditBox" skin="EditBoxEmpty" position_real="0.0085714285714285719 0.059999999999999998 0.98285714285714287 0.88" align="HStretch VStretch" name="NumVal4">
+						<Property key="MaxTextLength" value="30"/>
 						<Property key="TextShadow" value="true"/>
 						<Property key="TextAlign" value="Center"/>
 						<Property key="FontName" value="SM_Button"/>
@@ -110,6 +114,7 @@
 				</Widget>
 				<Widget type="Widget" skin="SearchBarBackground" position_real="0 0.5 1 0.5" align="HStretch Top">
 					<Widget type="EditBox" skin="EditBoxEmpty" position_real="0.0085714285714285719 0.059999999999999998 0.98285714285714287 0.88" align="HStretch VStretch" name="NumVal5">
+						<Property key="MaxTextLength" value="30"/>
 						<Property key="TextShadow" value="true"/>
 						<Property key="TextAlign" value="Center"/>
 						<Property key="FontName" value="SM_Button"/>
@@ -125,6 +130,7 @@
 				</Widget>
 				<Widget type="Widget" skin="SearchBarBackground" position_real="0 0.5 1 0.5" align="HStretch Top">
 					<Widget type="EditBox" skin="EditBoxEmpty" position_real="0.0085714285714285719 0.059999999999999998 0.98285714285714287 0.88" align="HStretch VStretch" name="NumVal6">
+						<Property key="MaxTextLength" value="30"/>
 						<Property key="TextShadow" value="true"/>
 						<Property key="TextAlign" value="Center"/>
 						<Property key="FontName" value="SM_Button"/>
