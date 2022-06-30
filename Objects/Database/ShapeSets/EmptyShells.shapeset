@@ -12,6 +12,8 @@
 				"y": 1,
 				"z": 1
 			},
+			"ratings": { "buoyancy": 3, "density": 1, "durability": 4, "friction": 6 },
+			"flammable": false,
 			"showInInventory": false
 		},
 		{
@@ -26,6 +28,8 @@
 				"y": 1,
 				"z": 1
 			},
+			"ratings": { "buoyancy": 2, "density": 2, "durability": 4, "friction": 6 },
+			"flammable": false,
 			"showInInventory": false
 		},
 		{
@@ -40,6 +44,8 @@
 				"y": 2,
 				"z": 2
 			},
+			"ratings": { "buoyancy": 1, "density": 4, "durability": 4, "friction": 6 },
+			"flammable": false,
 			"showInInventory": false
 		},
 		{
@@ -54,6 +60,8 @@
 				"y": 2,
 				"z": 2
 			},
+			"ratings": { "buoyancy": 0, "density": 8, "durability": 4, "friction": 6 },
+			"flammable": false,
 			"showInInventory": false
 		}
 	]
