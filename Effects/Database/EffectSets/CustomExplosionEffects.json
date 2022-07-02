@@ -6,17 +6,7 @@
 			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":0.0},"parameters":["size"],"delay":0.0},
 			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":0.0},"parameters":["shakeStrength","shakeRadius"],"duration":0.1,"delay":0.0},
 			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.5},"parameters":["color","radius","intensity"],"duration":1.0,"delay":0.0},
-			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":0.0,"z":0.0},"attached":true,"delay":0.0},
-			{"type":"particle","name":"Explosion_01","offset":{"x":-5.0,"y":0.0,"z":0.0},"attached":true,"delay":0.1},
-			{"type":"particle","name":"Explosion_01","offset":{"x":5.0,"y":0.0,"z":0.0},"attached":true,"delay":0.1},
-			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":0.0,"z":2.5},"attached":true,"delay":0.1},
-			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":0.0,"z":-2.5},"attached":true,"delay":0.1},
-			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":0.0},"parameters":["size"],"delay":0.1},
-			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":0.0,"z":5.0},"attached":true,"delay":0.2},
-			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":0.0,"z":-5.0},"attached":true,"delay":0.2},
-			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":0.0},"parameters":["size"],"delay":0.2},
-			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":5.0,"z":0.0},"attached":true,"delay":0.1},
-			{"type":"particle","name":"Explosion_01","offset":{"x":0.0,"y":-5.0,"z":0.0},"attached":true,"delay":0.1}
+			{"type":"particle","name":"dora_cannon_explosion","delay":0.0}
 		]
 	},
 	"AircraftCannon - Explosion":{
