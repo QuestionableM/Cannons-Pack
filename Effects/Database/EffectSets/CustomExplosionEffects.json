@@ -1,11 +1,14 @@
 {
     "DoraCannon - Explosion":{
-		"maxInstances":16,"parameterList":{"size":512.0,"color":"ffff00","radius":30.0,"intensity":8.0,"shakeStrength":2.0,"shakeRadius":90.0},
-		"parameterCurves":{"radius":{"timeline":[{"time":0.1,"value":30.0},{"time":0.6,"value":0.0}]}},
+		"maxInstances":32,"parameterList":{"size":512.0,"color":"ffff00","radius":30.0,"intensity":8.0,"shakeStrength":2.0,"shakeRadius":90.0},
+		"parameterCurves":{
+			//"radius":{"timeline":[{"time":0.4,"value":30.0},{"time":1.2,"value":0.0}]},
+			"intensity":{"timeline":[{"time":0.4,"value":8.0},{"time":1.2,"value":0.0}]}
+		},
 		"effectList":[
 			{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":0.0},"parameters":["size"],"delay":0.0},
 			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":0.0},"parameters":["shakeStrength","shakeRadius"],"duration":0.1,"delay":0.0},
-			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.5},"parameters":["color","radius","intensity"],"duration":1.0,"delay":0.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.5},"parameters":["color","radius","intensity"],"duration":1.2,"delay":0.0},
 			{"type":"particle","name":"dora_cannon_explosion","delay":0.0}
 		]
 	},
