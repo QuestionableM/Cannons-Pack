@@ -1,0 +1,18 @@
+{
+	"partList": [
+		{
+			"uuid": "7396cead-3624-49d7-8201-0b24ad3c4fcc",
+			"name": "CannonPipe",
+			"renderable": "$CONTENT_DATA/Objects/Renderables/CannonPipe.rend",
+			"cylinder": { "axis": "Z", "depth": 1, "diameter": 1 },
+			"physicsMaterial": "Metal",
+			"ratings": { "buoyancy": 0, "density": 1, "durability": 5, "friction": 5 },
+			"flammable": false,
+			"qualityLevel": 5,
+			"color": "375000",
+			"density": 250.0,
+			"rotationSet": "PropZ",
+			"sticky": "-Z+Z"
+		}
+	]
+}

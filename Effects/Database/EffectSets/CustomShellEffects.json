@@ -353,5 +353,13 @@
 				"duration":30.0
 			}
 		]
+	},
+	"RocketPod01 - Rocket":{
+		"effectList":[
+			{
+				"type":"renderable",
+				"name":"$CONTENT_DATA/Effects/Renderables/rocketpod01_rocket_folded.rend"
+			}
+		]
 	}
 }
