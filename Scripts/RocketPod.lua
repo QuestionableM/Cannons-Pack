@@ -19,34 +19,35 @@ function RocketPod:client_onCreate()
 		effect_positions =
 		{
 			--Row 2
-			_newVec(-0.087, 0.15, 0),
-			_newVec(0, 0.15, 0),
-			_newVec(0.087, 0.15, 0),
+			_newVec(-0.087, 0.15, 0),   --1
+			_newVec(0, 0.15, 0),        --2
+			_newVec(0.087, 0.15, 0),    --3
 
 			--Row 1
-			_newVec(-0.132, 0.075, 0),
-			_newVec(-0.045, 0.075, 0),
-			_newVec(0.045, 0.075, 0),
-			_newVec(0.132, 0.075, 0),
+			_newVec(-0.132, 0.075, 0),  --4
+			_newVec(-0.045, 0.075, 0),  --5
+			_newVec(0.045, 0.075, 0),   --6
+			_newVec(0.132, 0.075, 0),   --7
 
 			--Row 0
-			_newVec(-0.174, 0, 0),
-			_newVec(-0.087, 0, 0),
-			_newVec(0, 0, 0),
-			_newVec(0.087, 0, 0),
-			_newVec(0.174, 0, 0),
+			_newVec(-0.174, 0, 0),      --8
+			_newVec(-0.087, 0, 0),      --9
+			_newVec(0, 0, 0),           --10
+			_newVec(0.087, 0, 0),       --11
+			_newVec(0.174, 0, 0),       --12
 
 			--Row -1
-			_newVec(-0.132, -0.075, 0),
-			_newVec(-0.045, -0.075, 0),
-			_newVec(0.045, -0.075, 0),
-			_newVec(0.132, -0.075, 0),
+			_newVec(-0.132, -0.075, 0), --13
+			_newVec(-0.045, -0.075, 0), --14
+			_newVec(0.045, -0.075, 0),  --15
+			_newVec(0.132, -0.075, 0),  --16
 
 			--Row -2
-			_newVec(-0.087, -0.15, 0),
-			_newVec(0, -0.15, 0),
-			_newVec(0.087, -0.15, 0),
-		}
+			_newVec(-0.087, -0.15, 0),  --17
+			_newVec(0, -0.15, 0),       --18
+			_newVec(0.087, -0.15, 0)    --19
+		},
+		shoot_order = { 10, 5, 9, 14, 15, 11, 6, 2, 1, 4, 8, 13, 17, 18, 19, 16, 12, 7, 3 }
 	}
 
 	self.effects = {}
@@ -54,16 +55,26 @@ function RocketPod:client_onCreate()
 	local s_interactable = self.interactable
 	local eff_scale = sm.vec3.new(0.25, 0.25, 0.25)
 	local eff_name = rocket_pod_data.ammo_effect
-	for k, v in pairs(rocket_pod_data.effect_positions) do
-		local cur_effect = sm.effect.createEffect(eff_name, s_interactable)
-		cur_effect:setOffsetPosition(v)
+	local shoot_pos_data = rocket_pod_data.effect_positions
+
+	self.cl_effect_pos_data = {}
+
+	for k, v in ipairs(rocket_pod_data.shoot_order) do
+		local shoot_offset = shoot_pos_data[v]
+
+		local cur_effect = _createEffect(eff_name, s_interactable)
+		cur_effect:setOffsetPosition(shoot_pos_data[v])
 		cur_effect:setScale(eff_scale)
 		cur_effect:start()
 
-		self.effects[k] = cur_effect
+		_tableInsert(self.effects, cur_effect)
+		_tableInsert(self.cl_effect_pos_data, shoot_offset)
 	end
 
 	self.cl_effect_count = #self.effects
+
+	self.shoot_effect = _createEffect("RocketLauncher - Shoot", s_interactable)
+	self.shoot_fumes = _createEffect("SmartRocketLauncher - Fumes", s_interactable)
 end
 
 function RocketPod:client_onFixedUpdate(dt)
@@ -91,12 +102,20 @@ end
 
 function RocketPod:client_onShoot(id)
 	local eff_id = self.cl_effect_count - id + 1
-	
+
 	for i = 1, eff_id do
 		local inv_eff_id = self.cl_effect_count - i
 
 		self.effects[inv_eff_id + 1]:stopImmediate()
 	end
+
+	local cur_shoot_pos = self.cl_effect_pos_data[id]
+	self.shoot_effect:setOffsetPosition(cur_shoot_pos)
+	self.shoot_effect:start()
+
+	self.shoot_fumes:start()
+	--print(cur_shoot_pos)
+	--self.shoot_effect
 end
 
 function RocketPod:client_onPodReload(reload_time)
@@ -124,7 +143,7 @@ function RocketPod:server_onFixedUpdate(dt)
 
 	if active and not self.reload then
 		if self.sv_ammo_counter == 1 then
-			self.reload = 15
+			self.reload = 30
 		else
 			self.reload = 5
 		end
