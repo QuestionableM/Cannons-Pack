@@ -1,7 +1,7 @@
 What are u doing here? you little thief
 
-Cannons Pack version 4.72 changelog:
-1. Better explosion effect for Schwerer Gustav cannon
+Cannons Pack version 4.8 changelog:
+1. New Weapon - Large Rocket Pod
 
 Made by:
 Questionable Mark - creator of all the textures, UV maps and also some scripts and cannon models.

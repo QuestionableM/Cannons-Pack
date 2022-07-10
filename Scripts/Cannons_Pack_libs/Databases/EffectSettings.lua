@@ -144,11 +144,11 @@ local cannon_effects = {
 
 function _cpEffect_cl_loadEffects2(self)
 	local obj_effects = cannon_effects[tostring(self.shape.uuid)]
-	local s_interactable = self.interactable
 
 	if obj_effects then
 		local effect_set     = {}
 		local effect_offsets = {}
+		local s_interactable = self.interactable
 
 		for id, effect in pairs(obj_effects) do
 			if type(effect) == "table" then
@@ -171,10 +171,10 @@ end
 
 function _cpEffect_cl_loadEffects(self)
 	local obj_effects = cannon_effects[tostring(self.shape.uuid)]
-	local s_Interactable = self.interactable
-
-	if type(obj_effects) == "table" then
+	if obj_effects then
 		local effect_set = {}
+		local s_Interactable = self.interactable
+
 		for id, effect in pairs(obj_effects) do
 			if type(effect) == "table" then
 				local new_eff = _createEffect(effect.name, s_Interactable)

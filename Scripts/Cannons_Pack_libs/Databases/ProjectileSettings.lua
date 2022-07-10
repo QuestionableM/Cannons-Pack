@@ -242,7 +242,7 @@ local ProjSettings = {
 	[ProjEnum.RocketPod01] = TranslateSettings({
 		localPosition = true,			localVelocity = false,
 		position = _newVec(0, 0, 0.6),	friction = 0.0,
-		gravity = 2,					shellEffect = "RocketPod01 - RocketProj",
+		gravity = 3,					shellEffect = "RocketPod01 - RocketProj",
 		lifetime = 15,					explosionEffect = ExplEffectEnum.ExplSmall,
 		explosionLevel = 10,			explosionRadius = 0.4,
 		explosionImpulseRadius = 25,	explosionImpulseStrength = 6000,

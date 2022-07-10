@@ -3,6 +3,7 @@
 	Questionable Mark
 ]]
 
+if RocketPod then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 RocketPod = class(GLOBAL_SCRIPT)
 RocketPod.maxParentCount = 1
