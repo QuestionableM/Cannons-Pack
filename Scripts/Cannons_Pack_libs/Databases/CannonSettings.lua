@@ -299,9 +299,7 @@ local cannon_settings = {
 			velocity = 200
 		},
 		effect_config = {
-			shoot_effect   = "RocketLauncher - Shoot",
-			exhaust_effect = "RocketPod01 - Fumes",
-			ammo_effect    = "RocketPod01 - Rocket",
+			ammo_effect = "RocketPod01 - Rocket",
 			shoot_order = { 10, 5, 9, 14, 15, 11, 6, 2, 1, 4, 8, 13, 17, 18, 19, 16, 12, 7, 3 },
 			effect_positions =
 			{

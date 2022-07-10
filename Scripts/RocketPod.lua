@@ -20,7 +20,7 @@ function RocketPod:cl_initAmmoEffects(pod_data)
 	local shoot_pos_data = pod_data.effect_positions
 	local shoot_order = pod_data.shoot_order
 
-	self.effects = {}
+	self.ammo_effects = {}
 	self.cl_effect_pos_data = {}
 	self.cl_effect_count = #shoot_order
 
@@ -32,7 +32,7 @@ function RocketPod:cl_initAmmoEffects(pod_data)
 		cur_effect:setScale(eff_scale)
 		cur_effect:start()
 
-		_tableInsert(self.effects, cur_effect)
+		_tableInsert(self.ammo_effects, cur_effect)
 		_tableInsert(self.cl_effect_pos_data, shoot_offset)
 	end
 end
@@ -40,14 +40,11 @@ end
 function RocketPod:client_onCreate()
 	self:client_injectScript("CPProjectile")
 
+	self.effects, self.eff_offsets = _cpEffect_cl_loadEffects2(self)
 	local pod_data = _cpCannons_loadCannonInfo(self)
 
 	local eff_config = pod_data.effect_config
 	self:cl_initAmmoEffects(eff_config)
-
-	local s_interactable = self.interactable
-	self.shoot_effect = _createEffect(eff_config.shoot_effect, s_interactable)
-	self.shoot_fumes  = _createEffect(eff_config.exhaust_effect, s_interactable)
 end
 
 function RocketPod:client_onFixedUpdate(dt)
@@ -61,7 +58,7 @@ function RocketPod:client_onFixedUpdate(dt)
 			self.cl_eff_cache = effect_id
 
 			if effect_id > 0 then
-				self.effects[effect_id]:start()
+				self.ammo_effects[effect_id]:start()
 			end
 		end
 
@@ -79,21 +76,25 @@ function RocketPod:client_onShoot(id)
 	for i = 1, eff_id do
 		local inv_eff_id = self.cl_effect_count - i
 
-		self.effects[inv_eff_id + 1]:stopImmediate()
+		self.ammo_effects[inv_eff_id + 1]:stopImmediate()
 	end
 
-	local cur_shoot_pos = self.cl_effect_pos_data[id]
-	self.shoot_effect:setOffsetPosition(cur_shoot_pos)
-	self.shoot_effect:start()
+	local cur_shoot_offset = self.cl_effect_pos_data[id]
+	local sht_eff_offset   = self.eff_offsets[EffectEnum.sht] or _vecZero()
+	local cur_shoot_pos    = sht_eff_offset + cur_shoot_offset
 
-	self.shoot_fumes:start()
+	local sht_eff = self.effects[EffectEnum.sht]
+	sht_eff:setOffsetPosition(cur_shoot_pos)
+	sht_eff:start()
+
+	self.effects[EffectEnum.fms]:start()
 end
 
 function RocketPod:client_onPodReload(reload_time)
 	self.cl_reload_total = reload_time
 	self.cl_reload_timer = reload_time
 
-	for k, v in ipairs(self.effects) do
+	for k, v in ipairs(self.ammo_effects) do
 		if v:isPlaying() then
 			v:stopImmediate()
 		end

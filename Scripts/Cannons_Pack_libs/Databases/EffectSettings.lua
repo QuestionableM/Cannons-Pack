@@ -4,38 +4,38 @@
 ]]
 
 EffectEnum = {
-	sht = 1,
-	rld = 2,
-	sht2 = 3,
-	crg = 4,
-	pnt = 5,
-	err = 6,
+	sht     = 1,
+	rld     = 2,
+	sht2    = 3,
+	crg     = 4,
+	pnt     = 5,
+	err     = 6,
 	sht_snd = 7,
-	fms = 8,
-	eff = 9,
-	lit = 10
+	fms     = 8,
+	eff     = 9,
+	lit     = 10
 }
 
 ExplEffectEnum = {
-	AircraftCannon = 1,
-	ExplSmall = 2,
-	ExplBig = 3,
-	ExplBig2 = 4,
-	DoraCannon = 5,
+	AircraftCannon     = 1,
+	ExplSmall          = 2,
+	ExplBig            = 3,
+	ExplBig2           = 4,
+	DoraCannon         = 5,
 	OrbitalCannonSmall = 6,
-	OrbitalCannon = 7,
-	EMPCannon = 8
+	OrbitalCannon      = 7,
+	EMPCannon          = 8
 }
 
 ExplEffectEnumTrans = {
-	[ExplEffectEnum.AircraftCannon] = "AircraftCannon - Explosion",
-	[ExplEffectEnum.ExplSmall] = "ExplSmall",
-	[ExplEffectEnum.ExplBig] = "ExplBig",
-	[ExplEffectEnum.ExplBig2] = "ExplBig2",
-	[ExplEffectEnum.DoraCannon] = "DoraCannon - Explosion",
+	[ExplEffectEnum.AircraftCannon]     = "AircraftCannon - Explosion",
+	[ExplEffectEnum.ExplSmall]          = "ExplSmall",
+	[ExplEffectEnum.ExplBig]            = "ExplBig",
+	[ExplEffectEnum.ExplBig2]           = "ExplBig2",
+	[ExplEffectEnum.DoraCannon]         = "DoraCannon - Explosion",
 	[ExplEffectEnum.OrbitalCannonSmall] = "OrbitalCannon - ExplosionSmall",
-	[ExplEffectEnum.OrbitalCannon] = "OrbitalCannon - Explosion",
-	[ExplEffectEnum.EMPCannon] = "EMPCannon - Explosion"
+	[ExplEffectEnum.OrbitalCannon]      = "OrbitalCannon - Explosion",
+	[ExplEffectEnum.EMPCannon]          = "EMPCannon - Explosion"
 }
 
 local function TranslateEffects(eff_table)
@@ -65,12 +65,12 @@ local cannon_effects = {
 		rld = "Reloading"
 	}),
 	["04c1c87f-da87-4f5e-8d70-1ca452314728"] = TranslateEffects({ --RocketLauncher
-		sht = "RocketLauncher - Shoot",
+		sht = {name = "RocketLauncher - Shoot", offset = _newVec(0.0, 0.0, 0.65)},
 		rld = "Reloading"
 	}),
 	["e8a8a8ce-7b00-4e2b-b417-75e8995a02d8"] = TranslateEffects({ --SmartRocketLauncher
 		rld = "Reloading",
-		sht = "RocketLauncher2 - Shoot",
+		sht = {name = "RocketLauncher - Shoot", offset = _newVec(0.0, 0.0, 0.65)},
 		fms = "SmartRocketLauncher - Fumes"
 	}),
 	["388ccd57-1be9-40cc-b96b-69dd16eb4f32"] = TranslateEffects({ --TankCannon3
@@ -133,30 +133,56 @@ local cannon_effects = {
 		sht = "FlareCannon - Shoot",
 		rld = "Reloading"
 	}),
-	["0d30954b-4f81-4e4b-99c6-cbdef5eb6c76"] = TranslateEffects({
+	["0d30954b-4f81-4e4b-99c6-cbdef5eb6c76"] = TranslateEffects({ --LaserCannon
 		sht = "LaserCannon - Shoot"
+	}),
+	["0dc868d7-5e01-4183-b3bb-63236595ba36"] = TranslateEffects({ --RocketPod01
+		fms = "RocketPod01 - Fumes",
+		sht = {name = "RocketLauncher - Shoot", offset = _newVec(0.0, 0.0, 0.8)}
 	})
 }
 
-function _cpEffect_cl_loadEffects(self)
-	local obj_uuid = tostring(self.shape.uuid)
-	local obj_effects = cannon_effects[obj_uuid]
+function _cpEffect_cl_loadEffects2(self)
+	local obj_effects = cannon_effects[tostring(self.shape.uuid)]
+	local s_interactable = self.interactable
 
-	if obj_effects == nil then
-		_cpPrint(("A set of effects for object \"%s\" doesn't exist!"):format(obj_uuid))
-		return
+	if obj_effects then
+		local effect_set     = {}
+		local effect_offsets = {}
+
+		for id, effect in pairs(obj_effects) do
+			if type(effect) == "table" then
+				local eff_name = effect.name
+				local eff_offset = effect.offset or _vecZero()
+
+				local new_eff = _createEffect(effect.name, s_interactable)
+				new_eff:setOffsetPosition(eff_offset)
+
+				effect_set    [id] = new_eff
+				effect_offsets[id] = eff_offset
+			else
+				effect_set[id] = _createEffect(effect, s_interactable)
+			end
+		end
+
+		return effect_set, effect_offsets
 	end
+end
 
+function _cpEffect_cl_loadEffects(self)
+	local obj_effects = cannon_effects[tostring(self.shape.uuid)]
 	local s_Interactable = self.interactable
 
 	if type(obj_effects) == "table" then
 		local effect_set = {}
 		for id, effect in pairs(obj_effects) do
-			local success, eff = pcall(_createEffect, effect, s_Interactable)
-			if success then
-				effect_set[id] = eff
+			if type(effect) == "table" then
+				local new_eff = _createEffect(effect.name, s_Interactable)
+				new_eff:setOffsetPosition(effect.offset or _vecZero())
+
+				effect_set[id] = new_eff
 			else
-				_cpPrint(("Couldn't load effect: %s. Error Message: %s"):format(effect, eff))
+				effect_set[id] = _createEffect(effect, s_Interactable)
 			end
 		end
 

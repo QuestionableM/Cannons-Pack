@@ -230,7 +230,8 @@
 		"effectList":[{"type":"audio","name":"Gas Explosion","offset":{"x":0.0,"y":0.0,"z":1.0},"parameters":["size"],"delay":0.0}]
 	},
 	"RocketLauncher - Shoot":{
-		"maxInstances":64,"parameterList":{"velocity":0.0,"power":0.0,"color":"ffff00","radius":3.0,"intensity":1.5,"shakeStrength":0.1,"shakeRadius":3.0},
+		"maxInstances":64,
+		"parameterList":{"velocity":0.0,"power":0.0,"color":"ffff00","radius":3.0,"intensity":1.5,"shakeStrength":0.1,"shakeRadius":3.0},
 		"parameterCurves":{
 			"radius":{"timeline":[{"time":0.03,"value":3.0},{"time":0.3,"value":0.0}]},
 			"intensity":{"timeline":[{"time":0.03,"value":1.5},{"time":0.3,"value":0.0}]},
@@ -240,12 +241,12 @@
 			"power":{"timeline":[{"time":0.03,"value":200.0},{"time":0.5,"value":0.0}]}
 		},
 		"effectList":[
-			{"type":"audio","name":"PotatoRifle - Shoot","offset":{"x":0.0,"y":0.0,"z":0.65},"delay":0.0},
-			{"type":"audio","name":"event:/vehicle/thrusters/thruster01","offset":{"x":0.0,"y":0.0,"z":0.65},"parameters":["velocity","power"],"duration":0.5,"delay":0.0},
-			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":0.65},"parameters":["shakeStrength","shakeRadius"],"duration":0.3,"delay":0.0},
-			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.65},"parameters":["color","radius","intensity"],"duration":0.3,"delay":0.0},
-			{"type":"particle","name":"hammer_metal","offset":{"x":0.0,"y":0.0,"z":0.65},"attached":true,"delay":0.0},
-			{"type":"particle","name":"p_spudgun_basic_muzzel","offset":{"x":0.0,"y":0.0,"z":0.65},"attached":true,"delay":0.0}
+			{"type":"audio","name":"PotatoRifle - Shoot"},
+			{"type":"audio","name":"event:/vehicle/thrusters/thruster01","parameters":["velocity","power"],"duration":0.5},
+			{"type":"cameraShake","name":"","parameters":["shakeStrength","shakeRadius"],"duration":0.3},
+			{"type":"pointLight","name":"","parameters":["color","radius","intensity"],"duration":0.3},
+			{"type":"particle","name":"hammer_metal","attached":true},
+			{"type":"particle","name":"p_spudgun_basic_muzzel","attached":true}
 		]
 	},
 	"NumberLogicCannon - Shoot":{
@@ -398,25 +399,6 @@
 			{"type":"particle","name":"fumes","offset":{"x":0.0,"y":0.0,"z":-0.5},"direction":{"x":0,"y":0,"z":1},"attached":true,"delay":0.0,"duration":2.0}
 		]
 	},
-	"RocketLauncher2 - Shoot":{
-		"maxInstances":64,"parameterList":{"velocity":0.0,"power":0.0,"color":"ffff00","radius":3.0,"intensity":1.5,"shakeStrength":0.1,"shakeRadius":3.0},
-		"parameterCurves":{
-			"radius":{"timeline":[{"time":0.05,"value":3.0},{"time":0.3,"value":0.0}]},
-			"intensity":{"timeline":[{"time":0.05,"value":1.5},{"time":0.3,"value":0.0}]},
-			"shakeStrength":{"timeline":[{"time":0.05,"value":0.1},{"time":0.3,"value":0.0}]},
-			"shakeRadius":{"timeline":[{"time":0.05,"value":3.0},{"time":0.3,"value":0.0}]},
-			"velocity":{"timeline":[{"time":0.05,"value":60.0},{"time":0.5,"value":0.0}]},
-			"power":{"timeline":[{"time":0.05,"value":200.0},{"time":0.5,"value":0.0}]}
-		},
-		"effectList":[
-			{"type":"audio","name":"PotatoRifle - Shoot","offset":{"x":0.0,"y":0.0,"z":0.65},"delay":0.0},
-			{"type":"audio","name":"event:/vehicle/thrusters/thruster01","offset":{"x":0.0,"y":0.0,"z":0.65},"parameters":["velocity","power"],"duration":0.5,"delay":0.0},
-			{"type":"cameraShake","name":"","offset":{"x":0.0,"y":0.0,"z":0.65},"parameters":["shakeStrength","shakeRadius"],"duration":0.3,"delay":0.0},
-			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.65},"parameters":["color","radius","intensity"],"duration":0.3,"delay":0.0},
-			{"type":"particle","name":"hammer_metal","offset":{"x":0.0,"y":0.0,"z":0.65},"attached":true,"delay":0.0},
-			{"type":"particle","name":"p_spudgun_basic_muzzel","offset":{"x":0.0,"y":0.0,"z":0.65},"attached":true,"delay":0.0}
-		]
-	},
 	"FlareCannon - Shoot":{
 		"maxInstances":64,"parameterList":{"color":"ffff00","radius":1.0,"intensity":1.0,"shakeStrength":0.1,"shakeRadius":1.0},
 		"parameterCurves":{
@@ -476,8 +458,13 @@
 		]
 	},
 	"RocketPod01 - Fumes":{
+		"parameterList":{"color":"fca103","radius":3.0,"intensity":0.0},
+		"parameterCurves":{
+			"intensity":{"timeline":[{"time":0.0,"value":0.0},{"time":0.03,"value":1.5},{"time":0.35,"value":0.0}]}
+		},
 		"effectList":[
-			{"type":"particle","name":"RocketPod01Fumes","offset":{"x":0.0,"y":0.0,"z":-0.8},"direction":{"x":0,"y":0,"z":-1},"attached":true,"delay":0.0,"duration":2.0}
+			{"type":"particle","name":"RocketPod01Fumes","offset":{"x":0.0,"y":0.0,"z":-0.8},"direction":{"x":0,"y":0,"z":-1},"attached":true,"delay":0.0,"duration":2.0},
+			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":-1.0},"parameters":["color","radius","intensity"],"duration":0.35,"delay":0.0}
 		]
 	}
 }
