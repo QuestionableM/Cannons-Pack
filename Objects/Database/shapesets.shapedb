@@ -1,7 +1,7 @@
 {
 	"shapeSetList" : [
 		"$CONTENT_DATA/Objects/Database/ShapeSets/Weapons.shapeset",
-		"$CONTENT_DATA/Objects/Database/ShapeSets/RocketPads.shapeset",
+		"$CONTENT_DATA/Objects/Database/ShapeSets/RocketPods.shapeset",
 		"$CONTENT_DATA/Objects/Database/ShapeSets/OtherParts.shapeset",
 		"$CONTENT_DATA/Objects/Database/ShapeSets/EmptyShells.shapeset"
 	]

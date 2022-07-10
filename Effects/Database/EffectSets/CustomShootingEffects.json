@@ -474,5 +474,10 @@
 			{"type":"pointLight","name":"","offset":{"x":0.0,"y":0.0,"z":0.6},"parameters":["color","radius","intensity"],"duration":0.3,"delay":0.0},
 			{"type":"particle","name":"LaserCannonMuzzleFlash","offset":{"x":0.0,"y":0.0,"z":0.75},"attached":true,"delay":0.0,"duration":0.5}
 		]
+	},
+	"RocketPod01 - Fumes":{
+		"effectList":[
+			{"type":"particle","name":"RocketPod01Fumes","offset":{"x":0.0,"y":0.0,"z":-0.8},"direction":{"x":0,"y":0,"z":-1},"attached":true,"delay":0.0,"duration":2.0}
+		]
 	}
 }

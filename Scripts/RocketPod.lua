@@ -12,69 +12,42 @@ RocketPod.connectionOutput = _connectionType.none
 RocketPod.colorNormal    = _colorNew(0x4ebf61ff)
 RocketPod.colorHighlight = _colorNew(0x65fc7eff)
 
-function RocketPod:client_onCreate()
-	local rocket_pod_data =
-	{
-		ammo_effect = "RocketPod01 - Rocket",
-		effect_positions =
-		{
-			--Row 2
-			_newVec(-0.087, 0.15, 0),   --1
-			_newVec(0, 0.15, 0),        --2
-			_newVec(0.087, 0.15, 0),    --3
+function RocketPod:cl_initAmmoEffects(pod_data)
+	local s_interactable = self.interactable
 
-			--Row 1
-			_newVec(-0.132, 0.075, 0),  --4
-			_newVec(-0.045, 0.075, 0),  --5
-			_newVec(0.045, 0.075, 0),   --6
-			_newVec(0.132, 0.075, 0),   --7
-
-			--Row 0
-			_newVec(-0.174, 0, 0),      --8
-			_newVec(-0.087, 0, 0),      --9
-			_newVec(0, 0, 0),           --10
-			_newVec(0.087, 0, 0),       --11
-			_newVec(0.174, 0, 0),       --12
-
-			--Row -1
-			_newVec(-0.132, -0.075, 0), --13
-			_newVec(-0.045, -0.075, 0), --14
-			_newVec(0.045, -0.075, 0),  --15
-			_newVec(0.132, -0.075, 0),  --16
-
-			--Row -2
-			_newVec(-0.087, -0.15, 0),  --17
-			_newVec(0, -0.15, 0),       --18
-			_newVec(0.087, -0.15, 0)    --19
-		},
-		shoot_order = { 10, 5, 9, 14, 15, 11, 6, 2, 1, 4, 8, 13, 17, 18, 19, 16, 12, 7, 3 }
-	}
+	local eff_scale = sm.vec3.new(0.25, 0.25, 0.25)
+	local ammo_eff = pod_data.ammo_effect
+	local shoot_pos_data = pod_data.effect_positions
+	local shoot_order = pod_data.shoot_order
 
 	self.effects = {}
-
-	local s_interactable = self.interactable
-	local eff_scale = sm.vec3.new(0.25, 0.25, 0.25)
-	local eff_name = rocket_pod_data.ammo_effect
-	local shoot_pos_data = rocket_pod_data.effect_positions
-
 	self.cl_effect_pos_data = {}
+	self.cl_effect_count = #shoot_order
 
-	for k, v in ipairs(rocket_pod_data.shoot_order) do
+	for k, v in ipairs(shoot_order) do
 		local shoot_offset = shoot_pos_data[v]
 
-		local cur_effect = _createEffect(eff_name, s_interactable)
-		cur_effect:setOffsetPosition(shoot_pos_data[v])
+		local cur_effect = _createEffect(ammo_eff, s_interactable)
+		cur_effect:setOffsetPosition(shoot_offset)
 		cur_effect:setScale(eff_scale)
 		cur_effect:start()
 
 		_tableInsert(self.effects, cur_effect)
 		_tableInsert(self.cl_effect_pos_data, shoot_offset)
 	end
+end
 
-	self.cl_effect_count = #self.effects
+function RocketPod:client_onCreate()
+	self:client_injectScript("CPProjectile")
 
-	self.shoot_effect = _createEffect("RocketLauncher - Shoot", s_interactable)
-	self.shoot_fumes = _createEffect("SmartRocketLauncher - Fumes", s_interactable)
+	local pod_data = _cpCannons_loadCannonInfo(self)
+
+	local eff_config = pod_data.effect_config
+	self:cl_initAmmoEffects(eff_config)
+
+	local s_interactable = self.interactable
+	self.shoot_effect = _createEffect(eff_config.shoot_effect, s_interactable)
+	self.shoot_fumes  = _createEffect(eff_config.exhaust_effect, s_interactable)
 end
 
 function RocketPod:client_onFixedUpdate(dt)
@@ -114,8 +87,6 @@ function RocketPod:client_onShoot(id)
 	self.shoot_effect:start()
 
 	self.shoot_fumes:start()
-	--print(cur_shoot_pos)
-	--self.shoot_effect
 end
 
 function RocketPod:client_onPodReload(reload_time)
@@ -130,8 +101,20 @@ function RocketPod:client_onPodReload(reload_time)
 end
 
 function RocketPod:server_onCreate()
-	self.sv_ammo_capacity = 19
-	self.sv_ammo_counter = self.sv_ammo_capacity
+	local pod_data = _cpCannons_loadCannonInfo(self)
+	local pod_eff_data    = pod_data.effect_config
+	local pod_cannon_data = pod_data.cannon_config
+
+	self.sv_ammo_capacity = #pod_eff_data.shoot_order
+	self.sv_ammo_counter  = self.sv_ammo_capacity
+
+	self.sv_shoot_delay      = pod_cannon_data.shoot_delay
+	self.sv_full_reload_time = pod_cannon_data.full_reload_time
+	self.sv_proj_id          = pod_cannon_data.proj_set_id
+	self.sv_spread           = pod_cannon_data.spread
+	self.sv_shoot_vel        = pod_cannon_data.velocity
+	
+	self.sv_proj_config = {}
 end
 
 function RocketPod:server_onFixedUpdate(dt)
@@ -145,8 +128,12 @@ function RocketPod:server_onFixedUpdate(dt)
 		if self.sv_ammo_counter == 1 then
 			self.reload = 30
 		else
-			self.reload = 5
+			self.reload = self.sv_shoot_delay
 		end
+
+		self.sv_proj_config[ProjSettingEnum.velocity] = _cp_calculateSpread(self, self.sv_spread, self.sv_shoot_vel)
+
+		CPProjectile:server_sendProjectile(self, self.sv_proj_config, self.sv_proj_id)
 
 		self.network:sendToClients("client_onShoot", self.sv_ammo_counter)
 		self.sv_ammo_counter = self.sv_ammo_counter - 1
@@ -156,7 +143,7 @@ function RocketPod:server_onFixedUpdate(dt)
 		self.reload = (self.reload > 1 and self.reload - 1) or nil
 
 		if self.sv_ammo_counter == 0 and self.reload == nil then
-			self.reload = 300
+			self.reload = self.sv_full_reload_time
 			self.sv_ammo_counter = self.sv_ammo_capacity
 			self.network:sendToClients("client_onPodReload", self.reload)
 		end

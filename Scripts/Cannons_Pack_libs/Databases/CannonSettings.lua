@@ -289,13 +289,57 @@ local cannon_settings = {
 			dot_highlight = 0xff6700ff,
 			effect_distance = 150
 		}
+	},
+	["0dc868d7-5e01-4183-b3bb-63236595ba36"] = { --RocketPod01
+		cannon_config = {
+			full_reload_time = 300,
+			shoot_delay = 5,
+			proj_set_id = ProjEnum.RocketPod01,
+			spread = 5,
+			velocity = 200
+		},
+		effect_config = {
+			shoot_effect   = "RocketLauncher - Shoot",
+			exhaust_effect = "RocketPod01 - Fumes",
+			ammo_effect    = "RocketPod01 - Rocket",
+			shoot_order = { 10, 5, 9, 14, 15, 11, 6, 2, 1, 4, 8, 13, 17, 18, 19, 16, 12, 7, 3 },
+			effect_positions =
+			{
+				--Row 2
+				_newVec(-0.087, 0.15, 0),   --1
+				_newVec(0, 0.15, 0),        --2
+				_newVec(0.087, 0.15, 0),    --3
+	
+				--Row 1
+				_newVec(-0.132, 0.075, 0),  --4
+				_newVec(-0.045, 0.075, 0),  --5
+				_newVec(0.045, 0.075, 0),   --6
+				_newVec(0.132, 0.075, 0),   --7
+	
+				--Row 0
+				_newVec(-0.174, 0, 0),      --8
+				_newVec(-0.087, 0, 0),      --9
+				_newVec(0, 0, 0),           --10
+				_newVec(0.087, 0, 0),       --11
+				_newVec(0.174, 0, 0),       --12
+	
+				--Row -1
+				_newVec(-0.132, -0.075, 0), --13
+				_newVec(-0.045, -0.075, 0), --14
+				_newVec(0.045, -0.075, 0),  --15
+				_newVec(0.132, -0.075, 0),  --16
+	
+				--Row -2
+				_newVec(-0.087, -0.15, 0),  --17
+				_newVec(0, -0.15, 0),       --18
+				_newVec(0.087, -0.15, 0)    --19
+			}
+		}
 	}
 }
 
 function _cpCannons_loadCannonInfo(self)
-	local uuid_str = tostring(self.shape.uuid)
-	local _CSettings = cannon_settings[uuid_str]
-
+	local _CSettings = cannon_settings[tostring(self.shape.uuid)]
 	if _CSettings then
 		local _ConstructedTable = {}
 		for k, v in pairs(_CSettings) do _ConstructedTable[k] = v end
@@ -307,9 +351,7 @@ function _cpCannons_loadCannonInfo(self)
 end
 
 function _cpCannons_sv_loadCannonInfo(self)
-	local uuid_str = tostring(self.shape.uuid)
-	local _CSettings = cannon_settings[uuid_str]
-
+	local _CSettings = cannon_settings[tostring(self.shape.uuid)]
 	if _CSettings and _CSettings.server_settings then
 		local _ConstructedTable = {}
 		for k, v in pairs(_CSettings.server_settings) do _ConstructedTable[k] = v end
@@ -322,9 +364,7 @@ function _cpCannons_sv_loadCannonInfo(self)
 end
 
 function _cpCannons_cl_loadCannonInfo(self)
-	local uuid_str = tostring(self.shape.uuid)
-	local _CSettings = cannon_settings[uuid_str]
-
+	local _CSettings = cannon_settings[tostring(self.shape.uuid)]
 	if _CSettings and _CSettings.client_settings then
 		local _ConstructedTable = {}
 		for k, v in pairs(_CSettings.client_settings) do _ConstructedTable[k] = v end

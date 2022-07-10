@@ -42,6 +42,10 @@
 		"ParticleEffects/BarrelSmoke/barrel_smoke_schwerer_gustav.json",
 
 		//Explosions
-		"ParticleEffects/ExplosionEffects/dora_cannon_explosion.json"
+		"ParticleEffects/ExplosionEffects/dora_cannon_explosion.json",
+
+		//Rocket Pod Effects
+		"ParticleEffects/RocketPod/SmallRocketFumes.json",
+		"ParticleEffects/RocketPod/RocketPod01Fumes.json"
 	]
 }

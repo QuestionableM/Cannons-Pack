@@ -2,7 +2,7 @@
 	"partList": [
 		{
 			"uuid": "0dc868d7-5e01-4183-b3bb-63236595ba36",
-			"name": "RocketPad01",
+			"name": "RocketPod01",
 			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/Launchers/RocketPod1.rend",
 			"scripted": {
 				"classname": "RocketPod",
