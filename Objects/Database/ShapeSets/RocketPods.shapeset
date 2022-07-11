@@ -8,15 +8,15 @@
 				"classname": "RocketPod",
 				"filename": "$CONTENT_DATA/Scripts/RocketPod.lua"
 			},
-			"box": { "x": 2, "y": 2, "z": 6 },
+			"cylinder": { "axis": "Z", "depth": 6, "diameter": 2 },
 			"physicsMaterial": "Metal",
 			"ratings": { "buoyancy": 0, "density": 5, "durability": 5, "friction": 5 },
 			"flammable": false,
 			"qualityLevel": 5,
 			"color": "375000",
 			"density": 500.0,
-			"rotationSet": "PropYZ",
-			"sticky": "-Z+Z-X+X-Y"
+			"rotationSet": "PropYX",
+			"sticky": "-X+X-Y+Y"
 		},
 		{
 			"uuid": "51356e94-23be-488e-af0c-5ef1d0129854",
@@ -26,15 +26,15 @@
 				"classname": "RocketPod",
 				"filename": "$CONTENT_DATA/Scripts/RocketPod.lua"
 			},
-			"box": { "x": 1, "y": 1, "z": 4 },
+			"cylinder": { "axis": "Z", "depth": 4, "diameter": 1 },
 			"physicsMaterial": "Metal",
 			"ratings": { "buoyancy": 0, "density": 2, "durability": 5, "friction": 5 },
 			"flammable": false,
 			"qualityLevel": 5,
 			"color": "375000",
 			"density": 500.0,
-			"rotationSet": "PropYZ",
-			"sticky": "-Z+Z-X+X-Y"
+			"rotationSet": "PropYX",
+			"sticky": "-X+X-Y+Y"
 		}
 	]
 }
