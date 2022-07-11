@@ -1,8 +1,7 @@
 What are u doing here? you little thief
 
-Cannons Pack version 4.8 changelog:
-1. New Weapon - Large Rocket Pod
-2. New Weapon - Small Rocket Pod
+Cannons Pack version 4.81 changelog:
+1. Fixed the shooting position for Small Rocket Pod
 
 Made by:
 Questionable Mark - creator of all the textures, UV maps and also some scripts and cannon models.
