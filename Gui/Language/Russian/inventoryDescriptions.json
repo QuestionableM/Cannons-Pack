@@ -116,12 +116,12 @@
 	},
 	"0dc868d7-5e01-4183-b3bb-63236595ba36": {
 		"title": "Большая ракетная установка",
-		"description": "#ffffffМожет запустить 19 ракет.\n\nТип - #ffff00Ракетная установка#ffffff\nАвто-перезарядка - #ffff00есть#ffffff\nВремя перезарядки: #ffff007.5#ffffff секунд",
+		"description": "#ffffffМожет запустить 19 ракет.\n\nТип - #ffff00Ракетная установка#ffffff\nАвто-перезарядка - #ffff00есть#ffffff\nВремя перезарядки: #ffff0011.25#ffffff секунд",
 		"keywords": ["Cannons Pack","rocket","pod","launcher"]
 	},
 	"51356e94-23be-488e-af0c-5ef1d0129854": {
 		"title": "Маленькая ракетная установка",
-		"description": "#ffffffМожет запустить 7 ракет.\n\nТип - #ffff00Ракетная установка#ffffff\nАвто-перезарядка - #ffff00есть#ffffff\nВремя перезарядки: #ffff003.75#ffffff секунды",
+		"description": "#ffffffМожет запустить 7 ракет.\n\nТип - #ffff00Ракетная установка#ffffff\nАвто-перезарядка - #ffff00есть#ffffff\nВремя перезарядки: #ffff006.25#ffffff секунд",
 		"keywords": ["Cannons Pack","rocket","pod","launcher"]
 	}
 }

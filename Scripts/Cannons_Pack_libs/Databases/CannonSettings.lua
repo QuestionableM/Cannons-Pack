@@ -292,7 +292,7 @@ local cannon_settings = {
 	},
 	["0dc868d7-5e01-4183-b3bb-63236595ba36"] = { --RocketPod01
 		cannon_config = {
-			full_reload_time = 300,
+			full_reload_time = 450,
 			shoot_delay = 5,
 			proj_set_id = ProjEnum.RocketPod01,
 			spread = 5,
@@ -336,7 +336,7 @@ local cannon_settings = {
 	},
 	["51356e94-23be-488e-af0c-5ef1d0129854"] = { --SmallRocketPod
 		cannon_config = {
-			full_reload_time = 150,
+			full_reload_time = 250,
 			shoot_delay = 5,
 			proj_set_id = ProjEnum.SmallRocketPod,
 			spread = 5,
