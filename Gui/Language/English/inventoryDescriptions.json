@@ -113,5 +113,15 @@
 		"title": "Pipe for Cannons",
 		"description": "#ffffffit will help you with making longer cannons",
 		"keywords": ["Cannons Pack","tube","pipe","cannon"]
+	},
+	"0dc868d7-5e01-4183-b3bb-63236595ba36": {
+		"title": "Large Rocket Pod",
+		"description": "#ffffffIt can fire 19 rockets.\n\nType - #ffff00Rocket Pod#ffffff\nAuto-reloading - #ffff00yes#ffffff\nReload time: #ffff007.5#ffffff seconds",
+		"keywords": ["Cannons Pack","rocket","pod","launcher"]
+	},
+	"51356e94-23be-488e-af0c-5ef1d0129854": {
+		"title": "Small Rocket Pod",
+		"description": "#ffffffIt can fire 7 rockets.\n\nType - #ffff00Rocket Pod#ffffff\nAuto-reloading - #ffff00yes#ffffff\nReload time: #ffff003.75#ffffff seconds",
+		"keywords": ["Cannons Pack","rocket","pod","launcher"]
 	}
 }
