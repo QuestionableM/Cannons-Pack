@@ -113,5 +113,15 @@
 		"title": "Fragment Lufy",
 		"description": "#ffffffPozwoli ci na tworzenie dłuższej lufy",
 		"keywords": ["Cannons Pack","rura","działo"]
+	},
+	"0dc868d7-5e01-4183-b3bb-63236595ba36": {
+		"title": "Duża podwieszana wyrzutia rakiet",
+		"description": "#ffffffMoże wystrzelić 19 rakiet jedna po drugiej. Po wystrzeleniu ostatniej następuje przeładowanie.\n\nType - #ffff00Podwieszana wyrzutnia rakiet#ffffff\nAutomatyczne przeładowanie - #ffff00tak#ffffff\nCzas przeładowania: #ffff0011.25#ffffff sekundy",
+		"keywords": ["Cannons Pack","wyrzutnia","rakiet"]
+	},
+	"51356e94-23be-488e-af0c-5ef1d0129854": {
+		"title": "Mała podwieszana wyrzutia rakiet",
+		"description": "#ffffffMoże wystrzelić 7 rakiet jedna po drugiej. Po wystrzeleniu ostatniej następuje przeładowanie.\n\nType - #ffff00Podwieszana wyrzutnia rakiet#ffffff\nAutomatyczne przeładowanie - #ffff00tak#ffffff\nCzas przeładowania: #ffff006.25#ffffff sekundy",
+		"keywords": ["Cannons Pack","wyrzutnia","rakiet"]
 	}
 }
