@@ -1,6 +1,6 @@
 ![Mod Preview](https://github.com/QuestionableM/Cannons-Pack/blob/main/preview.png)
 ## Description
-This mods contains 19 awesome cannons with shooting animations and custom projectiles.
+This mods contains 21 awesome cannons with shooting animations and custom projectiles.
 
 ## This Mod Adds
 - Tank cannon
@@ -25,6 +25,8 @@ This mods contains 19 awesome cannons with shooting animations and custom projec
 - Smart Rocket Detector
 - Shell Ejector
 - Laser Cannon
+- Small Rocket Pod
+- Large Rocket Pod
 
 ## Language Support
 - English: by default
