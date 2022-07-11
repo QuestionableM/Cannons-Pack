@@ -362,6 +362,14 @@
 			}
 		]
 	},
+	"SmallRocketPod - Rocket":{
+		"effectList":[
+			{
+				"type":"renderable",
+				"name":"$CONTENT_DATA/Effects/Renderables/smallrocketpod_rocket_folded.rend"
+			}
+		]
+	},
 	"RocketPod01 - RocketProj":{
 		"maxInstances":512,
 		"parameterList":{"velocity":200.0,"power":200.0,"color":"ff8000","radius":3.0,"intensity":1.5},
@@ -369,6 +377,40 @@
 			{
 				"type":"renderable",
 				"name":"$CONTENT_DATA/Effects/Renderables/rocketpod01_rocket_unfolded.rend"
+			},
+			{
+				"type":"particle",
+				"name":"SmallRocketFumes",
+				"offset":{"x":-0.15,"y":0.0,"z":0.0},
+				"direction":{"x":-1,"y":0,"z":0},
+				"delay":0.0,
+				"duration":30.0
+			},
+			{
+				"type":"audio",
+				"name":"event:/vehicle/thrusters/thruster01",
+				"offset":{"x":0.15,"y":0.0,"z":0.0},
+				"parameters":["velocity","power"],
+				"delay":0.0,
+				"duration":30.0
+			},
+			{
+				"type":"pointLight",
+				"name":"",
+				"offset":{"x":0.15,"y":0.0,"z":0.0},
+				"parameters":["color","radius","intensity"],
+				"delay":0.08,
+				"duration":30.0
+			}
+		]
+	},
+	"SmallRocketPod - RocketProj":{
+		"maxInstances":512,
+		"parameterList":{"velocity":200.0,"power":200.0,"color":"ff8000","radius":3.0,"intensity":1.5},
+		"effectList":[
+			{
+				"type":"renderable",
+				"name":"$CONTENT_DATA/Effects/Renderables/smallrocketpod_rocket_unfolded.rend"
 			},
 			{
 				"type":"particle",

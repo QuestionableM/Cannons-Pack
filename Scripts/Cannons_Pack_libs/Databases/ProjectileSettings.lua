@@ -25,7 +25,8 @@ ProjEnum =
 	Railgun2             = 18,
 	SmartCannon          = 19,
 	SmallSmartCannon     = 20,
-	RocketPod01          = 21
+	RocketPod01          = 21,
+	SmallRocketPod       = 22
 }
 
 ShellEjectorEnum =
@@ -245,6 +246,15 @@ local ProjSettings = {
 		gravity = 3,					shellEffect = "RocketPod01 - RocketProj",
 		lifetime = 15,					explosionEffect = ExplEffectEnum.ExplSmall,
 		explosionLevel = 10,			explosionRadius = 0.4,
+		explosionImpulseRadius = 25,	explosionImpulseStrength = 6000,
+		syncEffect = true,				keep_effect = true
+	}),
+	[ProjEnum.SmallRocketPod] = TranslateSettings({
+		localPosition = true,			localVelocity = false,
+		position = _newVec(0, 0, 0.6),	friction = 0.0,
+		gravity = 3,					shellEffect = "SmallRocketPod - RocketProj",
+		lifetime = 15,					explosionEffect = ExplEffectEnum.ExplSmall,
+		explosionLevel = 10,			explosionRadius = 0.3,
 		explosionImpulseRadius = 25,	explosionImpulseStrength = 6000,
 		syncEffect = true,				keep_effect = true
 	})

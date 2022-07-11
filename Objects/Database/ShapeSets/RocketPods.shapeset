@@ -10,7 +10,25 @@
 			},
 			"box": { "x": 2, "y": 2, "z": 6 },
 			"physicsMaterial": "Metal",
-			"ratings": { "buoyancy": 0, "density": 3, "durability": 5, "friction": 5 },
+			"ratings": { "buoyancy": 0, "density": 5, "durability": 5, "friction": 5 },
+			"flammable": false,
+			"qualityLevel": 5,
+			"color": "375000",
+			"density": 500.0,
+			"rotationSet": "PropYZ",
+			"sticky": "-Z+Z-X+X-Y"
+		},
+		{
+			"uuid": "51356e94-23be-488e-af0c-5ef1d0129854",
+			"name": "SmallRocketPod",
+			"renderable": "$CONTENT_DATA/Objects/Renderables/Cannons/Launchers/SmallRocketPod.rend",
+			"scripted": {
+				"classname": "RocketPod",
+				"filename": "$CONTENT_DATA/Scripts/RocketPod.lua"
+			},
+			"box": { "x": 1, "y": 1, "z": 4 },
+			"physicsMaterial": "Metal",
+			"ratings": { "buoyancy": 0, "density": 2, "durability": 5, "friction": 5 },
 			"flammable": false,
 			"qualityLevel": 5,
 			"color": "375000",

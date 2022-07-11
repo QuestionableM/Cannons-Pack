@@ -333,6 +333,34 @@ local cannon_settings = {
 				_newVec(0.087, -0.15, 0)    --19
 			}
 		}
+	},
+	["51356e94-23be-488e-af0c-5ef1d0129854"] = { --SmallRocketPod
+		cannon_config = {
+			full_reload_time = 150,
+			shoot_delay = 5,
+			proj_set_id = ProjEnum.SmallRocketPod,
+			spread = 5,
+			velocity = 200
+		},
+		effect_config = {
+			ammo_effect = "SmallRocketPod - Rocket",
+			shoot_order = { 4, 1, 2, 5, 7, 6, 3 },
+			effect_positions =
+			{
+				--Row 1
+				_newVec(-0.032, -0.054, 0), --1
+				_newVec(0.032, -0.054, 0),  --2
+
+				--Row 0
+				_newVec(-0.063, 0, 0),      --3
+				_newVec(0, 0, 0),           --4
+				_newVec(0.063, 0, 0),       --5
+
+				--Row -1
+				_newVec(-0.032, 0.054, 0),  --6
+				_newVec(0.032, 0.054, 0)    --7
+			}
+		}
 	}
 }
 

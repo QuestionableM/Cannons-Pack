@@ -139,6 +139,10 @@ local cannon_effects = {
 	["0dc868d7-5e01-4183-b3bb-63236595ba36"] = TranslateEffects({ --RocketPod01
 		fms = "RocketPod01 - Fumes",
 		sht = {name = "RocketLauncher - Shoot", offset = _newVec(0.0, 0.0, 0.8)}
+	}),
+	["51356e94-23be-488e-af0c-5ef1d0129854"] = TranslateEffects({ --SmallRocketPod
+		fms = {name = "RocketPod01 - Fumes", offset = _newVec(0.0, 0.0, 0.4)},
+		sht = {name = "RocketLauncher - Shoot", offset = _newVec(0.0, 0.0, 0.55)}
 	})
 }
 
@@ -152,7 +156,6 @@ function _cpEffect_cl_loadEffects2(self)
 
 		for id, effect in pairs(obj_effects) do
 			if type(effect) == "table" then
-				local eff_name = effect.name
 				local eff_offset = effect.offset or _vecZero()
 
 				local new_eff = _createEffect(effect.name, s_interactable)
