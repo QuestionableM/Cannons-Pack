@@ -63,6 +63,10 @@ function RocketPod:client_onFixedUpdate(dt)
 			end
 		end
 
+		if self.cl_reload_timer == 30 then
+			sm.effect.playHostedEffect("Reloading", self.interactable)
+		end
+
 		if self.cl_reload_timer <= 0 then
 			self.cl_reload_timer = nil
 			self.cl_reload_total = nil
