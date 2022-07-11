@@ -113,5 +113,15 @@
 		"title": "Kanonenrohr",
 		"description": "#ffffffVerlängerung für kurze Kanonen",
 		"keywords": ["Cannons Pack","Rohr","Kanone"]
+	},
+	"0dc868d7-5e01-4183-b3bb-63236595ba36": {
+		"title": "Große Raketenhülse",
+		"description": "#ffffffEs kann 19 Raketen abfeuern.\n\nType - #ffff00Raketenhülse#ffffff\nAuto-Nachladung - #ffff00Ja#ffffff\nNachladezeit: #ffff0011.25#ffffff Sekunden",
+		"keywords": ["Cannons Pack","Rakete","Hülse","Raketenwerfer"]
+	},
+	"51356e94-23be-488e-af0c-5ef1d0129854": {
+		"title": "Kleine Raketenhülse",
+		"description": "#ffffffEs kann 7 Raketen abfeuern.\n\nType - #ffff00Raketenhülse#ffffff\nAuto-Nachladung - #ffff00Ja#ffffff\nNachladezeit: #ffff006.25#ffffff Sekunden",
+		"keywords": ["Cannons Pack","Rakete","Hülse","Raketenwerfer"]
 	}
 }
