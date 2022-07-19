@@ -6,7 +6,7 @@
 if CP_SCRIPTLOADER_SCRIPTS_LOADED then return end
 CP_SCRIPTLOADER_SCRIPTS_LOADED = true
 
-print("[CannonsPack] Version: 4.81")
+print("[CannonsPack] Version: 4.82")
 print("[CannonsPack] Loading libraries...")
 
 dofile("FunctionReferences.lua")

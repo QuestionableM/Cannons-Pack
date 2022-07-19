@@ -8,13 +8,17 @@ SmartRocket = class(GLOBAL_SCRIPT)
 SmartRocket.projectiles = {}
 SmartRocket.proj_queue = {}
 
+SmartRocket.sv_last_update = 0
+SmartRocket.cl_last_update = 0
+SmartRocket.m_ref_count = 0
+
 --The FOV of Smart Rocket is 60 degrees (-0.66)
 --The FOV of Smart Rocket Detector is 80 degress (-0.88)
 
 function SmartRocket.server_sendProjectile(self, shapeScript, data, id)
 	local data_to_send = _cpProj_ClearNetworkData(data, id)
 
-	_tableInsert(self.proj_queue, {id, shapeScript.shape, data_to_send})
+	_tableInsert(SmartRocket.proj_queue, {id, shapeScript.shape, data_to_send})
 end
 
 SR_ModeEnum = {
@@ -44,7 +48,7 @@ function SmartRocket.client_loadProjectile(self, data)
 	local proximity_fuze = proj_settings[ProjSettingEnum.proxFuze]
 	local ignored_players = _cpProj_proxFuzeIgnore(shape.worldPosition, proximity_fuze)
 
-	self.projectiles[#self.projectiles + 1] = {
+	SmartRocket.projectiles[#SmartRocket.projectiles + 1] = {
 		effect = effect,
 		pos = position,
 		dir = velocity,
@@ -60,12 +64,12 @@ function SmartRocket.client_loadProjectile(self, data)
 end
 
 function SmartRocket.server_onScriptUpdate(self, dt)
-	for k, data in pairs(self.proj_queue) do
+	for k, data in pairs(SmartRocket.proj_queue) do
 		self.network:sendToClients("client_loadProjectile", data)
-		self.proj_queue[k] = nil
+		SmartRocket.proj_queue[k] = nil
 	end
 
-	for b, proj in pairs(self.projectiles) do
+	for b, proj in pairs(SmartRocket.projectiles) do
 		if proj and proj.hit then
 			_cpProj_betterExplosion(proj.hit, 60, 0.7, 7000, 30, "ExplBig", true)
 		end
@@ -173,9 +177,9 @@ local function PickATarget(rocket, char_pos, char_visible)
 end
 
 function SmartRocket.client_onScriptUpdate(self, dt)
-	for k, rocket in pairs(self.projectiles) do
+	for k, rocket in pairs(SmartRocket.projectiles) do
 		if rocket and rocket.hit then
-			self.projectiles[k] = nil
+			SmartRocket.projectiles[k] = nil
 		end
 
 		if rocket and not rocket.hit then
@@ -288,7 +292,7 @@ function SmartRocket.client_onScriptUpdate(self, dt)
 end
 
 function SmartRocket.client_onScriptDestroy(self)
-	local deleted_projectiles = _cpProj_cl_destroyProjectiles(self.projectiles)
+	local deleted_projectiles = _cpProj_cl_destroyProjectiles(SmartRocket.projectiles)
 	SmartRocket.projectiles = {}
 	SmartRocket.proj_queue = {}
 	_cpPrint(("SmartRocket: Deleted %s projectiles"):format(deleted_projectiles))
