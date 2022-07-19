@@ -8,10 +8,14 @@ RailgunProjectile = class(GLOBAL_SCRIPT)
 RailgunProjectile.projectiles = {}
 RailgunProjectile.proj_queue = {}
 
+RailgunProjectile.sv_last_update = 0
+RailgunProjectile.cl_last_update = 0
+RailgunProjectile.m_ref_count = 0
+
 function RailgunProjectile.server_sendProjectile(self, shapeScript, data, id)
 	local data_to_send = _cpProj_ClearNetworkData(data, id)
 
-	_tableInsert(self.proj_queue, {id, shapeScript.shape, data_to_send})
+	_tableInsert(RailgunProjectile.proj_queue, {id, shapeScript.shape, data_to_send})
 end
 
 function RailgunProjectile.client_loadProjectile(self, data)
@@ -42,7 +46,7 @@ function RailgunProjectile.client_loadProjectile(self, data)
 	shellEffect:setPosition(position)
 	shellEffect:start()
 
-	self.projectiles[#self.projectiles + 1] = {
+	RailgunProjectile.projectiles[#RailgunProjectile.projectiles + 1] = {
 		effect = shellEffect,
 		pos = position,
 		dir = proj_settings[ProjSettingEnum.velocity],
@@ -58,12 +62,12 @@ function RailgunProjectile.client_loadProjectile(self, data)
 end
 
 function RailgunProjectile.server_onScriptUpdate(self, dt, network)
-	for b, data in pairs(self.proj_queue) do
+	for b, data in pairs(RailgunProjectile.proj_queue) do
 		self.network:sendToClients("client_loadProjectile", data)
-		self.proj_queue[b] = nil
+		RailgunProjectile.proj_queue[b] = nil
 	end
 
-	for k, RlgProj in pairs(self.projectiles) do
+	for k, RlgProj in pairs(RailgunProjectile.projectiles) do
 		if RlgProj and RlgProj.hit then
 			_cpProj_betterExplosion(RlgProj.hit.result, RlgProj.explLvl, RlgProj.explRad, RlgProj.explImpStr, RlgProj.explImpRad, RlgProj.explEff, true)
 			if RlgProj.count > 0 and RlgProj.hit.type ~= "invalid" and RlgProj.hit.type ~= "terrainAsset" and RlgProj.hit.type ~= "terrainSurface" then
@@ -83,8 +87,8 @@ end
 
 local _xAxis = _newVec(1, 0, 0)
 function RailgunProjectile.client_onScriptUpdate(self, dt)
-	for k, RlgProj in pairs(self.projectiles) do
-		if RlgProj and RlgProj.hit then self.projectiles[k] = nil end
+	for k, RlgProj in pairs(RailgunProjectile.projectiles) do
+		if RlgProj and RlgProj.hit then RailgunProjectile.projectiles[k] = nil end
 		if RlgProj and not RlgProj.hit then
 			RlgProj.alive = RlgProj.alive - dt
 
@@ -110,7 +114,7 @@ function RailgunProjectile.client_onScriptUpdate(self, dt)
 end
 
 function RailgunProjectile.client_onScriptDestroy(self)
-	local deleted_projectiles = _cpProj_cl_destroyProjectiles(self.projectiles)
+	local deleted_projectiles = _cpProj_cl_destroyProjectiles(RailgunProjectile.projectiles)
 	RailgunProjectile.projectiles = {}
 	RailgunProjectile.proj_queue = {}
 	_cpPrint(("RailgunProjectile: Deleted %s projectiles"):format(deleted_projectiles))
