@@ -8,8 +8,12 @@ LaserProjectile = class(GLOBAL_SCRIPT)
 LaserProjectile.projectiles = {}
 LaserProjectile.proj_queue = {}
 
+LaserProjectile.sv_last_update = 0
+LaserProjectile.cl_last_update = 0
+LaserProjectile.m_ref_count = 0
+
 function LaserProjectile.server_sendProjectile(self, shapeScript, data, id)
-	_tableInsert(self.proj_queue, {id, shapeScript.shape, data[ProjSettingEnum.velocity]})
+	_tableInsert(LaserProjectile.proj_queue, {id, shapeScript.shape, data[ProjSettingEnum.velocity]})
 end
 
 function LaserProjectile.client_loadProjectile(self, data)
@@ -29,7 +33,7 @@ function LaserProjectile.client_loadProjectile(self, data)
 	shellEffect:setPosition(position)
 	shellEffect:start()
 
-	self.projectiles[#self.projectiles + 1] = {
+	LaserProjectile.projectiles[#LaserProjectile.projectiles + 1] = {
 		effect = shellEffect,
 		pos = position,
 		dir = velocity,
@@ -40,11 +44,11 @@ end
 local _zAxis = _newVec(0, 0, 1)
 local _vecOne = _newVec(1, 1, 1)
 function LaserProjectile.server_onScriptUpdate(self, dt)
-	for b, data in pairs(self.proj_queue) do
+	for b, data in pairs(LaserProjectile.proj_queue) do
 		self.network:sendToClients("client_loadProjectile", data)
-		self.proj_queue[b] = nil
+		LaserProjectile.proj_queue[b] = nil
 	end
-	for k, proj in pairs(self.projectiles) do
+	for k, proj in pairs(LaserProjectile.projectiles) do
 		if proj and proj.hit then
 			local _RayRes = proj.hit
 			if _RayRes.valid then
@@ -85,9 +89,9 @@ end
 
 local _xAxis = _newVec(1, 0, 0)
 function LaserProjectile.client_onScriptUpdate(self, dt)
-	for k, proj in pairs(self.projectiles) do
+	for k, proj in pairs(LaserProjectile.projectiles) do
 		if proj and proj.hit then
-			self.projectiles[k] = nil
+			LaserProjectile.projectiles[k] = nil
 		end
 
 		if proj and not proj.hit then
@@ -115,7 +119,7 @@ function LaserProjectile.client_onScriptUpdate(self, dt)
 end
 
 function LaserProjectile.client_onScriptDestroy(self)
-	local deleted_projectiles = _cpProj_cl_destroyProjectiles(self.projectiles)
+	local deleted_projectiles = _cpProj_cl_destroyProjectiles(LaserProjectile.projectiles)
 	LaserProjectile.projectiles = {}
 	LaserProjectile.proj_queue = {}
 	_cpPrint(("LaserProjectile: Deleted %s projectiles"):format(deleted_projectiles))
