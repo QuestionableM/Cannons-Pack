@@ -5,16 +5,20 @@
 
 if CPProjectile then return end
 CPProjectile = class(GLOBAL_SCRIPT)
+CPProjectile.projectiles = {}
+CPProjectile.proj_queue  = {}
 
-function CPProjectile.server_sendProjectile(proj_script, self, data, id)
+CPProjectile.sv_last_update = 0
+CPProjectile.cl_last_update = 0
+CPProjectile.m_ref_count = 0
+
+function CPProjectile.server_sendProjectile(self, shapeScript, data, id)
 	local data_to_send = _cpProj_ClearNetworkData(data, id)
-
-	_tableInsert(self.proj_queue, {id, data_to_send})
+	_tableInsert(CPProjectile.proj_queue, {id, shapeScript.shape, data_to_send})
 end
 
 function CPProjectile.client_loadProjectile(self, data)
-	local shape = self.shape
-	local proj_data_id, rc_proj_data = unpack(data)
+	local proj_data_id, shape, rc_proj_data = unpack(data)
 	local proj_settings = _cpProj_CombineProjectileData(rc_proj_data, proj_data_id)
 
 	local localPosition = proj_settings[ProjSettingEnum.localPosition]
@@ -44,7 +48,7 @@ function CPProjectile.client_loadProjectile(self, data)
 	local proxFuze = proj_settings[ProjSettingEnum.proxFuze] or 0
 	local ignored_players = _cpProj_proxFuzeIgnore(shape.worldPosition, proxFuze)
 
-	self.projectiles[#self.projectiles + 1] = {
+	CPProjectile.projectiles[#CPProjectile.projectiles + 1] = {
 		effect = shellEffect,
 		pos = position,
 		dir = velocity,
@@ -64,12 +68,12 @@ function CPProjectile.client_loadProjectile(self, data)
 end
 
 function CPProjectile.server_onScriptUpdate(self, dt)
-	for b, data in pairs(self.proj_queue) do
+	for b, data in pairs(CPProjectile.proj_queue) do
 		self.network:sendToClients("client_loadProjectile", data)
-		self.proj_queue[b] = nil
+		CPProjectile.proj_queue[b] = nil
 	end
 
-	for k, CPProj in pairs(self.projectiles) do
+	for k, CPProj in pairs(CPProjectile.projectiles) do
 		if CPProj and CPProj.hit then 
 			local expl_eff_name = ExplEffectEnumTrans[CPProj.explEff]
 
@@ -93,10 +97,10 @@ local function CPProj_UpdateEffect(CPProj)
 end
 
 function CPProjectile.client_onScriptUpdate(self, dt)
-	for k, CPProj in pairs(self.projectiles) do
+	for k, CPProj in pairs(CPProjectile.projectiles) do
 		if CPProj then
 			if CPProj.hit then
-				self.projectiles[k] = nil
+				CPProjectile.projectiles[k] = nil
 			else
 				CPProj.alive = CPProj.alive - dt
 				CPProj.dir = CPProj.dir * (1 - CPProj.friction) - _newVec(0, 0, CPProj.grav * dt)
@@ -118,7 +122,10 @@ function CPProjectile.client_onScriptUpdate(self, dt)
 end
 
 function CPProjectile.client_onScriptDestroy(self)
-	_cpProj_cl_destroyProjectiles(self.projectiles)
+	local deleted_projectiles = _cpProj_cl_destroyProjectiles(CPProjectile.projectiles)
+	CPProjectile.projectiles = {}
+	CPProjectile.proj_queue = {}
+	_cpPrint(("CPProjectile: Deleted %s projectiles"):format(deleted_projectiles))
 end
 
 _CP_gScript.CPProjectile = CPProjectile

@@ -5,16 +5,21 @@
 
 if EMPProjectile then return end
 EMPProjectile = class(GLOBAL_SCRIPT)
+EMPProjectile.projectiles = {}
+EMPProjectile.proj_queue = {}
 
-function EMPProjectile.server_sendProjectile(proj_script, self, data, id)
+EMPProjectile.sv_last_update = 0
+EMPProjectile.cl_last_update = 0
+EMPProjectile.m_ref_count = 0
+
+function EMPProjectile.server_sendProjectile(self, shapeScript, data, id)
 	local data_to_send = _cpProj_ClearNetworkData(data, id)
 
-	_tableInsert(self.proj_queue, {id, data_to_send})
+	_tableInsert(EMPProjectile.proj_queue, {id, shapeScript.shape, data_to_send})
 end
 
 function EMPProjectile.client_loadProjectile(self, data)
-	local shape = self.shape
-	local proj_data_id, data = unpack(data)
+	local proj_data_id, shape, data = unpack(data)
 
 	if not _cpExists(shape) then
 		_cpPrint("EMPProjectile: NO SHAPE")
@@ -30,7 +35,7 @@ function EMPProjectile.client_loadProjectile(self, data)
 	eff:setPosition(position)
 	eff:start()
 
-	self.projectiles[#self.projectiles + 1] = {
+	EMPProjectile.projectiles[#EMPProjectile.projectiles + 1] = {
 		effect = eff,
 		pos = position,
 		dir = proj_settings[ProjSettingEnum.velocity],
@@ -40,12 +45,12 @@ function EMPProjectile.client_loadProjectile(self, data)
 end
 
 function EMPProjectile.server_onScriptUpdate(self, dt)
-	for b, data in pairs(self.proj_queue) do
+	for b, data in pairs(EMPProjectile.proj_queue) do
 		self.network:sendToClients("client_loadProjectile", data)
-		self.proj_queue[b] = nil
+		EMPProjectile.proj_queue[b] = nil
 	end
 
-	for k,EMPProjectile in pairs(self.projectiles) do
+	for k,EMPProjectile in pairs(EMPProjectile.projectiles) do
 		if EMPProjectile and EMPProjectile.hit then
 			local shape_list = _getShapesInSphere(EMPProjectile.hit, EMPProjectile.disconnectRadius)
 
@@ -78,8 +83,8 @@ local function EMPProj_UpdateEffect(EMPProj)
 end
 
 function EMPProjectile.client_onScriptUpdate(self, dt)
-	for k,EMPProj in pairs(self.projectiles) do
-		if EMPProj and EMPProj.hit then self.projectiles[k] = nil end
+	for k,EMPProj in pairs(EMPProjectile.projectiles) do
+		if EMPProj and EMPProj.hit then EMPProjectile.projectiles[k] = nil end
 		if EMPProj and not EMPProj.hit then
 			EMPProj.alive = EMPProj.alive - dt
 
@@ -99,7 +104,10 @@ function EMPProjectile.client_onScriptUpdate(self, dt)
 end
 
 function EMPProjectile.client_onScriptDestroy(self)
-	_cpProj_cl_destroyProjectiles(self.projectiles)
+	local deleted_projectiles = _cpProj_cl_destroyProjectiles(EMPProjectile.projectiles)
+	EMPProjectile.projectiles = {}
+	EMPProjectile.proj_queue = {}
+	_cpPrint(("EMPProjectile: Deleted %s projectiles"):format(deleted_projectiles))
 end
 
 _CP_gScript.EMPProjectile = EMPProjectile

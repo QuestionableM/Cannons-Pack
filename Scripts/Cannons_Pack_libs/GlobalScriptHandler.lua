@@ -25,26 +25,40 @@ function GLOBAL_SCRIPT.client_injectScript(self, script)
 	if not self._GS_ATTACHED then
 		self._GS_ATTACHED = true
 
-		self.projectiles = {}
-		self.proj_queue = {}
+		g_script.m_ref_count = g_script.m_ref_count + 1
 
 		self.client_loadProjectile = g_script.client_loadProjectile
 
 		local sv_onFixedUpdate_cpy = self.server_onFixedUpdate
 		self.server_onFixedUpdate = function(self, dt)
-			g_script.server_onScriptUpdate(self, dt)
+			local cur_tick = _getCurrentTick()
+			if g_script.sv_last_update ~= cur_tick then
+				g_script.sv_last_update = cur_tick
+				g_script.server_onScriptUpdate(self, dt)
+			end
+
 			sv_onFixedUpdate_cpy(self, dt)
 		end
 		
 		local cl_onFixedUpdate_cpy = self.client_onFixedUpdate
 		self.client_onFixedUpdate = function(self, dt)
-			g_script.client_onScriptUpdate(self, dt)
+			local cur_tick = _getCurrentTick()
+			if g_script.cl_last_update ~= cur_tick then
+				g_script.cl_last_update = cur_tick
+				g_script.client_onScriptUpdate(self, dt)
+			end
+
 			cl_onFixedUpdate_cpy(self, dt)
 		end
 
 		local cl_onDestroy_cpy = self.client_onDestroy
 		self.client_onDestroy = function(self)
-			g_script.client_onScriptDestroy(self)
+			g_script.m_ref_count = g_script.m_ref_count - 1
+			if g_script.m_ref_count <= 0 then
+				g_script.m_ref_count = 0
+				g_script.client_onScriptDestroy(self)
+			end
+
 			cl_onDestroy_cpy(self)
 		end
 	end

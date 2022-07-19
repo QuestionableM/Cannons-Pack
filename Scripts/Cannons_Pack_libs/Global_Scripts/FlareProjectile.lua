@@ -8,8 +8,12 @@ FlareProjectile = class(GLOBAL_SCRIPT)
 FlareProjectile.projectiles = {}
 FlareProjectile.proj_queue = {}
 
+FlareProjectile.sv_last_update = 0
+FlareProjectile.cl_last_update = 0
+FlareProjectile.m_ref_count = 0
+
 function FlareProjectile.server_sendProjectile(self, shapeScript, direction)
-	_tableInsert(self.proj_queue, {shapeScript.shape, direction})
+	_tableInsert(FlareProjectile.proj_queue, {shapeScript.shape, direction})
 end
 
 function FlareProjectile.client_loadProjectile(self, data)
@@ -26,7 +30,7 @@ function FlareProjectile.client_loadProjectile(self, data)
 	eff:setPosition(pos)
 	eff:start()
 
-	self.projectiles[#self.projectiles + 1] = {
+	FlareProjectile.projectiles[#FlareProjectile.projectiles + 1] = {
 		effect = eff,
 		pos = pos,
 		dir = dir,
@@ -36,14 +40,14 @@ function FlareProjectile.client_loadProjectile(self, data)
 end
 
 function FlareProjectile.server_onScriptUpdate(self, dt)
-	for k, data in pairs(self.proj_queue) do
+	for k, data in pairs(FlareProjectile.proj_queue) do
 		self.network:sendToClients("client_loadProjectile", data)
-		self.proj_queue[k] = nil
+		FlareProjectile.proj_queue[k] = nil
 	end
 end
 
 function FlareProjectile.client_onScriptUpdate(self, dt)
-	for k, flare in pairs(self.projectiles) do
+	for k, flare in pairs(FlareProjectile.projectiles) do
 		if flare and not flare.hit then
 			flare.alive = flare.alive - dt
 			flare.dir = flare.dir * 0.997 - _newVec(0, 0, flare.grav * dt)
@@ -64,13 +68,13 @@ function FlareProjectile.client_onScriptUpdate(self, dt)
 
 		if flare and (flare.hit or flare.alive <= 0) then
 			_cpProj_cl_onProjHit(flare.effect, true)
-			self.projectiles[k] = nil
+			FlareProjectile.projectiles[k] = nil
 		end
 	end
 end
 
 function FlareProjectile.client_onScriptDestroy(self)
-	local deleted_projectiles = _cpProj_cl_destroyProjectiles(self.projectiles)
+	local deleted_projectiles = _cpProj_cl_destroyProjectiles(FlareProjectile.projectiles)
 	FlareProjectile.projectiles = {}
 	FlareProjectile.proj_queue = {}
 	_cpPrint(("FlareProjectile: Deleted %s projectiles"):format(deleted_projectiles))
