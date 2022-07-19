@@ -5,17 +5,16 @@
 
 if EMPProjectile then return end
 EMPProjectile = class(GLOBAL_SCRIPT)
-EMPProjectile.projectiles = {}
-EMPProjectile.proj_queue = {}
 
-function EMPProjectile.server_sendProjectile(self, shapeScript, data, id)
+function EMPProjectile.server_sendProjectile(proj_script, self, data, id)
 	local data_to_send = _cpProj_ClearNetworkData(data, id)
 
-	_tableInsert(self.proj_queue, {id, shapeScript.shape, data_to_send})
+	_tableInsert(self.proj_queue, {id, data_to_send})
 end
 
 function EMPProjectile.client_loadProjectile(self, data)
-	local proj_data_id, shape, data = unpack(data)
+	local shape = self.shape
+	local proj_data_id, data = unpack(data)
 
 	if not _cpExists(shape) then
 		_cpPrint("EMPProjectile: NO SHAPE")
@@ -100,10 +99,7 @@ function EMPProjectile.client_onScriptUpdate(self, dt)
 end
 
 function EMPProjectile.client_onScriptDestroy(self)
-	local deleted_projectiles = _cpProj_cl_destroyProjectiles(self.projectiles)
-	EMPProjectile.projectiles = {}
-	EMPProjectile.proj_queue = {}
-	_cpPrint(("EMPProjectile: Deleted %s projectiles"):format(deleted_projectiles))
+	_cpProj_cl_destroyProjectiles(self.projectiles)
 end
 
 _CP_gScript.EMPProjectile = EMPProjectile

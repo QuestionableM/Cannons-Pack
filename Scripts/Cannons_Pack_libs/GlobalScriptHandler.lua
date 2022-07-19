@@ -25,7 +25,6 @@ function GLOBAL_SCRIPT.client_injectScript(self, script)
 	if not self._GS_ATTACHED then
 		self._GS_ATTACHED = true
 
-		self.cl_attached_script = g_script
 		self.projectiles = {}
 		self.proj_queue = {}
 
