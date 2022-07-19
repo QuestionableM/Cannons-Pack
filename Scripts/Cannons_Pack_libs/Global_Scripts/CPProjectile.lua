@@ -5,17 +5,16 @@
 
 if CPProjectile then return end
 CPProjectile = class(GLOBAL_SCRIPT)
-CPProjectile.projectiles = {}
-CPProjectile.proj_queue = {}
 
-function CPProjectile.server_sendProjectile(self, shapeScript, data, id)
+function CPProjectile.server_sendProjectile(proj_script, self, data, id)
 	local data_to_send = _cpProj_ClearNetworkData(data, id)
 
-	_tableInsert(self.proj_queue, {id, shapeScript.shape, data_to_send})
+	_tableInsert(self.proj_queue, {id, data_to_send})
 end
 
 function CPProjectile.client_loadProjectile(self, data)
-	local proj_data_id, shape, rc_proj_data = unpack(data)
+	local shape = self.shape
+	local proj_data_id, rc_proj_data = unpack(data)
 	local proj_settings = _cpProj_CombineProjectileData(rc_proj_data, proj_data_id)
 
 	local localPosition = proj_settings[ProjSettingEnum.localPosition]
@@ -119,10 +118,7 @@ function CPProjectile.client_onScriptUpdate(self, dt)
 end
 
 function CPProjectile.client_onScriptDestroy(self)
-	local deleted_projectiles = _cpProj_cl_destroyProjectiles(self.projectiles)
-	CPProjectile.projectiles = {}
-	CPProjectile.proj_queue = {}
-	_cpPrint(("CPProjectile: Deleted %s projectiles"):format(deleted_projectiles))
+	_cpProj_cl_destroyProjectiles(self.projectiles)
 end
 
 _CP_gScript.CPProjectile = CPProjectile

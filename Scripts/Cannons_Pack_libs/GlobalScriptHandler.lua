@@ -10,11 +10,48 @@ function GLOBAL_SCRIPT.server_onFixedUpdate(self, dt) end
 function GLOBAL_SCRIPT.client_onFixedUpdate(self, dt) end
 function GLOBAL_SCRIPT.client_onDestroy(self) end
 
+--[[
 local _SpawnPosition = _newVec(0, 0, 5000)
 local _ActiveScripts = {}
+]]
 
 function GLOBAL_SCRIPT.client_injectScript(self, script)
-	local _sUuid = self.shape:getShapeUuid()
+	local g_script = _CP_gScript[script]
+	if g_script == nil then
+		_cpPrint("The specified script \""..script.."\" doesn't exist!")
+		return
+	end
+
+	if not self._GS_ATTACHED then
+		self._GS_ATTACHED = true
+
+		self.cl_attached_script = g_script
+		self.projectiles = {}
+		self.proj_queue = {}
+
+		self.client_loadProjectile = g_script.client_loadProjectile
+
+		local sv_onFixedUpdate_cpy = self.server_onFixedUpdate
+		self.server_onFixedUpdate = function(self, dt)
+			g_script.server_onScriptUpdate(self, dt)
+			sv_onFixedUpdate_cpy(self, dt)
+		end
+		
+		local cl_onFixedUpdate_cpy = self.client_onFixedUpdate
+		self.client_onFixedUpdate = function(self, dt)
+			g_script.client_onScriptUpdate(self, dt)
+			cl_onFixedUpdate_cpy(self, dt)
+		end
+
+		local cl_onDestroy_cpy = self.client_onDestroy
+		self.client_onDestroy = function(self)
+			g_script.client_onScriptDestroy(self)
+			cl_onDestroy_cpy(self)
+		end
+	end
+
+	--Temporarily scrapped
+	--[[local _sUuid = self.shape:getShapeUuid()
 	local _ShapePos = self.shape:getWorldPosition()
 
 	local _GScript = _CP_gScript[script]
@@ -63,7 +100,7 @@ function GLOBAL_SCRIPT.client_injectScript(self, script)
 		if self.client_onScriptCreate then self.client_onScriptCreate(self) end
 
 		_cpPrint(script.." script has been initialized")
-	end
+	end]]
 end
 
 _cpPrint("Global Script has been loaded!")
