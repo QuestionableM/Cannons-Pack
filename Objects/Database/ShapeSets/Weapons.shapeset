@@ -328,11 +328,10 @@
 				"z": 30
 			},
 			"physicsMaterial": "Metal",
-			"ratings": { "buoyancy": 0, "density": 10, "durability": 5, "friction": 5 },
+			"ratings": { "buoyancy": 0, "density": 8, "durability": 5, "friction": 5 },
 			"flammable": false,
 			"qualityLevel": 5,
 			"color": "375000",
-			"density": 250.0,
 			"rotationSet": "PropZ",
 			"sticky": "-Z"
 		},
