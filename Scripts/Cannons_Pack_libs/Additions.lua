@@ -89,6 +89,7 @@ function _cp_infoOutput(sound, globalSound, text, duration)
 	end
 end
 
+---@param position Vec3
 function _cpProj_betterExplosion(position, expl_level, expl_radius, expl_impulse, expl_magnitude, effect, pushPlayers)
 	_physExplode(position, expl_level, expl_radius, 1, 1, effect)
 
@@ -233,7 +234,7 @@ function _cpProj_isFlareNear(flare_table, rocket_pos, radius)
 	end
 end
 
-function _cpCreateGui() return nil end
+function _cpCreateGui(path) return nil end
 
 if sm.gui then
 	local create_layout_func = sm.gui.createGuiFromLayout

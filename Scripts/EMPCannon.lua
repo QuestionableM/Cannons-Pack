@@ -29,14 +29,16 @@ function emp:client_onDestroy()
 end
 
 function emp:server_onCreate()
-	self.options = {
-		[1] = {reload = 120, uv = 24, radius = 0.5, toAdd = 280, recoil = 2500},
-		[2] = {reload = 180, uv = 49.5, radius = 1, toAdd = 250, recoil = 4000},
-		[3] = {reload = 260, uv = 75, radius = 1.5, toAdd = 230, recoil = 6000},
-		[4] = {reload = 320, uv = 99, radius = 2, toAdd = 190, recoil = 8000},
-		[5] = {reload = 360, uv = 124.5, radius = 2.5, toAdd = 125, recoil = 10000},
-		[6] = {reload = 420, uv = 150, radius = 3, toAdd = 50, recoil = 12000}
+	self.options =
+	{
+		[1] = { reload = 120, uv = 24   , radius = 0.5, toAdd = 280 },
+		[2] = { reload = 180, uv = 49.5 , radius = 1  , toAdd = 250 },
+		[3] = { reload = 260, uv = 75   , radius = 1.5, toAdd = 230 },
+		[4] = { reload = 320, uv = 99   , radius = 2  , toAdd = 190 },
+		[5] = { reload = 360, uv = 124.5, radius = 2.5, toAdd = 125 },
+		[6] = { reload = 420, uv = 150  , radius = 3  , toAdd = 50  }
 	}
+
 	self.projectileConfiguration = _cpCannons_loadCannonInfo(self)
 end
 
@@ -70,9 +72,7 @@ function emp:server_onFixedUpdate()
 				self.projectileConfiguration[ProjSettingEnum.disconnectRadius] = cur_opt.radius
 				self.projectileConfiguration[ProjSettingEnum.velocity] = _cp_calculateSpread(self, 0, 500)
 
-				local c_recoil = _newVec(0, 0, -cur_opt.recoil)
-
-				self.reload = _cp_Shoot(self, cur_opt.reload, "client_getData", EffectEnum.sht, c_recoil)
+				self.reload = _cp_Shoot(self, cur_opt.reload, "client_getData", EffectEnum.sht)
 
 				EMPProjectile:server_sendProjectile(self, self.projectileConfiguration, ProjEnum.EMPCannon)
 				self.network:sendToClients("client_getUvData", {EMP_ModeEnum.rld, self.charge * 150, cur_opt.reload + cur_opt.toAdd})
