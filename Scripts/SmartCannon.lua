@@ -683,7 +683,7 @@ function SmartCannon:client_GUI_CreateTempValTable()
 		[2]  = {name = "Spread (deg)"                  , type = sc_gui_num_val , id = NumLogicTrTable.fire_spread          , value = 0, default = 0.2 , min = 0, max = 360},
 		[3]  = {name = "Reload Time (ticks)"           , type = sc_gui_num_val , id = NumLogicTrTable.reload_time          , value = 0, default = 8   , min = 0, max = 1000000},
 		[4]  = {name = "Explosion Level"               , type = sc_gui_num_val , id = NumLogicTrTable.expl_level           , value = 0, default = 5   , min = 0.001, max = 99999999},
-		[5]  = {name = "Explosion Radius (m)"          , type = sc_gui_num_val , id = NumLogicTrTable.expl_radius          , value = 0, default = 0.5 , min = 0.3, max = 100},
+		[5]  = {name = "Explosion Radius (m)"          , type = sc_gui_num_val , id = NumLogicTrTable.expl_radius          , value = 0, default = 0.5 , min = 0.1, max = 100},
 		[6]  = {name = "Explosion Impulse Radius (m)"  , type = sc_gui_num_val , id = NumLogicTrTable.expl_impulse_radius  , value = 0, default = 15.0, min = 0.001, max = 99999999},
 		[7]  = {name = "Explosion Impulse Strength"    , type = sc_gui_num_val , id = NumLogicTrTable.expl_impulse_strength, value = 0, default = 2000, min = 0, max = 99999999},
 		[8]  = {name = "Projectile Gravity"            , type = sc_gui_num_val , id = NumLogicTrTable.projectile_gravity   , value = 0, default = 10  , min = -99999999, max = 99999999},

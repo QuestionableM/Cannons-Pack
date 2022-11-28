@@ -16,7 +16,7 @@ RocketPod.colorHighlight = _colorNew(0x65fc7eff)
 function RocketPod:cl_initAmmoEffects(pod_data)
 	local s_interactable = self.interactable
 
-	local eff_scale = sm.vec3.new(0.25, 0.25, 0.25)
+	local eff_scale = _newVec(0.25, 0.25, 0.25)
 	local ammo_eff = pod_data.ammo_effect
 	local shoot_pos_data = pod_data.effect_positions
 	local shoot_order = pod_data.shoot_order
@@ -64,7 +64,7 @@ function RocketPod:client_onFixedUpdate(dt)
 		end
 
 		if self.cl_reload_timer == 30 then
-			sm.effect.playHostedEffect("Reloading", self.interactable)
+			_playHostedEffect("Reloading", self.interactable)
 		end
 
 		if self.cl_reload_timer <= 0 then
@@ -125,7 +125,7 @@ end
 
 function RocketPod:server_onFixedUpdate(dt)
 	local s_inter = self.interactable
-	if not sm.exists(s_inter) then return end
+	if not _cpExists(s_inter) then return end
 
 	local parent = s_inter:getSingleParent()
 	local active = parent and parent.active

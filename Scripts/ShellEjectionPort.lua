@@ -59,17 +59,17 @@ end
 
 local proj_id_to_shell_data =
 {
-	[ShellEjectorEnum.SmallShell ] = { uuid = sm.uuid.new("c47f3479-9398-41ad-a75b-c4a254a14cff"), offset = 0.25, max_rot = 25 },
-	[ShellEjectorEnum.MediumShell] = { uuid = sm.uuid.new("8d7c3cc8-864b-4ae6-ae3c-859d2fd72027"), offset = 0.25, max_rot = 20 },
-	[ShellEjectorEnum.LargeShell ] = { uuid = sm.uuid.new("850d690c-b4df-48d2-943a-f04b9a57a8b0"), offset = 0.25, max_rot = 10 },
-	[ShellEjectorEnum.GiantShell ] = { uuid = sm.uuid.new("6de55e3e-03ba-4b9c-80be-4fefa1f9a59b"), offset = 0.25, max_rot = 5  }
+	[ShellEjectorEnum.SmallShell ] = { uuid = _uuidNew("c47f3479-9398-41ad-a75b-c4a254a14cff"), offset = 0.25, max_rot = 25 },
+	[ShellEjectorEnum.MediumShell] = { uuid = _uuidNew("8d7c3cc8-864b-4ae6-ae3c-859d2fd72027"), offset = 0.25, max_rot = 20 },
+	[ShellEjectorEnum.LargeShell ] = { uuid = _uuidNew("850d690c-b4df-48d2-943a-f04b9a57a8b0"), offset = 0.25, max_rot = 10 },
+	[ShellEjectorEnum.GiantShell ] = { uuid = _uuidNew("6de55e3e-03ba-4b9c-80be-4fefa1f9a59b"), offset = 0.25, max_rot = 5  }
 }
 
 function ShellEjector:client_ejectShell(shell_id, dt)
 	local shell_data = proj_id_to_shell_data[shell_id]
 
 	--Calculate the shell rotation
-	local angle_axis = sm.quat.angleAxis(math.rad(90), sm.vec3.new(0, 1, 0))
+	local angle_axis = _quatAngleAxis(math.rad(90), _newVec(0, 1, 0))
 	local final_quat = self.shape.worldRotation * angle_axis
 
 	local shape_velocity = self.shape.velocity
@@ -80,13 +80,13 @@ function ShellEjector:client_ejectShell(shell_id, dt)
 
 	--Calculate the shell velocity
 	local shell_vel_val = math.random(40, 50) / 10
-	local shell_vel = (sm.noise.gunSpread(self.shape.at, 20) * shell_vel_val) + shape_velocity
+	local shell_vel = (_gunSpread(self.shape.at, 20) * shell_vel_val) + shape_velocity
 
 	local max_rot = shell_data.max_rot
-	local angular_vel = sm.vec3.new(0, math.random(-max_rot, max_rot), math.random(-max_rot, max_rot))
+	local angular_vel = _newVec(0, math.random(-max_rot, max_rot), math.random(-max_rot, max_rot))
 	local shell_lifetime = math.random(2, 10)
 
-	sm.debris.createDebris(shell_data.uuid, shell_pos, final_quat, shell_vel, angular_vel, sm.color.new(0xffff00ff), shell_lifetime)
+	_createDebris(shell_data.uuid, shell_pos, final_quat, shell_vel, angular_vel, _colorNew(0xffff00ff), shell_lifetime)
 end
 
 function ShellEjector:server_TryEjectShell()

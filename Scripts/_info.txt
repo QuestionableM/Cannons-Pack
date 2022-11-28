@@ -1,10 +1,7 @@
 What are u doing here? you little thief
 
-Cannons Pack version 4.83 changelog:
-1. Schwerer Gustav (Dora) cannon is lighter
-2. Added support for Abrams Cannon Breech from Machine Guns Pack
-3. Lowered the recoil for Laser Cannon
-4. Removed recoil for EMP Cannon
+Cannons Pack version 4.84 changelog:
+1. Smart Cannon can now destroy 1 block when explosion radius is less than 0.3
 
 Made by:
 Questionable Mark - creator of all the textures, UV maps and also some scripts and cannon models.

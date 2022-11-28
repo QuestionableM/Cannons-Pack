@@ -67,6 +67,33 @@ function CPProjectile.client_loadProjectile(self, data)
 	}
 end
 
+local function CPProj_spawnExplosion(proj)
+	local expl_eff_name = ExplEffectEnumTrans[proj.explEff]
+	local v_proj_hit = proj.hit
+
+	if proj.explRad < 0.3 then
+		local v_hit_shape = proj.hit_shape --[[@as Shape]]
+		if _cpExists(v_hit_shape) then
+			local v_shape_uuid = v_hit_shape.uuid
+
+			if _getItemQualityLevel(v_shape_uuid) <= proj.explLvl then
+				if _isItemBlock(v_shape_uuid) then
+					local v_block_hit = v_hit_shape:getClosestBlockLocalPosition(v_proj_hit)
+					v_hit_shape:destroyBlock(v_block_hit, _vecOne())
+				else
+					v_hit_shape:destroyShape()
+				end
+
+				_playEffect(expl_eff_name, v_proj_hit)
+
+				return
+			end
+		end
+	end
+
+	_cpProj_betterExplosion(v_proj_hit, proj.explLvl, math.max(proj.explRad, 0.3), proj.explImpStr, proj.explImpRad, expl_eff_name, true)
+end
+
 function CPProjectile.server_onScriptUpdate(self, dt)
 	for b, data in pairs(CPProjectile.proj_queue) do
 		self.network:sendToClients("client_loadProjectile", data)
@@ -74,10 +101,8 @@ function CPProjectile.server_onScriptUpdate(self, dt)
 	end
 
 	for k, CPProj in pairs(CPProjectile.projectiles) do
-		if CPProj and CPProj.hit then 
-			local expl_eff_name = ExplEffectEnumTrans[CPProj.explEff]
-
-			_cpProj_betterExplosion(CPProj.hit, CPProj.explLvl, CPProj.explRad, CPProj.explImpStr, CPProj.explImpRad, expl_eff_name, true)
+		if CPProj and CPProj.hit then
+			CPProj_spawnExplosion(CPProj)
 		end
 	end
 end
@@ -110,7 +135,30 @@ function CPProjectile.client_onScriptUpdate(self, dt)
 
 				local hit, result = _physRaycast(cp_pos, cp_pos + cp_dir * dt * 1.2)
 				if hit or CPProj.alive <= 0 or _cpProj_cl_proxFuze(CPProj.proxFuze, cp_pos, CPProj.ignored_players) then
-					CPProj.hit = (result.valid and result.pointWorld) or cp_pos
+					if hit then
+						CPProj.hit = result.pointWorld
+						if result.type == "body" then
+							local v_hit_shape = result:getShape()
+							if _cpExists(v_hit_shape) then
+								local v_shape_uuid = v_hit_shape.uuid
+								CPProj.hit_shape = v_hit_shape
+
+								if _getItemQualityLevel(v_shape_uuid) <= CPProj.explLvl and CPProj.explRad < 0.3 then
+									local v_ang_vel = _newVec(
+										math.random(1, 500) / 10,
+										math.random(1, 500) / 10,
+										math.random(1, 500) / 10
+									)
+
+									local v_debri_pos = _isItemBlock(v_shape_uuid) and result.pointWorld or v_hit_shape.worldPosition
+									_createDebris(v_shape_uuid, v_debri_pos, v_hit_shape.worldRotation, v_hit_shape.velocity, v_ang_vel, v_hit_shape.color, math.random(3, 7))
+								end
+							end
+						end
+					else
+						CPProj.hit = cp_pos
+					end
+
 					_cpProj_cl_onProjHit(CPProj.effect, CPProj.keep_effect)
 				else
 					CPProj.pos = cp_pos + cp_dir * dt

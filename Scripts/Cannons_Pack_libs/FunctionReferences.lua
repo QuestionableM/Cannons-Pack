@@ -8,6 +8,7 @@ CP_FUNCTION_REFERENCES_SCRIPT_LOADED = true
 
 _newVec = sm.vec3.new
 _vecZero = sm.vec3.zero
+_vecOne = sm.vec3.one
 _vecLerp = sm.vec3.lerp
 _getVec3Rotation = sm.vec3.getRotation
 
@@ -28,6 +29,7 @@ _createParticle = sm.particle.createParticle
 _getSphereContacts = sm.physics.getSphereContacts
 _logError = sm.log.error
 _playEffect = sm.effect.playEffect
+_playHostedEffect = sm.effect.playHostedEffect
 _physRaycast = sm.physics.raycast
 _getCurrentTick = sm.game.getCurrentTick
 _octaveNoise = sm.noise.octaveNoise2d
@@ -40,6 +42,7 @@ _setInteractionText = sm.gui.setInteractionText
 _utilClamp = sm.util.clamp
 _colorNew = sm.color.new
 _uuidNew = sm.uuid.new
+_createDebris = sm.debris.createDebris
 
 _connectionType = sm.interactable.connectionType
 
