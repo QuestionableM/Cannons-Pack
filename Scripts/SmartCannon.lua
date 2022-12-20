@@ -90,6 +90,14 @@ local projectile_type_table =
 
 local projectile_type_count = #projectile_type_table - 1
 
+function SmartCannon:getDefaultProjectileId()
+	if tostring(self.shape.uuid) == "fd6130e4-261d-4875-a418-96fe33bb2714" then --small smart cannon
+		return 0
+	else
+		return 1
+	end
+end
+
 function SmartCannon:server_onCreate()
 	self.sv_settings = {
 		number = {
@@ -176,11 +184,7 @@ function SmartCannon:server_onCreate()
 	end
 
 	if self.sv_settings[OtherTrTable.shell_effect_id] == -1 then
-		if tostring(self.shape.uuid) == "fd6130e4-261d-4875-a418-96fe33bb2714" then --small smart cannon
-			self.sv_settings[OtherTrTable.shell_effect_id] = 0
-		else
-			self.sv_settings[OtherTrTable.shell_effect_id] = 1
-		end
+		self.sv_settings[OtherTrTable.shell_effect_id] = self:getDefaultProjectileId()
 	end
 
 	self.interactable.publicData = { ejectedShellId = current_shell_id, allowedPorts = cannon_info.port_uuids }
@@ -755,14 +759,14 @@ function SmartCannon:client_GUI_CreateTempValTable()
 			[3] = { name = "Potato Shotgun" }, [4] = { name = "Spudling Gun" },
 			[5] = { name = "Explosion"      }
 		}},
-		[5] = {name = "Ejector Shell Model", value = 0, default = 0, max = 3, type = sc_gui_list_val, id = OtherTrTable.ejected_shell_id, list = { --5 ejected shell model
+		[5] = {name = "Ejector Shell Model", value = 0, default = self:getDefaultProjectileId(), max = 3, type = sc_gui_list_val, id = OtherTrTable.ejected_shell_id, list = { --5 ejected shell model
 			[1] = { name = "Small Shell" }, [2] = { name = "Medium Shell" },
 			[3] = { name = "Large Shell" }, [4] = { name = "Giant Shell"  }
 		}},
-		[6] = {name = "Shell Model", value = 0, default = 0, max = 6, type = sc_gui_list_val, id = OtherTrTable.shell_effect_id, list = {
+		[6] = {name = "Shell Model", value = 0, default = self:getDefaultProjectileId(), max = 6, type = sc_gui_list_val, id = OtherTrTable.shell_effect_id, list = {
 			[1] = { name = "Small Smart Cannon"      }, [2] = { name = "Smart Cannon"      },
 			[3] = { name = "Rocket"                  }, [4] = { name = "Rocket Pod Rocket" },
-			[5] = { name = "Small Rocket Pod Rocket" }, [6] = { name = "Emp Cannon"        },
+			[5] = { name = "Small Rocket Pod Rocket" }, [6] = { name = "EMP"               },
 			[7] = { name = "Laser"                   }
 		}}
 	}
