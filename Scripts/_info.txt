@@ -1,7 +1,9 @@
 What are u doing here? you little thief
 
-Cannons Pack version 4.84 changelog:
-1. Smart Cannon can now destroy 1 block when explosion radius is less than 0.3
+Cannons Pack version 4.85 changelog:
+1. Customizable projectile for Smart Cannons
+2. Resetting smart cannons to defaults now sets the correct ejector shell model
+3. The shockwave of the giant explosion lasts a bit longer
 
 Made by:
 Questionable Mark - creator of all the textures, UV maps and also some scripts and cannon models.

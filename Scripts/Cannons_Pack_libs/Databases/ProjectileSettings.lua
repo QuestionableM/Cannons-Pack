@@ -54,14 +54,13 @@ ProjSettingEnum =
 	explosionImpulseStrength = 13,
 	syncEffect               = 14,
 	proxFuze                 = 15,
-	keep_effect              = 16,
-	collision_size           = 17,
-	disconnectRadius         = 18,
-	player                   = 19,
-	mode                     = 20,
-	speed                    = 21,
-	count                    = 22,
-	obstacleAvoidance        = 23
+	collision_size           = 16,
+	disconnectRadius         = 17,
+	player                   = 18,
+	mode                     = 19,
+	speed                    = 20,
+	count                    = 21,
+	obstacleAvoidance        = 22
 }
 
 CP_ProjShellEffectEnum =
@@ -102,6 +101,27 @@ CP_ProjShellEffectEnumStrings =
 	[CP_ProjShellEffectEnum.SmallRocketPodShell  ] = "SmallRocketPod - RocketProj",
 	[CP_ProjShellEffectEnum.EmpCannonShell       ] = "EMPCannon - Shell",
 	[CP_ProjShellEffectEnum.LaserCannonShell     ] = "LaserCannon - Shell"
+}
+
+--Projectiles that have smoke effects should be kept alive, otherwise the smoke particles will just disappear on impact
+CP_ProjShouldKeepEffect =
+{
+	[CP_ProjShellEffectEnum.AircraftCannonShell  ] = false,
+	[CP_ProjShellEffectEnum.FlakCannonShell      ] = false,
+	[CP_ProjShellEffectEnum.HowitzerCannonShell  ] = false,
+	[CP_ProjShellEffectEnum.M1AbramsCannonShell  ] = false,
+	[CP_ProjShellEffectEnum.NavalCannonShell     ] = false,
+	[CP_ProjShellEffectEnum.NavalCannon2Shell    ] = false,
+	[CP_ProjShellEffectEnum.RocketLauncherShell  ] = true,
+	[CP_ProjShellEffectEnum.DoraCannonShell      ] = false,
+	[CP_ProjShellEffectEnum.TankCannonShell      ] = false,
+	[CP_ProjShellEffectEnum.RailgunCannonShell   ] = false,
+	[CP_ProjShellEffectEnum.SmartCannonShell     ] = false,
+	[CP_ProjShellEffectEnum.SmallSmartCannonShell] = false,
+	[CP_ProjShellEffectEnum.RocketPodShell       ] = true,
+	[CP_ProjShellEffectEnum.SmallRocketPodShell  ] = true,
+	[CP_ProjShellEffectEnum.EmpCannonShell       ] = true,
+	[CP_ProjShellEffectEnum.LaserCannonShell     ] = false
 }
 
 local function TranslateSettings(set_table)
@@ -219,8 +239,7 @@ local ProjSettings = {
 		explosionRadius = 0.7,
 		explosionImpulseRadius = 30,
 		explosionImpulseStrength = 8000,
-		syncEffect = true,
-		keep_effect = true
+		syncEffect = true
 	}),
 	[ProjEnum.SchwererGustavCannon] = TranslateSettings({
 		localPosition = true,
@@ -394,8 +413,7 @@ local ProjSettings = {
 		explosionRadius = 0.4,
 		explosionImpulseRadius = 25,
 		explosionImpulseStrength = 6000,
-		syncEffect = true,
-		keep_effect = true
+		syncEffect = true
 	}),
 	[ProjEnum.SmallRocketPod] = TranslateSettings({
 		localPosition = true,
@@ -410,8 +428,7 @@ local ProjSettings = {
 		explosionRadius = 0.3,
 		explosionImpulseRadius = 25,
 		explosionImpulseStrength = 6000,
-		syncEffect = true,
-		keep_effect = true
+		syncEffect = true
 	})
 }
 

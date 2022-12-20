@@ -65,7 +65,7 @@ function CPProjectile.client_loadProjectile(self, data)
 		proxFuze = proxFuze,
 		ignored_players = ignored_players,
 		syncEffect = proj_settings[ProjSettingEnum.syncEffect],
-		keep_effect = proj_settings[ProjSettingEnum.keep_effect]
+		keep_effect = CP_ProjShouldKeepEffect[v_effectId]
 	}
 end
 

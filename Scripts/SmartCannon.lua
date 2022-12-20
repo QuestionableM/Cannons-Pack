@@ -3,7 +3,7 @@
 	Questionable Mark
 ]]
 
---if SmartCannon then return end
+if SmartCannon then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 SmartCannon = class(GLOBAL_SCRIPT)
 SmartCannon.maxParentCount = -1
@@ -32,7 +32,8 @@ local _ShellEffectTrans = {
 	[4] = CP_ProjShellEffectEnum.RocketPodShell,
 	[5] = CP_ProjShellEffectEnum.SmallRocketPodShell,
 	[6] = CP_ProjShellEffectEnum.EmpCannonShell,
-	[7] = CP_ProjShellEffectEnum.LaserCannonShell
+	[7] = CP_ProjShellEffectEnum.LaserCannonShell,
+	[8] = CP_ProjShellEffectEnum.DoraCannonShell
 }
 
 local _ExplosionTrans = {
@@ -763,11 +764,11 @@ function SmartCannon:client_GUI_CreateTempValTable()
 			[1] = { name = "Small Shell" }, [2] = { name = "Medium Shell" },
 			[3] = { name = "Large Shell" }, [4] = { name = "Giant Shell"  }
 		}},
-		[6] = {name = "Shell Model", value = 0, default = self:getDefaultProjectileId(), max = 6, type = sc_gui_list_val, id = OtherTrTable.shell_effect_id, list = {
+		[6] = {name = "Shell Model", value = 0, default = self:getDefaultProjectileId(), max = 7, type = sc_gui_list_val, id = OtherTrTable.shell_effect_id, list = {
 			[1] = { name = "Small Smart Cannon"      }, [2] = { name = "Smart Cannon"      },
 			[3] = { name = "Rocket"                  }, [4] = { name = "Rocket Pod Rocket" },
 			[5] = { name = "Small Rocket Pod Rocket" }, [6] = { name = "EMP"               },
-			[7] = { name = "Laser"                   }
+			[7] = { name = "Laser"                   }, [8] = { name = "Schwerer Gustav"   }
 		}}
 	}
 
