@@ -30,7 +30,8 @@ function RailgunProjectile.client_loadProjectile(self, data)
 	end
 
 	local proj_settings = _cpProj_CombineProjectileData(rc_proj_data, proj_data_id)
-	local effect_name = proj_settings[ProjSettingEnum.shellEffect]
+	local effect_id = proj_settings[ProjSettingEnum.shellEffect]
+	local effect_name = CP_ProjShellEffectEnumStrings[effect_id]
 
 	local success, shellEffect = pcall(_createEffect, effect_name)
 	if not success then

@@ -35,8 +35,10 @@ function CPProjectile.client_loadProjectile(self, data)
 	if localVelocity then velocity = shape.worldPosition * velocity end
 	if localPosition then position = shape.worldPosition + shape.worldRotation * position end
 
-	local effName = proj_settings[ProjSettingEnum.shellEffect]
-	local success, shellEffect = pcall(_createEffect, effName)
+	local v_effectId = proj_settings[ProjSettingEnum.shellEffect]
+	local v_effectName = CP_ProjShellEffectEnumStrings[v_effectId]
+	
+	local success, shellEffect = pcall(_createEffect, v_effectName)
 	if not success then
 		_logError(shellEffect)
 		return

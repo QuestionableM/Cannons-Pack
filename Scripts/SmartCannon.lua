@@ -3,7 +3,7 @@
 	Questionable Mark
 ]]
 
-if SmartCannon then return end
+--if SmartCannon then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 SmartCannon = class(GLOBAL_SCRIPT)
 SmartCannon.maxParentCount = -1
@@ -24,6 +24,16 @@ function SmartCannon:client_onCreate()
 	self.cur_rld_effect = 1
 	self.cur_muzzle_flash_effect = 1
 end
+
+local _ShellEffectTrans = {
+	[1] = CP_ProjShellEffectEnum.SmallSmartCannonShell,
+	[2] = CP_ProjShellEffectEnum.SmartCannonShell,
+	[3] = CP_ProjShellEffectEnum.RocketLauncherShell,
+	[4] = CP_ProjShellEffectEnum.RocketPodShell,
+	[5] = CP_ProjShellEffectEnum.SmallRocketPodShell,
+	[6] = CP_ProjShellEffectEnum.EmpCannonShell,
+	[7] = CP_ProjShellEffectEnum.LaserCannonShell
+}
 
 local _ExplosionTrans = {
 	[1] = ExplEffectEnum.ExplSmall,
@@ -54,7 +64,7 @@ local NumLogicTrTable =
 }
 
 local LogicTrTable = {spudgun_mode = 1, no_friction_mode = 2, ignore_rotation_mode = 3, no_recoil_mode = 4, transfer_momentum = 5}
-local OtherTrTable = {sound = 1, muzzle_flash = 2, reload_sound = 3, explosion_effect = 4, ejected_shell_id = 5}
+local OtherTrTable = {sound = 1, muzzle_flash = 2, reload_sound = 3, explosion_effect = 4, ejected_shell_id = 5, shell_effect_id = 6}
 
 local projectile_type_table =
 {
@@ -112,6 +122,7 @@ function SmartCannon:server_onCreate()
 		[OtherTrTable.reload_sound    ] = 0,
 		[OtherTrTable.explosion_effect] = 0,
 		[OtherTrTable.ejected_shell_id] = -1,
+		[OtherTrTable.shell_effect_id ] = -1,
 		version = 1
 	}
 
@@ -164,6 +175,14 @@ function SmartCannon:server_onCreate()
 		current_shell_id = saved_ejected_shell_id + 1
 	end
 
+	if self.sv_settings[OtherTrTable.shell_effect_id] == -1 then
+		if tostring(self.shape.uuid) == "fd6130e4-261d-4875-a418-96fe33bb2714" then --small smart cannon
+			self.sv_settings[OtherTrTable.shell_effect_id] = 0
+		else
+			self.sv_settings[OtherTrTable.shell_effect_id] = 1
+		end
+	end
+
 	self.interactable.publicData = { ejectedShellId = current_shell_id, allowedPorts = cannon_info.port_uuids }
 
 	--Read projectile config
@@ -173,6 +192,9 @@ function SmartCannon:server_onCreate()
 	if sv_expl_eff > 0 then
 		self.projConfig[ProjSettingEnum.explosionEffect] = _ExplosionTrans[sv_expl_eff + 1]
 	end
+
+	local saved_shell_effect_id = self.sv_settings[OtherTrTable.shell_effect_id]
+	self.projConfig[ProjSettingEnum.shellEffect] = _ShellEffectTrans[saved_shell_effect_id + 1]
 end
 
 local _ReloadSoundTimeOffsets = {
@@ -424,7 +446,8 @@ function SmartCannon:server_requestCannonData(data, player)
 			[OtherTrTable.muzzle_flash    ] = sv_data[OtherTrTable.muzzle_flash],
 			[OtherTrTable.reload_sound    ] = sv_data[OtherTrTable.reload_sound],
 			[OtherTrTable.explosion_effect] = sv_data[OtherTrTable.explosion_effect],
-			[OtherTrTable.ejected_shell_id] = self.interactable.publicData.ejectedShellId - 1
+			[OtherTrTable.ejected_shell_id] = self.interactable.publicData.ejectedShellId - 1,
+			[OtherTrTable.shell_effect_id]  = sv_data[OtherTrTable.shell_effect_id]
 		}
 	}
 
@@ -459,14 +482,20 @@ function SmartCannon:server_setNewSettings(data)
 	assign_new_data_to_settings(sv_set.logic, data[2]) --logic
 
 	local eff_data = data[3]
+
 	local expl_eff_id = eff_data[OtherTrTable.explosion_effect]
-	
 	self.projConfig[ProjSettingEnum.explosionEffect] = _ExplosionTrans[expl_eff_id + 1]
+
+	local shell_effect_id = eff_data[OtherTrTable.shell_effect_id]
+	self.projConfig[ProjSettingEnum.shellEffect] = _ShellEffectTrans[shell_effect_id + 1]
+
 	sv_set[OtherTrTable.explosion_effect] = expl_eff_id
 	sv_set[OtherTrTable.sound           ] = eff_data[OtherTrTable.sound]
 	sv_set[OtherTrTable.reload_sound    ] = eff_data[OtherTrTable.reload_sound]
 	sv_set[OtherTrTable.muzzle_flash    ] = eff_data[OtherTrTable.muzzle_flash]
 	sv_set[OtherTrTable.ejected_shell_id] = eff_data[OtherTrTable.ejected_shell_id]
+	sv_set[OtherTrTable.shell_effect_id ] = shell_effect_id
+
 	self.interactable.publicData.ejectedShellId = eff_data[OtherTrTable.ejected_shell_id] + 1
 
 	self.network:sendToClients("client_setEffects", self:server_prepareEffectTable())
@@ -729,6 +758,12 @@ function SmartCannon:client_GUI_CreateTempValTable()
 		[5] = {name = "Ejector Shell Model", value = 0, default = 0, max = 3, type = sc_gui_list_val, id = OtherTrTable.ejected_shell_id, list = { --5 ejected shell model
 			[1] = { name = "Small Shell" }, [2] = { name = "Medium Shell" },
 			[3] = { name = "Large Shell" }, [4] = { name = "Giant Shell"  }
+		}},
+		[6] = {name = "Shell Model", value = 0, default = 0, max = 6, type = sc_gui_list_val, id = OtherTrTable.shell_effect_id, list = {
+			[1] = { name = "Small Smart Cannon"      }, [2] = { name = "Smart Cannon"      },
+			[3] = { name = "Rocket"                  }, [4] = { name = "Rocket Pod Rocket" },
+			[5] = { name = "Small Rocket Pod Rocket" }, [6] = { name = "Emp Cannon"        },
+			[7] = { name = "Laser"                   }
 		}}
 	}
 
