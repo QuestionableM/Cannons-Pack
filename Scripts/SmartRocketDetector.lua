@@ -78,7 +78,7 @@ end
 
 function RocketDetector:client_onFixedUpdate()
 	if not _smExists(self.interactable) then return end
-	
+
 	if SmartRocket and SmartRocket.projectiles then
 		self.nearest_distance = math.huge
 
@@ -90,7 +90,7 @@ function RocketDetector:client_onFixedUpdate()
 
 			local rocket_sees_sensor = _cp_isObjectVisible(rocket_pos, norm_dir, shape_pos, -0.66)
 			local sensor_sees_rocket = _cp_isObjectVisible(shape_pos, shape_up, rocket_pos, -0.88)
-			
+
 			if rocket_sees_sensor and sensor_sees_rocket then
 				local distance = (shape_pos - rocket_pos):length()
 				if distance < self.nearest_distance then

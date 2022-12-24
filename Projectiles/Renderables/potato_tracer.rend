@@ -1,0 +1,17 @@
+{
+	"lodList": [
+		{
+			"mesh": "$GAME_DATA/Projectiles/Mesh/obj_plants_potato.fbx",
+			"subMeshList": [
+				{
+					"custom": { "shadow": false },
+					"material": "DifAsg",
+					"textureList": [
+						"$CONTENT_DATA/Projectiles/Textures/tracer_dif.png",
+						"$CONTENT_DATA/Projectiles/Textures/tracer_asg.png"
+					]
+				}
+			]
+		}
+	]
+}

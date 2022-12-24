@@ -33,6 +33,40 @@
 			"radius": 0.25,
 			"spin": 7.0,
 			"uuid": "cb1c0aec-2f37-41b3-92b6-72a2bca5eb02"
+		},
+		{
+			"attachedEffect": "",
+			"audiomass": 250.0,
+			"destruction": {
+				"destructionLevels": [
+					{ "chance": 1.0 , "qualityLevel": 1  },
+					{ "chance": 0.98, "qualityLevel": 2  },
+					{ "chance": 0.94, "qualityLevel": 3  },
+					{ "chance": 0.9 , "qualityLevel": 4  },
+					{ "chance": 0.86, "qualityLevel": 5  },
+					{ "chance": 0.82, "qualityLevel": 6  },
+					{ "chance": 0.78, "qualityLevel": 7  },
+					{ "chance": 0.74, "qualityLevel": 8  },
+					{ "chance": 0.7 , "qualityLevel": 9  },
+					{ "chance": 0.66, "qualityLevel": 10 },
+					{ "chance": 0.62, "qualityLevel": 11 },
+					{ "chance": 0.58, "qualityLevel": 12 },
+					{ "chance": 0.54, "qualityLevel": 13 },
+					{ "chance": 0.5 , "qualityLevel": 14 },
+					{ "chance": 0.46, "qualityLevel": 15 }
+				]
+			},
+			"effect": "PotatoProjectile - Hit",
+			"effectmaterial": "Potato",
+			"enableGravity": true,
+			"enableImpactEffect": true,
+			"friction": 0.2,
+			"mass": 3.0,
+			"mesh": "$CONTENT_DATA/Projectiles/Renderables/potato_tracer.rend",
+			"name": "powerful_potato_tracer",
+			"radius": 0.25,
+			"spin": 7.0,
+			"uuid": "6d77bdd9-1136-40c2-9e90-c4fbb09e34e8"
 		}
 	]
 }

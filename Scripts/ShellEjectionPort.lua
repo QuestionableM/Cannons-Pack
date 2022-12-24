@@ -92,7 +92,7 @@ end
 function ShellEjector:server_TryEjectShell()
 	if self.sv_queue_size > 0 and not self.shell_launch_delay and self.cl_anim_val == 1.0 then
 		self.shell_launch_delay = 1
-		
+
 		self.network:sendToClients("client_ejectShell", self.sv_shell_queue[1])
 		self:server_resetAnimVals(true)
 

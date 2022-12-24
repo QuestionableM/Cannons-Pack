@@ -24,7 +24,8 @@ ExplEffectEnum = {
 	DoraCannon         = 5,
 	OrbitalCannonSmall = 6,
 	OrbitalCannon      = 7,
-	EMPCannon          = 8
+	EMPCannon          = 8,
+	PotatoHit          = 9
 }
 
 ExplEffectEnumTrans = {
@@ -35,7 +36,8 @@ ExplEffectEnumTrans = {
 	[ExplEffectEnum.DoraCannon]         = "DoraCannon - Explosion",
 	[ExplEffectEnum.OrbitalCannonSmall] = "OrbitalCannon - ExplosionSmall",
 	[ExplEffectEnum.OrbitalCannon]      = "OrbitalCannon - Explosion",
-	[ExplEffectEnum.EMPCannon]          = "EMPCannon - Explosion"
+	[ExplEffectEnum.EMPCannon]          = "EMPCannon - Explosion",
+	[ExplEffectEnum.PotatoHit]          = "PotatoProjectile - Hit"
 }
 
 local function TranslateEffects(eff_table)

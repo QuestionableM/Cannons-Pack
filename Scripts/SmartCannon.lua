@@ -41,7 +41,8 @@ local _ExplosionTrans = {
 	[2] = ExplEffectEnum.AircraftCannon,
 	[3] = ExplEffectEnum.ExplBig2,
 	[4] = ExplEffectEnum.DoraCannon,
-	[5] = ExplEffectEnum.EMPCannon
+	[5] = ExplEffectEnum.EMPCannon,
+	[6] = ExplEffectEnum.PotatoHit
 }
 
 local NumLogicTrTable =
@@ -86,7 +87,8 @@ local projectile_type_table =
 	[15] = { name = "Chemical"       , uuid = _uuidNew("46292783-af41-49a5-91ef-092f22dfae91") },
 	[16] = { name = "Pesticide"      , uuid = _uuidNew("68029b35-2028-42a5-8509-286d78656561") },
 	[17] = { name = "Seed"           , uuid = _uuidNew("9512029a-3f1d-4aa2-92bf-cb876d5c8cb0") },
-	[18] = { name = "Powerful Potato", uuid = _uuidNew("cb1c0aec-2f37-41b3-92b6-72a2bca5eb02") }
+	[18] = { name = "Powerful Potato", uuid = _uuidNew("cb1c0aec-2f37-41b3-92b6-72a2bca5eb02") },
+	[19] = { name = "Powerful Tracer Potato", uuid = _uuidNew("6d77bdd9-1136-40c2-9e90-c4fbb09e34e8") }
 }
 
 local projectile_type_count = #projectile_type_table - 1
@@ -266,7 +268,7 @@ function SmartCannon:server_onFixedUpdate()
 
 		if _cp_isNumberLogic(gate) then
 			local g_power = gate.power
-			
+
 			if gate_color == "eeaf5cff" then --1st orange
 				if g_power > 0 then fire_force = g_power end
 			elseif gate_color == "673b00ff" then --3rd orange
@@ -614,7 +616,7 @@ function SmartCannon:client_GUI_Open()
 
 	self:client_GUI_SetWaitingState(false)
 	self.network:sendToServer("server_requestCannonData")
-	
+
 	gui:open()
 end
 
@@ -747,10 +749,10 @@ function SmartCannon:client_GUI_CreateTempValTable()
 			[3] = { name = "Big Explosion"        }, [4] = { name = "Frier Muzzle Flash" },
 			[5] = { name = "Spinner Muzzle Flash" }
 		}},
-		[2] = {name = "Explosion Effect", value = 0, default = 0, max = 4, type = sc_gui_list_val, id = OtherTrTable.explosion_effect, list = { --2 explosion effect
+		[2] = {name = "Explosion Effect", value = 0, default = 0, max = 5, type = sc_gui_list_val, id = OtherTrTable.explosion_effect, list = { --2 explosion effect
 			[1] = { name = "Default"       }, [2] = { name = "Little Explosion" },
 			[3] = { name = "Big Explosion" }, [4] = { name = "Giant Explosion"  },
-			[5] = { name = "Sparks"        }
+			[5] = { name = "Sparks"        }, [6] = { name = "Potato Impact"    }
 		}},
 		[3] = {name = "Reload Sound", value = 0, default = 0, max = 1, type = sc_gui_list_val, id = OtherTrTable.reload_sound, list = { --3 reloading effect
 			[1] = { name = "Default" }, [2] = { name = "Heavy Realoading" }
@@ -867,7 +869,7 @@ function SmartCannon:client_GUI_onBooleanChangedCallback(btn_name)
 	local cur_set = self:client_GUI_getCurrentOption(btn_id)
 
 	cur_set.cur_val = not cur_set.cur_val
-	
+
 	local gui_int = s_gui.interface
 	gui_int:setVisible("SaveChanges", true)
 

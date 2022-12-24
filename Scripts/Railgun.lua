@@ -72,7 +72,7 @@ function Railgun:server_onFixedUpdate()
 		if self.reload == 170 then
 			_cp_Shoot(self, nil, "client_effects", EffectEnum.sht, railgun_recoil)
 			self.projectileConfiguration[ProjSettingEnum.velocity] = _cp_calculateSpread(self, 0, 1000)
-			
+
 			RailgunProjectile:server_sendProjectile(self, self.projectileConfiguration, ProjEnum.Railgun)
 		end
 

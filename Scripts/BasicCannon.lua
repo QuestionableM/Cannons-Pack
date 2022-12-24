@@ -68,10 +68,10 @@ function BasicCannon:server_onFixedUpdate()
 
 	if active and not self.reload then
 		self.reload = _cp_Shoot(self, s_set.reload, "client_shoot", EffectEnum.sht, s_set.impulse_dir * s_set.impulse_str)
-		
+
 		self.projectileConfig[ProjSettingEnum.velocity] = _cp_calculateSpread(self, s_set.spread, s_set.velocity)
 		self.proj_scr:server_sendProjectile(self, self.projectileConfig, s_set.proj_data_id)
-		
+
 		if self.sv_saved_child then
 			local s_pub_data = self.sv_saved_child.publicData
 			if s_pub_data then
@@ -80,11 +80,11 @@ function BasicCannon:server_onFixedUpdate()
 			end
 		end
 	end
-	
+
 	if self.reload then
 		local snd_on_hold = s_set.no_snd_on_hold
 		local r_Sound = s_set.rld_sound
-		
+
 		if ((snd_on_hold and not active) or not snd_on_hold) and (r_Sound and self.reload == r_Sound) then
 			self.network:sendToClients("client_shoot", EffectEnum.rld)
 		end

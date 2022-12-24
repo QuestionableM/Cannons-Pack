@@ -54,7 +54,7 @@ function RocketPod:client_onFixedUpdate(dt)
 
 		local timer_frac = 1 - (self.cl_reload_timer / self.cl_reload_total)
 		local effect_id = math.floor(timer_frac * self.cl_effect_count)
-		
+
 		if self.cl_eff_cache ~= effect_id then
 			self.cl_eff_cache = effect_id
 
@@ -119,7 +119,7 @@ function RocketPod:server_onCreate()
 	self.sv_proj_id          = pod_cannon_data.proj_set_id
 	self.sv_spread           = pod_cannon_data.spread
 	self.sv_shoot_vel        = pod_cannon_data.velocity
-	
+
 	self.sv_proj_config = {}
 end
 

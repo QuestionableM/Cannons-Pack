@@ -69,8 +69,31 @@ function CPProjectile.client_loadProjectile(self, data)
 	}
 end
 
+local CPProj_ProjectilesWithNormals =
+{
+	[ExplEffectEnum.PotatoHit] = true,
+	[ExplEffectEnum.EMPCannon] = true
+}
+
+local function CPProj_PlayEffect(proj)
+	local v_proj_expl_id = proj.explEff
+	local v_expl_eff = ExplEffectEnumTrans[v_proj_expl_id]
+
+	if CPProj_ProjectilesWithNormals[v_proj_expl_id] then
+		local v_ray_result = proj.ray_result --[[@as RaycastResult]]
+
+		if v_ray_result ~= nil then
+			local v_eff_rotation = _getVec3Rotation(_newVec(0, 0, 1), v_ray_result.normalWorld)
+			_playEffect(v_expl_eff, v_ray_result.pointWorld, nil, v_eff_rotation)
+
+			return nil
+		end
+	end
+
+	return v_expl_eff
+end
+
 local function CPProj_spawnExplosion(proj)
-	local expl_eff_name = ExplEffectEnumTrans[proj.explEff]
 	local v_proj_hit = proj.hit
 
 	if proj.explRad < 0.3 then
@@ -86,14 +109,21 @@ local function CPProj_spawnExplosion(proj)
 					v_hit_shape:destroyShape()
 				end
 
-				_playEffect(expl_eff_name, v_proj_hit)
+				local v_eff_rotation = nil
+				local v_ray_result = proj.ray_result
+				if v_ray_result ~= nil then
+					v_eff_rotation = _getVec3Rotation(_newVec(0, 0, 1), v_ray_result.normalWorld)
+				end
+
+				_playEffect(ExplEffectEnumTrans[proj.explEff], v_proj_hit, nil, v_eff_rotation)
 
 				return
 			end
 		end
 	end
 
-	_cpProj_betterExplosion(v_proj_hit, proj.explLvl, math.max(proj.explRad, 0.3), proj.explImpStr, proj.explImpRad, expl_eff_name, true)
+	local v_effect_string = CPProj_PlayEffect(proj)
+	_cpProj_betterExplosion(v_proj_hit, proj.explLvl, math.max(proj.explRad, 0.3), proj.explImpStr, proj.explImpRad, v_effect_string, true)
 end
 
 function CPProjectile.server_onScriptUpdate(self, dt)
@@ -123,6 +153,34 @@ local function CPProj_UpdateEffect(CPProj)
 	end
 end
 
+---@param result RaycastResult
+local function CPProj_TryCreateDebris(result, proj)
+	if result.type ~= "body" then
+		return
+	end
+
+	local v_hit_shape = result:getShape()
+	if not _cpExists(v_hit_shape) then
+		return
+	end
+
+	local v_shape_uuid = v_hit_shape.uuid
+	proj.hit_shape = v_hit_shape
+
+	if _getItemQualityLevel(v_shape_uuid) <= proj.explLvl and proj.explRad < 0.3 then
+		local v_ang_vel = _newVec(
+			_mathRandom(1, 500) / 10,
+			_mathRandom(1, 500) / 10,
+			_mathRandom(1, 500) / 10
+		)
+
+		local v_debri_pos = _isItemBlock(v_shape_uuid) and result.pointWorld or v_hit_shape.worldPosition
+		local v_debri_lifetime = _mathRandom(3, 7)
+
+		_createDebris(v_shape_uuid, v_debri_pos, v_hit_shape.worldRotation, v_hit_shape.velocity, v_ang_vel, v_hit_shape.color, v_debri_lifetime)
+	end
+end
+
 function CPProjectile.client_onScriptUpdate(self, dt)
 	for k, CPProj in pairs(CPProjectile.projectiles) do
 		if CPProj then
@@ -138,25 +196,10 @@ function CPProjectile.client_onScriptUpdate(self, dt)
 				local hit, result = _physRaycast(cp_pos, cp_pos + cp_dir * dt * 1.2)
 				if hit or CPProj.alive <= 0 or _cpProj_cl_proxFuze(CPProj.proxFuze, cp_pos, CPProj.ignored_players) then
 					if hit then
+						CPProj.ray_result = result
 						CPProj.hit = result.pointWorld
-						if result.type == "body" then
-							local v_hit_shape = result:getShape()
-							if _cpExists(v_hit_shape) then
-								local v_shape_uuid = v_hit_shape.uuid
-								CPProj.hit_shape = v_hit_shape
 
-								if _getItemQualityLevel(v_shape_uuid) <= CPProj.explLvl and CPProj.explRad < 0.3 then
-									local v_ang_vel = _newVec(
-										math.random(1, 500) / 10,
-										math.random(1, 500) / 10,
-										math.random(1, 500) / 10
-									)
-
-									local v_debri_pos = _isItemBlock(v_shape_uuid) and result.pointWorld or v_hit_shape.worldPosition
-									_createDebris(v_shape_uuid, v_debri_pos, v_hit_shape.worldRotation, v_hit_shape.velocity, v_ang_vel, v_hit_shape.color, math.random(3, 7))
-								end
-							end
-						end
+						CPProj_TryCreateDebris(result, CPProj)
 					else
 						CPProj.hit = cp_pos
 					end

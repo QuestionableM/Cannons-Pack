@@ -116,7 +116,7 @@ end
 function emp:client_setEffectVal(rpm_val, lit_val, uv_val)
 	self.effects[EffectEnum.crg]:setParameter("rpm", rpm_val)
 	self.effects[EffectEnum.lit]:setParameter("intensity", lit_val)
-	
+
 	self.interactable:setUvFrameIndex(uv_val)
 end
 
@@ -133,7 +133,7 @@ function emp:client_clearData()
 
 	lit_eff:setParameter("intensity", 0)
 	lit_eff:stop()
-	
+
 	self.uv = {}
 end
 

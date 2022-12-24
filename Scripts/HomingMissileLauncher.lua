@@ -250,10 +250,10 @@ function HomingMissile:client_onInteract(character, state)
 		end
 
 		local pl_list = _getAllPlayers()
-		
+
 		local c_Value = character:isCrouching() and -1 or 1
 		self.client_pl_page = (self.client_pl_page + c_Value) % (#pl_list + 1)
-		
+
 		if self.client_pl_page == 0 then
 			_cp_infoOutput("GUI Item drag", true, "#ffff00Mode#ffffff: #ffff00Targeting closest visible player#ffffff")
 			self.network:sendToServer("server_setTarget")
