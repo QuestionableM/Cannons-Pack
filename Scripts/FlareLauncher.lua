@@ -1,11 +1,13 @@
 --[[
-	Copyright (c) 2022 Cannons Pack Team
+	Copyright (c) 2023 Cannons Pack Team
 	Questionable Mark
 ]]
 
 if flare then return end
-dofile("Cannons_Pack_libs/ScriptLoader.lua")
-flare = class(GLOBAL_SCRIPT)
+
+dofile("Libs/ScriptLoader.lua")
+
+flare = class()
 flare.maxParentCount = 1
 flare.maxChildCount  = 0
 flare.connectionInput  = _connectionType.logic
@@ -19,7 +21,6 @@ end
 
 function flare:client_onCreate()
 	self.effects = _cpEffect_cl_loadEffects(self)
-	self:client_injectScript("FlareProjectile")
 end
 
 local _l_recoil = _newVec(0, 0, -250)

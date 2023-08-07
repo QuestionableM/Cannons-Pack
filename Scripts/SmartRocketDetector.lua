@@ -1,10 +1,12 @@
 --[[
-	Copyright (c) 2022 Cannons Pack Team
+	Copyright (c) 2023 Cannons Pack Team
 	Questionable Mark
 ]]
 
 if RocketDetector then return end
-dofile("Cannons_Pack_libs/ScriptLoader.lua")
+
+dofile("Libs/ScriptLoader.lua")
+
 RocketDetector = class()
 RocketDetector.connectionInput  = _connectionType.logic
 RocketDetector.connectionOutput = _connectionType.logic

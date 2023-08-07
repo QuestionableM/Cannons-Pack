@@ -1,24 +1,31 @@
 --[[
-	Copyright (c) 2022 Cannons Pack Team
+	Copyright (c) 2023 Cannons Pack Team
 	Questionable Mark
 ]]
 
 if RailgunProjectile then return end
-RailgunProjectile = class(GLOBAL_SCRIPT)
+
+dofile("$CONTENT_DATA/Scripts/Libs/ScriptLoader.lua")
+
+---@class RailgunProjectile : ToolClass
+RailgunProjectile = class()
 RailgunProjectile.projectiles = {}
 RailgunProjectile.proj_queue = {}
 
-RailgunProjectile.sv_last_update = 0
-RailgunProjectile.cl_last_update = 0
-RailgunProjectile.m_ref_count = 0
+local g_railgunprojectile_host_tool = nil
+
+function RailgunProjectile:client_onCreate()
+	if g_railgunprojectile_host_tool == nil then
+		g_railgunprojectile_host_tool = self.tool
+	end
+end
 
 function RailgunProjectile.server_sendProjectile(self, shapeScript, data, id)
 	local data_to_send = _cpProj_ClearNetworkData(data, id)
-
 	_tableInsert(RailgunProjectile.proj_queue, {id, shapeScript.shape, data_to_send})
 end
 
-function RailgunProjectile.client_loadProjectile(self, data)
+function RailgunProjectile:client_loadProjectile(data)
 	local proj_data_id = data[1]
 	local shape = data[2]
 	local rc_proj_data = data[3]
@@ -62,7 +69,11 @@ function RailgunProjectile.client_loadProjectile(self, data)
 	}
 end
 
-function RailgunProjectile.server_onScriptUpdate(self, dt, network)
+function RailgunProjectile:server_onFixedUpdate(dt)
+	if g_railgunprojectile_host_tool ~= self.tool then
+		return
+	end
+
 	for b, data in pairs(RailgunProjectile.proj_queue) do
 		self.network:sendToClients("client_loadProjectile", data)
 		RailgunProjectile.proj_queue[b] = nil
@@ -79,7 +90,7 @@ function RailgunProjectile.server_onScriptUpdate(self, dt, network)
 				data_to_send[ProjSettingEnum.explosionImpulseRadius] = RlgProj.explImpRad * 0.8
 				data_to_send[ProjSettingEnum.explosionImpulseStrength] = RlgProj.explImpStr * 0.75
 				data_to_send[ProjSettingEnum.count] = RlgProj.count - 1
-				
+
 				self.network:sendToClients("client_loadProjectile", {RlgProj.proj_id, nil, data_to_send})
 			end
 		end
@@ -87,37 +98,49 @@ function RailgunProjectile.server_onScriptUpdate(self, dt, network)
 end
 
 local _xAxis = _newVec(1, 0, 0)
-function RailgunProjectile.client_onScriptUpdate(self, dt)
+function RailgunProjectile:client_onFixedUpdate(dt)
+	if g_railgunprojectile_host_tool ~= self.tool then
+		return
+	end
+
 	for k, RlgProj in pairs(RailgunProjectile.projectiles) do
-		if RlgProj and RlgProj.hit then RailgunProjectile.projectiles[k] = nil end
-		if RlgProj and not RlgProj.hit then
-			RlgProj.alive = RlgProj.alive - dt
-
-			local rlg_pos = RlgProj.pos
-			local rlg_dir = RlgProj.dir
-
-			local hit, result = _physRaycast(rlg_pos, rlg_pos + rlg_dir * dt * 1.2)
-			if hit or RlgProj.alive <= 0 then 
-				RlgProj.hit = {result = (result.pointWorld ~= _vecZero() and result.pointWorld) or rlg_pos, type = result.type}
-				_cpProj_cl_onProjHit(RlgProj.effect)
+		if RlgProj then
+			if RlgProj.hit then
+				RailgunProjectile.projectiles[k] = nil
 			else
-				RlgProj.pos = rlg_pos + rlg_dir * dt
+				RlgProj.alive = RlgProj.alive - dt
 
-				local proj_eff = RlgProj.effect
-				if rlg_dir:length() > 0.0001 then
-					proj_eff:setRotation(_getVec3Rotation(_xAxis, rlg_dir))
+				local rlg_pos = RlgProj.pos
+				local rlg_dir = RlgProj.dir
+
+				local hit, result = _physRaycast(rlg_pos, rlg_pos + rlg_dir * dt * 1.2)
+				if hit or RlgProj.alive <= 0 then 
+					RlgProj.hit = {result = (result.pointWorld ~= _vecZero() and result.pointWorld) or rlg_pos, type = result.type}
+					_cpProj_cl_onProjHit(RlgProj.effect)
+				else
+					RlgProj.pos = rlg_pos + rlg_dir * dt
+
+					local proj_eff = RlgProj.effect
+					if rlg_dir:length() > 0.0001 then
+						proj_eff:setRotation(_getVec3Rotation(_xAxis, rlg_dir))
+					end
+
+					proj_eff:setPosition(RlgProj.pos)
 				end
-
-				proj_eff:setPosition(RlgProj.pos)
 			end
 		end
 	end
 end
 
-function RailgunProjectile.client_onScriptDestroy(self)
+function RailgunProjectile:client_onDestroy()
+	if g_railgunprojectile_host_tool ~= self.tool then
+		return
+	end
+
 	local deleted_projectiles = _cpProj_cl_destroyProjectiles(RailgunProjectile.projectiles)
 	RailgunProjectile.projectiles = {}
 	RailgunProjectile.proj_queue = {}
+
 	_cpPrint(("RailgunProjectile: Deleted %s projectiles"):format(deleted_projectiles))
 end
 

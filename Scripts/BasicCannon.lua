@@ -1,11 +1,13 @@
 --[[
-	Copyright (c) 2022 Cannons Pack Team
+	Copyright (c) 2023 Cannons Pack Team
 	Questionable Mark
 ]]
 
 if BasicCannon then return end
-dofile("Cannons_Pack_libs/ScriptLoader.lua")
-BasicCannon = class(GLOBAL_SCRIPT)
+
+dofile("Libs/ScriptLoader.lua")
+
+BasicCannon = class()
 BasicCannon.maxParentCount = 1
 BasicCannon.maxChildCount  = 1
 BasicCannon.connectionInput  = _connectionType.logic
@@ -16,7 +18,6 @@ BasicCannon.colorHighlight = _colorNew(0xff6e00ff)
 function BasicCannon:client_onCreate()
 	self.client_settings = _cpCannons_cl_loadCannonInfo(self)
 	self.effects = _cpEffect_cl_loadEffects(self)
-	self:client_injectScript(self.client_settings.t_script)
 end
 
 function BasicCannon:server_onCreate()

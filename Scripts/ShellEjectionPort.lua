@@ -1,11 +1,13 @@
 --[[
-	Copyright (c) 2022 Cannons Pack Team
+	Copyright (c) 2023 Cannons Pack Team
 	Questionable Mark
 ]]
 
 if ShellEjector then return end
-dofile("Cannons_Pack_libs/ScriptLoader.lua")
-ShellEjector = class(GLOBAL_SCRIPT)
+
+dofile("Libs/ScriptLoader.lua")
+
+ShellEjector = class()
 ShellEjector.maxParentCount = 1
 ShellEjector.maxChildCount  = 0
 ShellEjector.connectionInput  = _connectionType.logic

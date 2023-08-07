@@ -1,11 +1,13 @@
 --[[
-	Copyright (c) 2022 Cannons Pack Team
+	Copyright (c) 2023 Cannons Pack Team
 	Questionable Mark
 ]]
 
 if Railgun then return end
-dofile("Cannons_Pack_libs/ScriptLoader.lua")
-Railgun = class(GLOBAL_SCRIPT)
+
+dofile("Libs/ScriptLoader.lua")
+
+Railgun = class()
 Railgun.maxParentCount = 1
 Railgun.maxChildCount  = 0
 Railgun.connectionInput  = _connectionType.logic
@@ -16,7 +18,6 @@ Railgun.colorHighlight = _colorNew(0x00ffe6ff)
 function Railgun:client_onCreate()
 	self.effects = _cpEffect_cl_loadEffects(self)
 	self.effects[EffectEnum.eff]:setParameter("velocity", 0)
-	self:client_injectScript("RailgunProjectile")
 end
 
 function Railgun:server_onCreate()

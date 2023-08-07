@@ -1,9 +1,7 @@
 What are u doing here? you little thief
 
-Cannons Pack version 4.86 changelog:
-1. Added a powerful tracer potato to the Smart Cannon
-2. Added a potato hit effect for explosive projectiles
-3. "Sparks" projectile explosion now has the correct rotation
+Cannons Pack version 4.87 changelog:
+1. Improved the global projectile script
 
 Made by:
 Questionable Mark - creator of all the textures, UV maps and also some scripts and cannon models.

@@ -1,11 +1,13 @@
 --[[
-	Copyright (c) 2022 Cannons Pack Team
+	Copyright (c) 2023 Cannons Pack Team
 	Questionable Mark
 ]]
 
 if RocketPod then return end
-dofile("Cannons_Pack_libs/ScriptLoader.lua")
-RocketPod = class(GLOBAL_SCRIPT)
+
+dofile("Libs/ScriptLoader.lua")
+
+RocketPod = class()
 RocketPod.maxParentCount = 1
 RocketPod.maxChildCount  = 0
 RocketPod.connectionInput  = _connectionType.logic
@@ -39,8 +41,6 @@ function RocketPod:cl_initAmmoEffects(pod_data)
 end
 
 function RocketPod:client_onCreate()
-	self:client_injectScript("CPProjectile")
-
 	self.effects, self.eff_offsets = _cpEffect_cl_loadEffects2(self)
 	local pod_data = _cpCannons_loadCannonInfo(self)
 

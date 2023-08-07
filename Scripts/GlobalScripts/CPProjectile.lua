@@ -1,23 +1,31 @@
 --[[
-	Copyright (c) 2022 Cannons Pack Team
+	Copyright (c) 2023 Cannons Pack Team
 	Questionable Mark
 ]]
 
 if CPProjectile then return end
-CPProjectile = class(GLOBAL_SCRIPT)
+
+dofile("$CONTENT_DATA/Scripts/Libs/ScriptLoader.lua")
+
+---@class CPProjectile : ToolClass
+CPProjectile = class()
 CPProjectile.projectiles = {}
 CPProjectile.proj_queue  = {}
 
-CPProjectile.sv_last_update = 0
-CPProjectile.cl_last_update = 0
-CPProjectile.m_ref_count = 0
+local g_cpprojectile_host_tool = nil
+
+function CPProjectile:client_onCreate()
+	if g_cpprojectile_host_tool == nil then
+		g_cpprojectile_host_tool = self.tool
+	end
+end
 
 function CPProjectile.server_sendProjectile(self, shapeScript, data, id)
 	local data_to_send = _cpProj_ClearNetworkData(data, id)
 	_tableInsert(CPProjectile.proj_queue, {id, shapeScript.shape, data_to_send})
 end
 
-function CPProjectile.client_loadProjectile(self, data)
+function CPProjectile:client_loadProjectile(data)
 	local proj_data_id, shape, rc_proj_data = unpack(data)
 	local proj_settings = _cpProj_CombineProjectileData(rc_proj_data, proj_data_id)
 
@@ -37,7 +45,7 @@ function CPProjectile.client_loadProjectile(self, data)
 
 	local v_effectId = proj_settings[ProjSettingEnum.shellEffect]
 	local v_effectName = CP_ProjShellEffectEnumStrings[v_effectId]
-	
+
 	local success, shellEffect = pcall(_createEffect, v_effectName)
 	if not success then
 		_logError(shellEffect)
@@ -126,7 +134,11 @@ local function CPProj_spawnExplosion(proj)
 	_cpProj_betterExplosion(v_proj_hit, proj.explLvl, math.max(proj.explRad, 0.3), proj.explImpStr, proj.explImpRad, v_effect_string, true)
 end
 
-function CPProjectile.server_onScriptUpdate(self, dt)
+function CPProjectile:server_onFixedUpdate(dt)
+	if g_cpprojectile_host_tool ~= self.tool then
+		return
+	end
+
 	for b, data in pairs(CPProjectile.proj_queue) do
 		self.network:sendToClients("client_loadProjectile", data)
 		CPProjectile.proj_queue[b] = nil
@@ -181,7 +193,11 @@ local function CPProj_TryCreateDebris(result, proj)
 	end
 end
 
-function CPProjectile.client_onScriptUpdate(self, dt)
+function CPProjectile:client_onFixedUpdate(dt)
+	if g_cpprojectile_host_tool ~= self.tool then
+		return
+	end
+
 	for k, CPProj in pairs(CPProjectile.projectiles) do
 		if CPProj then
 			if CPProj.hit then
@@ -214,10 +230,15 @@ function CPProjectile.client_onScriptUpdate(self, dt)
 	end
 end
 
-function CPProjectile.client_onScriptDestroy(self)
+function CPProjectile:client_onDestroy()
+	if g_cpprojectile_host_tool ~= self.tool then
+		return
+	end
+
 	local deleted_projectiles = _cpProj_cl_destroyProjectiles(CPProjectile.projectiles)
 	CPProjectile.projectiles = {}
 	CPProjectile.proj_queue = {}
+
 	_cpPrint(("CPProjectile: Deleted %s projectiles"):format(deleted_projectiles))
 end
 
