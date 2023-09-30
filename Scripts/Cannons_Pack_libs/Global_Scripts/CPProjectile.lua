@@ -207,12 +207,17 @@ function CPProjectile.client_onScriptUpdate(self, dt)
 
 				if hit or cp_time_out or _cpProj_cl_proxFuze(CPProj.proxFuze, cp_pos, CPProj.ignored_players) then
 					if cp_time_out then
-						local v_travel_fraction = math.min(math.abs(CPProj.alive) / dt, 1.0)
-						local v_pos_fraction = sm.vec3.lerp(cp_pos + cp_dir * dt, cp_pos, v_travel_fraction)
-						local v_diff_dir = (result.pointWorld - v_pos_fraction):normalize()
+						local v_travel_fraction = _mathMin(_mathAbs(CPProj.alive) / dt, 1.0)
+						local v_pos_fraction = _vecLerp(cp_pos + cp_dir * dt, cp_pos, v_travel_fraction)
 
-						if hit and v_diff_dir:dot(cp_dir:normalize()) < 0.0 then
-							CPProj_RegisterRayHit(CPProj, result)
+						if hit then
+							local v_diff_dir = (result.pointWorld - v_pos_fraction):normalize()
+
+							if v_diff_dir:dot(cp_dir:normalize()) < 0.0 then
+								CPProj_RegisterRayHit(CPProj, result)
+							else
+								CPProj.hit = v_pos_fraction
+							end
 						else
 							CPProj.hit = v_pos_fraction
 						end
