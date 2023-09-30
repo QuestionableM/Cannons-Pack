@@ -181,7 +181,16 @@ local function CPProj_TryCreateDebris(result, proj)
 	end
 end
 
+local function CPProj_RegisterRayHit(CPProj, result)
+	CPProj.ray_result = result
+	CPProj.hit = result.pointWorld
+
+	CPProj_TryCreateDebris(result, CPProj)
+end
+
 function CPProjectile.client_onScriptUpdate(self, dt)
+	local dt_1d2 = dt * 1.2
+
 	for k, CPProj in pairs(CPProjectile.projectiles) do
 		if CPProj then
 			if CPProj.hit then
@@ -193,13 +202,22 @@ function CPProjectile.client_onScriptUpdate(self, dt)
 				local cp_dir = CPProj.dir
 				local cp_pos = CPProj.pos
 
-				local hit, result = _physRaycast(cp_pos, cp_pos + cp_dir * dt * 1.2)
-				if hit or CPProj.alive <= 0 or _cpProj_cl_proxFuze(CPProj.proxFuze, cp_pos, CPProj.ignored_players) then
-					if hit then
-						CPProj.ray_result = result
-						CPProj.hit = result.pointWorld
+				local cp_time_out = CPProj.alive <= 0
+				local hit, result = _physRaycast(cp_pos, cp_pos + cp_dir * dt_1d2)
 
-						CPProj_TryCreateDebris(result, CPProj)
+				if hit or cp_time_out or _cpProj_cl_proxFuze(CPProj.proxFuze, cp_pos, CPProj.ignored_players) then
+					if cp_time_out then
+						local v_travel_fraction = math.min(math.abs(CPProj.alive) / dt, 1.0)
+						local v_pos_fraction = sm.vec3.lerp(cp_pos + cp_dir * dt, cp_pos, v_travel_fraction)
+						local v_diff_dir = (result.pointWorld - v_pos_fraction):normalize()
+
+						if hit and v_diff_dir:dot(cp_dir:normalize()) < 0.0 then
+							CPProj_RegisterRayHit(CPProj, result)
+						else
+							CPProj.hit = v_pos_fraction
+						end
+					elseif hit then
+						CPProj_RegisterRayHit(CPProj, result)
 					else
 						CPProj.hit = cp_pos
 					end
