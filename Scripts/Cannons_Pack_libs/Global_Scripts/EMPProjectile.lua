@@ -1,31 +1,24 @@
 --[[
-	Copyright (c) 2023 Cannons Pack Team
+	Copyright (c) 2022 Cannons Pack Team
 	Questionable Mark
 ]]
 
 if EMPProjectile then return end
-
-dofile("$CONTENT_DATA/Scripts/Libs/ScriptLoader.lua")
-
----@class EMPProjectile : ToolClass
-EMPProjectile = class()
+EMPProjectile = class(GLOBAL_SCRIPT)
 EMPProjectile.projectiles = {}
 EMPProjectile.proj_queue = {}
 
-local g_empprojectile_host_tool = nil
-
-function EMPProjectile:client_onCreate()
-	if g_empprojectile_host_tool == nil then
-		g_empprojectile_host_tool = self.tool
-	end
-end
+EMPProjectile.sv_last_update = 0
+EMPProjectile.cl_last_update = 0
+EMPProjectile.m_ref_count = 0
 
 function EMPProjectile.server_sendProjectile(self, shapeScript, data, id)
 	local data_to_send = _cpProj_ClearNetworkData(data, id)
+
 	_tableInsert(EMPProjectile.proj_queue, {id, shapeScript.shape, data_to_send})
 end
 
-function EMPProjectile:client_loadProjectile(data)
+function EMPProjectile.client_loadProjectile(self, data)
 	local proj_data_id, shape, data = unpack(data)
 
 	if not _cpExists(shape) then
@@ -51,11 +44,7 @@ function EMPProjectile:client_loadProjectile(data)
 	}
 end
 
-function EMPProjectile:server_onFixedUpdate(dt)
-	if g_empprojectile_host_tool ~= self.tool then
-		return
-	end
-
+function EMPProjectile.server_onScriptUpdate(self, dt)
 	for b, data in pairs(EMPProjectile.proj_queue) do
 		self.network:sendToClients("client_loadProjectile", data)
 		EMPProjectile.proj_queue[b] = nil
@@ -93,43 +82,31 @@ local function EMPProj_UpdateEffect(EMPProj)
 	end
 end
 
-function EMPProjectile:client_onFixedUpdate(dt)
-	if g_empprojectile_host_tool ~= self.tool then
-		return
-	end
-
+function EMPProjectile.client_onScriptUpdate(self, dt)
 	for k,EMPProj in pairs(EMPProjectile.projectiles) do
-		if EMPProj then
-			if EMPProj.hit then
-				EMPProjectile.projectiles[k] = nil
+		if EMPProj and EMPProj.hit then EMPProjectile.projectiles[k] = nil end
+		if EMPProj and not EMPProj.hit then
+			EMPProj.alive = EMPProj.alive - dt
+
+			local emp_pos = EMPProj.pos
+			local emp_dir = EMPProj.dir
+
+			local hit,result = _physRaycast(emp_pos, emp_pos + emp_dir * dt * 1.2)
+			if hit or EMPProj.alive <= 0 then
+				EMPProj.hit = (result.pointWorld ~= _vecZero() and result.pointWorld) or emp_pos
+				_cpProj_cl_onProjHit(EMPProj.effect)
 			else
-				EMPProj.alive = EMPProj.alive - dt
-
-				local emp_pos = EMPProj.pos
-				local emp_dir = EMPProj.dir
-
-				local hit,result = _physRaycast(emp_pos, emp_pos + emp_dir * dt * 1.2)
-				if hit or EMPProj.alive <= 0 then
-					EMPProj.hit = (result.pointWorld ~= _vecZero() and result.pointWorld) or emp_pos
-					_cpProj_cl_onProjHit(EMPProj.effect)
-				else
-					EMPProj.pos = emp_pos + emp_dir * dt
-					EMPProj_UpdateEffect(EMPProj)
-				end
+				EMPProj.pos = emp_pos + emp_dir * dt
+				EMPProj_UpdateEffect(EMPProj)
 			end
 		end
 	end
 end
 
-function EMPProjectile:client_onDestroy()
-	if g_empprojectile_host_tool ~= self.tool then
-		return
-	end
-
+function EMPProjectile.client_onScriptDestroy(self)
 	local deleted_projectiles = _cpProj_cl_destroyProjectiles(EMPProjectile.projectiles)
 	EMPProjectile.projectiles = {}
 	EMPProjectile.proj_queue = {}
-
 	_cpPrint(("EMPProjectile: Deleted %s projectiles"):format(deleted_projectiles))
 end
 

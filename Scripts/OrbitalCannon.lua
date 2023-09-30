@@ -1,13 +1,11 @@
 --[[
-	Copyright (c) 2023 Cannons Pack Team
+	Copyright (c) 2022 Cannons Pack Team
 	Questionable Mark
 ]]
 
 if OrbitalCannon then return end
-
-dofile("Libs/ScriptLoader.lua")
-
-OrbitalCannon = class()
+dofile("Cannons_Pack_libs/ScriptLoader.lua")
+OrbitalCannon = class(GLOBAL_SCRIPT)
 OrbitalCannon.maxParentCount = 1
 OrbitalCannon.maxChildCount  = 0
 OrbitalCannon.connectionInput  = _connectionType.logic
@@ -18,6 +16,7 @@ OrbitalCannon.colorHighlight = _colorNew(0x99cfcbff)
 function OrbitalCannon:client_onCreate()
 	self.effects = _cpEffect_cl_loadEffects(self)
 	self.uv = {}
+	self:client_injectScript("CPProjectile")
 end
 
 function OrbitalCannon:server_onCreate()

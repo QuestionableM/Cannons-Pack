@@ -1,13 +1,11 @@
 --[[
-	Copyright (c) 2023 Cannons Pack Team
+	Copyright (c) 2022 Cannons Pack Team
 	Questionable Mark
 ]]
 
 if SmartCannon then return end
-
-dofile("Libs/ScriptLoader.lua")
-
-SmartCannon = class()
+dofile("Cannons_Pack_libs/ScriptLoader.lua")
+SmartCannon = class(GLOBAL_SCRIPT)
 SmartCannon.maxParentCount = -1
 SmartCannon.maxChildCount  = 1
 SmartCannon.connectionInput  = _connectionType.logic + _connectionType.power
@@ -16,6 +14,8 @@ SmartCannon.colorNormal    = _colorNew(0x5d0096ff)
 SmartCannon.colorHighlight = _colorNew(0x9000e8ff)
 
 function SmartCannon:client_onCreate()
+	self:client_injectScript("CPProjectile")
+
 	self.effects = _cpEffect_cl_loadEffects(self)
 	self.effects[EffectEnum.sht_snd]:setParameter("sound", 1)
 

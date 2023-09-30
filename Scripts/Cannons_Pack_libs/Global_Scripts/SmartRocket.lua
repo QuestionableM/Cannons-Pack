@@ -1,30 +1,23 @@
 --[[
-	Copyright (c) 2023 Cannons Pack Team
+	Copyright (c) 2022 Cannons Pack Team
 	Questionable Mark
 ]]
 
 if SmartRocket then return end
-
-dofile("$CONTENT_DATA/Scripts/Libs/ScriptLoader.lua")
-
----@class SmartRocket : ToolClass
-SmartRocket = class()
+SmartRocket = class(GLOBAL_SCRIPT)
 SmartRocket.projectiles = {}
 SmartRocket.proj_queue = {}
 
-local g_smartrocket_host_tool = nil
+SmartRocket.sv_last_update = 0
+SmartRocket.cl_last_update = 0
+SmartRocket.m_ref_count = 0
 
 --The FOV of Smart Rocket is 60 degrees (-0.66)
 --The FOV of Smart Rocket Detector is 80 degress (-0.88)
 
-function SmartRocket:client_onCreate()
-	if g_smartrocket_host_tool == nil then
-		g_smartrocket_host_tool = self.tool
-	end
-end
-
 function SmartRocket.server_sendProjectile(self, shapeScript, data, id)
 	local data_to_send = _cpProj_ClearNetworkData(data, id)
+
 	_tableInsert(SmartRocket.proj_queue, {id, shapeScript.shape, data_to_send})
 end
 
@@ -33,7 +26,7 @@ SR_ModeEnum = {
 	dirCam = 2
 }
 
-function SmartRocket:client_loadProjectile(data)
+function SmartRocket.client_loadProjectile(self, data)
 	local proj_data_id, shape, rc_proj_data = unpack(data)
 
 	if not _cpExists(shape) then
@@ -70,11 +63,7 @@ function SmartRocket:client_loadProjectile(data)
 	}
 end
 
-function SmartRocket:server_onFixedUpdate(dt)
-	if g_smartrocket_host_tool ~= self.tool then
-		return
-	end
-
+function SmartRocket.server_onScriptUpdate(self, dt)
 	for k, data in pairs(SmartRocket.proj_queue) do
 		self.network:sendToClients("client_loadProjectile", data)
 		SmartRocket.proj_queue[k] = nil
@@ -187,75 +176,60 @@ local function PickATarget(rocket, char_pos, char_visible)
 	end
 end
 
-function SmartRocket:client_onFixedUpdate(dt)
-	if g_smartrocket_host_tool ~= self.tool then
-		return
-	end
-
+function SmartRocket.client_onScriptUpdate(self, dt)
 	for k, rocket in pairs(SmartRocket.projectiles) do
-		if rocket then
-			if rocket.hit then
-				SmartRocket.projectiles[k] = nil
-			else
-				rocket.alive = rocket.alive - dt
-				local r_Alive = rocket.alive
-				local r_Pos = rocket.pos
+		if rocket and rocket.hit then
+			SmartRocket.projectiles[k] = nil
+		end
 
-				local r_Accuracy = 0.1
-				local t_Position = r_Pos + rocket.dir
-				local t_Distance = math.huge
-				local r_shape = rocket.shape
-				local r_shape_exists = _cpExists(r_shape)
-				local r_Mode = rocket.mode
-				local camera = (r_Mode ~= nil)
+		if rocket and not rocket.hit then
+			rocket.alive = rocket.alive - dt
+			local r_Alive = rocket.alive
+			local r_Pos = rocket.pos
 
-				if rocket.flar ~= r_FlarEnum.dead and _cpProj_isFlareNear(FlareProjectile.projectiles, r_Pos, 10) then
-					rocket.flar = r_FlarEnum.dead
-				end
+			local r_Accuracy = 0.1
+			local t_Position = r_Pos + rocket.dir
+			local t_Distance = math.huge
+			local r_shape = rocket.shape
+			local r_shape_exists = _cpExists(r_shape)
+			local r_Mode = rocket.mode
+			local camera = (r_Mode ~= nil)
 
-				local r_DirGood = (rocket.dir:length() > 0.001)
-				local o_Char = GetPlayerCharacter(rocket.player)
-				if o_Char ~= nil then
-					local char_pos = o_Char.worldPosition
+			if rocket.flar ~= r_FlarEnum.dead and _cpProj_isFlareNear(FlareProjectile.projectiles, r_Pos, 10) then
+				rocket.flar = r_FlarEnum.dead
+			end
 
-					if camera then
-						local cam_offset = _newVec(0, 0, o_Char:isCrouching() and 0.275 or 0.575)
-						local offset_pos = char_pos + cam_offset
-						local char_dir = o_Char.direction
+			local r_DirGood = (rocket.dir:length() > 0.001)
+			local o_Char = GetPlayerCharacter(rocket.player)
+			if o_Char ~= nil then
+				local char_pos = o_Char.worldPosition
 
-						local hit, result = _physRaycast(offset_pos + char_dir, offset_pos + char_dir * 2500)
-						if hit then
-							if r_Mode == SR_ModeEnum.dirCam then
-								if r_shape_exists then
-									t_Position = result.directionWorld * 20
-								end
-							else
-								if (r_shape_exists and result:getBody() ~= r_shape.body) and result:getCharacter() ~= o_Char then
-									t_Position = result.pointWorld
-									t_Distance = (t_Position - r_Pos):length()
-								end
+				if camera then
+					local cam_offset = _newVec(0, 0, o_Char:isCrouching() and 0.275 or 0.575)
+					local offset_pos = char_pos + cam_offset
+					local char_dir = o_Char.direction
+
+					local hit, result = _physRaycast(offset_pos + char_dir, offset_pos + char_dir * 2500)
+					if hit then
+						if r_Mode == SR_ModeEnum.dirCam then
+							if r_shape_exists then
+								t_Position = result.directionWorld * 20
 							end
-						end
-					else
-						if r_Alive < 14.5 and r_Alive > 14 then
-							r_Accuracy = 0.25
-							t_Position = char_pos
-							t_Distance = (t_Position - r_Pos):length()
-						elseif r_Alive < 14 and r_DirGood then
-							local charVisible = _cp_isObjectVisible(r_Pos, rocket.dir, char_pos, -0.66)
-							local tar_pos, tar_dst, tar_type = PickATarget(rocket, char_pos, charVisible)
-
-							if tar_pos ~= nil then
-								t_Position = tar_pos
-								t_Distance = tar_dst
-								rocket.flar = tar_type
+						else
+							if (r_shape_exists and result:getBody() ~= r_shape.body) and result:getCharacter() ~= o_Char then
+								t_Position = result.pointWorld
+								t_Distance = (t_Position - r_Pos):length()
 							end
 						end
 					end
 				else
-					if r_DirGood then
-						local vis_char = getClosestVisiblePlayer(r_Pos, rocket.dir)
-						local tar_pos, tar_dst, tar_type = PickATarget(rocket, vis_char, true)
+					if r_Alive < 14.5 and r_Alive > 14 then
+						r_Accuracy = 0.25
+						t_Position = char_pos
+						t_Distance = (t_Position - r_Pos):length()
+					elseif r_Alive < 14 and r_DirGood then
+						local charVisible = _cp_isObjectVisible(r_Pos, rocket.dir, char_pos, -0.66)
+						local tar_pos, tar_dst, tar_type = PickATarget(rocket, char_pos, charVisible)
 
 						if tar_pos ~= nil then
 							t_Position = tar_pos
@@ -264,57 +238,63 @@ function SmartRocket:client_onFixedUpdate(dt)
 						end
 					end
 				end
+			else
+				if r_DirGood then
+					local vis_char = getClosestVisiblePlayer(r_Pos, rocket.dir)
+					local tar_pos, tar_dst, tar_type = PickATarget(rocket, vis_char, true)
 
-				if r_Alive < 14.5 and t_Position then
-					local new_dir = (t_Position - r_Pos):normalize()
-					local dir_norm = rocket.dir:normalize()
-
-					if camera then
-						rocket.dir = _vecLerp(dir_norm, new_dir, 0.08):normalize() * rocket.vel
-					else
-						local hit, result = _physRaycast(r_Pos, r_Pos + (rocket.dir / 1.5))
-						local r_Type = result.type
-
-						if rocket.obsAvoid and (hit and ((r_Type == "terrainAsset" or r_Type == "terrainSurface") or (r_shape_exists and result:getBody() == r_shape.body))) then
-							local r_Normal = result.normalWorld
-							local r_Dot = rocket.dir:dot(r_Normal)
-							local r_Vector = rocket.dir - (r_Normal * r_Dot)
-
-							rocket.dir = _vecLerp(dir_norm, r_Vector, 0.01):normalize() * rocket.vel
-						else
-							rocket.dir = _vecLerp(dir_norm, new_dir, r_Accuracy):normalize() * rocket.vel
-						end
+					if tar_pos ~= nil then
+						t_Position = tar_pos
+						t_Distance = tar_dst
+						rocket.flar = tar_type
 					end
 				end
+			end
 
-				if camera and rocket.dir:length() > rocket.vel then
-					rocket.vel = rocket.vel * 0.998
-				end
+			if r_Alive < 14.5 and t_Position then
+				local new_dir = (t_Position - r_Pos):normalize()
+				local dir_norm = rocket.dir:normalize()
 
-				local hit, result = _physRaycast(r_Pos, r_Pos + rocket.dir * dt * 1.2)
-				if hit or r_Alive <= 0 or t_Distance < (r_ModeDist[camera or rocket.flar] or 1) or _cpProj_cl_proxFuze(rocket.proxFuze, r_Pos, rocket.ignored_players) then
-					rocket.hit = (result.pointWorld ~= _vecZero() and result.pointWorld) or r_Pos
-
-					_cpProj_cl_onProjHit(rocket.effect, true)
-					_cpProj_killNearestFlares(FlareProjectile.projectiles, rocket.hit, 8)
+				if camera then
+					rocket.dir = _vecLerp(dir_norm, new_dir, 0.08):normalize() * rocket.vel
 				else
-					rocket.pos = r_Pos + rocket.dir * dt
-					UpdateRocketEffect(rocket)
+					local hit, result = _physRaycast(r_Pos, r_Pos + (rocket.dir / 1.5))
+					local r_Type = result.type
+
+					if rocket.obsAvoid and (hit and ((r_Type == "terrainAsset" or r_Type == "terrainSurface") or (r_shape_exists and result:getBody() == r_shape.body))) then
+						local r_Normal = result.normalWorld
+						local r_Dot = rocket.dir:dot(r_Normal)
+						local r_Vector = rocket.dir - (r_Normal * r_Dot)
+
+						rocket.dir = _vecLerp(dir_norm, r_Vector, 0.01):normalize() * rocket.vel
+					else
+						rocket.dir = _vecLerp(dir_norm, new_dir, r_Accuracy):normalize() * rocket.vel
+					end
 				end
+			end
+			
+			if camera and rocket.dir:length() > rocket.vel then
+				rocket.vel = rocket.vel * 0.998
+			end
+
+			local hit, result = _physRaycast(r_Pos, r_Pos + rocket.dir * dt * 1.2)
+			if hit or r_Alive <= 0 or t_Distance < (r_ModeDist[camera or rocket.flar] or 1) or _cpProj_cl_proxFuze(rocket.proxFuze, r_Pos, rocket.ignored_players) then
+				rocket.hit = (result.pointWorld ~= _vecZero() and result.pointWorld) or r_Pos
+				
+				_cpProj_cl_onProjHit(rocket.effect, true)
+				_cpProj_killNearestFlares(FlareProjectile.projectiles, rocket.hit, 8)
+			else
+				rocket.pos = r_Pos + rocket.dir * dt
+				UpdateRocketEffect(rocket)
 			end
 		end
 	end
 end
 
 function SmartRocket.client_onScriptDestroy(self)
-	if g_smartrocket_host_tool ~= self.tool then
-		return
-	end
-
 	local deleted_projectiles = _cpProj_cl_destroyProjectiles(SmartRocket.projectiles)
 	SmartRocket.projectiles = {}
 	SmartRocket.proj_queue = {}
-
 	_cpPrint(("SmartRocket: Deleted %s projectiles"):format(deleted_projectiles))
 end
 

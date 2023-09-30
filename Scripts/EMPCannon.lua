@@ -1,13 +1,11 @@
 --[[
-	Copyright (c) 2023 Cannons Pack Team
+	Copyright (c) 2022 Cannons Pack Team
 	Questionable Mark
 ]]
 
 if emp then return end
-
-dofile("Libs/ScriptLoader.lua")
-
-emp = class()
+dofile("Cannons_Pack_libs/ScriptLoader.lua")
+emp = class(GLOBAL_SCRIPT)
 emp.maxParentCount = 1
 emp.maxChildCount  = 0
 emp.connectionInput  = _connectionType.logic
@@ -18,6 +16,7 @@ emp.colorHighlight = _colorNew(0xd0ff00ff)
 function emp:client_onCreate()
 	self.effects = _cpEffect_cl_loadEffects(self)
 	self.uv = {}
+	self:client_injectScript("EMPProjectile")
 end
 
 function emp:client_onDestroy()

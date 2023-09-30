@@ -1,13 +1,11 @@
 --[[
-	Copyright (c) 2023 Cannons Pack Team
+	Copyright (c) 2022 Cannons Pack Team
 	Questionable Mark
 ]]
 
 if HomingMissile then return end
-
-dofile("Libs/ScriptLoader.lua")
-
-HomingMissile = class()
+dofile("Cannons_Pack_libs/ScriptLoader.lua")
+HomingMissile = class(GLOBAL_SCRIPT)
 HomingMissile.maxParentCount = 5
 HomingMissile.maxChildCount  = 0
 HomingMissile.connectionInput  = _connectionType.logic + _connectionType.power
@@ -23,6 +21,7 @@ end
 
 function HomingMissile:client_onCreate()
 	self.effects = _cpEffect_cl_loadEffects(self)
+	self:client_injectScript("SmartRocket")
 
 	self.client_seat = false
 	self.client_cam = false

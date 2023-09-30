@@ -1,5 +1,5 @@
 --[[
-	Copyright (c) 2023 Cannons Pack Team
+	Copyright (c) 2022 Cannons Pack Team
 	Questionable Mark
 ]]
 
@@ -234,10 +234,18 @@ function _cpProj_isFlareNear(flare_table, rocket_pos, radius)
 	end
 end
 
----@param path string
----@return GuiInterface
-function _cpCreateGui(path)
-	return sm.gui.createGuiFromLayout("$CONTENT_c0344d93-7492-46c8-88be-a61699e57041/Gui/Layouts/"..path, false, { backgroundAlpha = 0.5, hidesHotbar = true })
+function _cpCreateGui(path) return nil end
+
+if sm.gui then
+	local create_layout_func = sm.gui.createGuiFromLayout
+
+	if type(create_layout_func) == "function" then
+		_cpGuiSupported = true
+
+		_cpCreateGui = function(path)
+			return create_layout_func("$CONTENT_c0344d93-7492-46c8-88be-a61699e57041/Gui/Layouts/"..path, false, { backgroundAlpha = 0.5, hidesHotbar = true })
+		end
+	end
 end
 
 _cpPrint("Additions library has been loaded!")
