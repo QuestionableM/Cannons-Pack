@@ -366,6 +366,10 @@ local cannon_settings = {
 	}
 }
 
+function _cpCannons_addCannonInfo(uuid, cannon_info)
+	cannon_settings[uuid] = cannon_info
+end
+
 function _cpCannons_loadCannonInfo(self)
 	local _CSettings = cannon_settings[tostring(self.shape.uuid)]
 	if _CSettings then

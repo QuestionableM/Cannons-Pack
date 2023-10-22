@@ -148,6 +148,10 @@ local cannon_effects = {
 	})
 }
 
+function _cpEffect_addEffectInfo(uuid, effect_info)
+	cannon_effects[uuid] = TranslateEffects(effect_info)
+end
+
 function _cpEffect_cl_loadEffects2(self)
 	local obj_effects = cannon_effects[tostring(self.shape.uuid)]
 

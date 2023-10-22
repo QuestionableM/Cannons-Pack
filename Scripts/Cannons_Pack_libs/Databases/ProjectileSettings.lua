@@ -432,6 +432,14 @@ local ProjSettings = {
 	})
 }
 
+function _cpProj_getProjEnum(name)
+	return ProjEnum[name]
+end
+
+function _cpProj_getShellEjectorEnum(name)
+	return ShellEjectorEnum[name]
+end
+
 function _cpProj_GetProjectileSettings(id)
 	local cur_settings = ProjSettings[id]
 
