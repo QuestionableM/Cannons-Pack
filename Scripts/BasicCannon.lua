@@ -64,7 +64,7 @@ function BasicCannon:server_onFixedUpdate()
 	local active = parent and parent.active
 
 	local s_set = self.settings
-	self:server_updateAndCheckChild(s_set.port_uuids)
+	self:server_updateAndCheckChild(s_set.port_uuids or {})
 
 	if active and not self.reload then
 		self.reload = _cp_Shoot(self, s_set.reload, "client_shoot", EffectEnum.sht, s_set.impulse_dir * s_set.impulse_str)
