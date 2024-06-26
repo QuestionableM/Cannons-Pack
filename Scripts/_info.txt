@@ -1,7 +1,7 @@
 What are u doing here? you little thief
 
-Cannons Pack version 4.87 changelog:
-1. Fixed a raycast over timer priority for Smart Cannons projectiles
+Cannons Pack version 4.88 changelog:
+1. Fixed a RocketLauncher script crash that happens when a shell ejector is attached
 
 Made by:
 Questionable Mark - creator of all the textures, UV maps and also some scripts and cannon models.
