@@ -366,10 +366,13 @@ local cannon_settings = {
 	}
 }
 
+---@param uuid string
+---@param cannon_info table
 function _cpCannons_addCannonInfo(uuid, cannon_info)
 	cannon_settings[uuid] = cannon_info
 end
 
+---@param self ShapeClass
 function _cpCannons_loadCannonInfo(self)
 	local _CSettings = cannon_settings[tostring(self.shape.uuid)]
 	if _CSettings then
@@ -382,6 +385,7 @@ function _cpCannons_loadCannonInfo(self)
 	end
 end
 
+---@param self ShapeClass
 function _cpCannons_sv_loadCannonInfo(self)
 	local _CSettings = cannon_settings[tostring(self.shape.uuid)]
 	if _CSettings and _CSettings.server_settings then
@@ -395,6 +399,7 @@ function _cpCannons_sv_loadCannonInfo(self)
 	end
 end
 
+---@param self ShapeClass
 function _cpCannons_cl_loadCannonInfo(self)
 	local _CSettings = cannon_settings[tostring(self.shape.uuid)]
 	if _CSettings and _CSettings.client_settings then

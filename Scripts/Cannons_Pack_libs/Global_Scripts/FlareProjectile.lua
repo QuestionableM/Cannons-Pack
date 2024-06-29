@@ -4,6 +4,13 @@
 ]]
 
 if FlareProjectile then return end
+
+---@class FlareProjectileInstance : ProjectileInstance
+---@field hit? boolean
+---@field grav number
+
+---@class FlareProjectile : GlobalScript
+---@field projectiles FlareProjectileInstance[]
 FlareProjectile = class(GLOBAL_SCRIPT)
 FlareProjectile.projectiles = {}
 FlareProjectile.proj_queue = {}

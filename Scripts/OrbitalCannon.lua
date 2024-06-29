@@ -4,7 +4,10 @@
 ]]
 
 if OrbitalCannon then return end
+
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
+
+---@class OrbitalCannon : GlobalScriptHandler
 OrbitalCannon = class(GLOBAL_SCRIPT)
 OrbitalCannon.maxParentCount = 1
 OrbitalCannon.maxChildCount  = 0

@@ -5,6 +5,8 @@
 
 if HomingMissile then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
+
+---@class HomingMissile : GlobalScriptHandler
 HomingMissile = class(GLOBAL_SCRIPT)
 HomingMissile.maxParentCount = 5
 HomingMissile.maxChildCount  = 0

@@ -4,6 +4,20 @@
 ]]
 
 if SmartRocket then return end
+
+---@class SmartRocketInstance : ProjectileInstance
+---@field hit? Vec3
+---@field obsAvoid boolean
+---@field mode integer
+---@field flar? string|integer
+---@field shape Shape
+---@field player Player
+---@field vel number
+---@field proxFuze number
+---@field ignored_players Player[]
+
+---@class SmartRocket : GlobalScript
+---@field projectiles SmartRocketInstance[]
 SmartRocket = class(GLOBAL_SCRIPT)
 SmartRocket.projectiles = {}
 SmartRocket.proj_queue = {}

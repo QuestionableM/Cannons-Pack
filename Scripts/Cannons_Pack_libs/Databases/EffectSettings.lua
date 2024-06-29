@@ -40,6 +40,8 @@ ExplEffectEnumTrans = {
 	[ExplEffectEnum.PotatoHit]          = "PotatoProjectile - Hit"
 }
 
+---@param eff_table table
+---@return table
 local function TranslateEffects(eff_table)
 	local output_table = {}
 
@@ -148,10 +150,13 @@ local cannon_effects = {
 	})
 }
 
+---@param uuid string
+---@param effect_info table
 function _cpEffect_addEffectInfo(uuid, effect_info)
 	cannon_effects[uuid] = TranslateEffects(effect_info)
 end
 
+---@param self ShapeClass
 function _cpEffect_cl_loadEffects2(self)
 	local obj_effects = cannon_effects[tostring(self.shape.uuid)]
 
@@ -178,6 +183,7 @@ function _cpEffect_cl_loadEffects2(self)
 	end
 end
 
+---@param self ShapeClass
 function _cpEffect_cl_loadEffects(self)
 	local obj_effects = cannon_effects[tostring(self.shape.uuid)]
 	if obj_effects then

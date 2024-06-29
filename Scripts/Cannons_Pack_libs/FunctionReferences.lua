@@ -64,6 +64,9 @@ _cpPrint = function(...)
 	print("[CannonsPack]", ...)
 end
 
+---@param obj any
+---@return boolean
+---@overload fun(obj: nil): false
 _cpExists = function(obj)
 	if obj == nil then return false end
 

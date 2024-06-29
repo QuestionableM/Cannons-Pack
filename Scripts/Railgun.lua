@@ -4,7 +4,10 @@
 ]]
 
 if Railgun then return end
+
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
+
+---@class Railgun : GlobalScriptHandler
 Railgun = class(GLOBAL_SCRIPT)
 Railgun.maxParentCount = 1
 Railgun.maxChildCount  = 0

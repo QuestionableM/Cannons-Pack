@@ -4,7 +4,10 @@
 ]]
 
 if RocketDetector then return end
+
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
+
+---@class RocketDetector : ShapeClass
 RocketDetector = class()
 RocketDetector.connectionInput  = _connectionType.logic
 RocketDetector.connectionOutput = _connectionType.logic

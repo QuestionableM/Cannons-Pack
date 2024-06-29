@@ -4,7 +4,10 @@
 ]]
 
 if emp then return end
+
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
+
+---@class EMPCannon : GlobalScriptHandler
 emp = class(GLOBAL_SCRIPT)
 emp.maxParentCount = 1
 emp.maxChildCount  = 0

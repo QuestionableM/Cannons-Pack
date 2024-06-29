@@ -4,6 +4,25 @@
 ]]
 
 if CPProjectile then return end
+
+---@class CPProjectileInstance : ProjectileInstance
+---@field hit? Vec3
+---@field ray_result? RaycastResult
+---@field hit_shape? Shape
+---@field explRad number
+---@field explLvl number
+---@field explImpStr number
+---@field explImpRad number
+---@field friction number
+---@field grav number
+---@field proxFuze number
+---@field ignored_players Player[]
+---@field keep_effect boolean
+---@field explEff integer
+---@field syncEffect boolean
+
+---@class CPProjectile : GlobalScript
+---@field projectiles CPProjectileInstance[]
 CPProjectile = class(GLOBAL_SCRIPT)
 CPProjectile.projectiles = {}
 CPProjectile.proj_queue  = {}
@@ -75,6 +94,8 @@ local CPProj_ProjectilesWithNormals =
 	[ExplEffectEnum.EMPCannon] = true
 }
 
+---@param proj CPProjectileInstance
+---@return nil|string
 local function CPProj_PlayEffect(proj)
 	local v_proj_expl_id = proj.explEff
 	local v_expl_eff = ExplEffectEnumTrans[v_proj_expl_id]
@@ -93,8 +114,10 @@ local function CPProj_PlayEffect(proj)
 	return v_expl_eff
 end
 
+---@param proj CPProjectileInstance
 local function CPProj_spawnExplosion(proj)
 	local v_proj_hit = proj.hit
+	---@cast v_proj_hit Vec3
 
 	if proj.explRad < 0.3 then
 		local v_hit_shape = proj.hit_shape --[[@as Shape]]
@@ -140,6 +163,8 @@ function CPProjectile.server_onScriptUpdate(self, dt)
 end
 
 local _xAxis = _newVec(1, 0, 0)
+
+---@param CPProj CPProjectileInstance
 local function CPProj_UpdateEffect(CPProj)
 	local cp_effect = CPProj.effect
 
@@ -154,6 +179,7 @@ local function CPProj_UpdateEffect(CPProj)
 end
 
 ---@param result RaycastResult
+---@param proj CPProjectileInstance
 local function CPProj_TryCreateDebris(result, proj)
 	if result.type ~= "body" then
 		return
@@ -181,6 +207,8 @@ local function CPProj_TryCreateDebris(result, proj)
 	end
 end
 
+---@param CPProj CPProjectileInstance
+---@param result RaycastResult
 local function CPProj_RegisterRayHit(CPProj, result)
 	CPProj.ray_result = result
 	CPProj.hit = result.pointWorld

@@ -4,6 +4,12 @@
 ]]
 
 if LaserProjectile then return end
+
+---@class LaserProjectileInstance : ProjectileInstance
+---@field hit nil|RaycastResult
+
+---@class LaserProjectile : GlobalScript
+---@field projectiles LaserProjectileInstance[]
 LaserProjectile = class(GLOBAL_SCRIPT)
 LaserProjectile.projectiles = {}
 LaserProjectile.proj_queue = {}
@@ -50,7 +56,7 @@ function LaserProjectile.server_onScriptUpdate(self, dt)
 	end
 	for k, proj in pairs(LaserProjectile.projectiles) do
 		if proj and proj.hit then
-			local _RayRes = proj.hit
+			local _RayRes = proj.hit --[[@as RaycastResult]]
 			if _RayRes.valid then
 				local _Shape = nil
 				local _HitPos = _RayRes.pointWorld
@@ -66,6 +72,7 @@ function LaserProjectile.server_onScriptUpdate(self, dt)
 				end
 
 				if _cpExists(_Shape) then
+					---@cast _Shape Shape
 					if _isItemBlock(_Shape:getShapeUuid()) then
 						local _BlockPos = _Shape:getClosestBlockLocalPosition(_HitPos)
 						_Shape:destroyBlock(_BlockPos, _vecOne, 0)

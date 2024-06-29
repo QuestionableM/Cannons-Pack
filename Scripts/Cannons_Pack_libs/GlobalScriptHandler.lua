@@ -4,6 +4,14 @@
 ]]
 
 if GLOBAL_SCRIPT then return end
+
+---@class GlobalScriptHandler : ShapeClass
+---@field server_sendProjectile fun(self: GlobalScriptHandler, shapeScript: ShapeClass, data: table, id: integer)
+---@field client_loadProjectile fun(self: GlobalScriptHandler, data: table)
+---@field server_onScriptUpdate fun(self: GlobalScriptHandler, dt: number)
+---@field client_onScriptUpdate fun(self: GlobalScriptHandler, dt: number)
+---@field client_onScriptDestroy fun(self: GlobalScriptHandler)
+---@field _GS_ATTACHED boolean
 GLOBAL_SCRIPT = class()
 
 function GLOBAL_SCRIPT.server_onFixedUpdate(self, dt) end
@@ -15,6 +23,8 @@ local _SpawnPosition = _newVec(0, 0, 5000)
 local _ActiveScripts = {}
 ]]
 
+---@param self GlobalScriptHandler
+---@param script string
 function GLOBAL_SCRIPT.client_injectScript(self, script)
 	local g_script = _CP_gScript[script]
 	if g_script == nil then
@@ -22,6 +32,7 @@ function GLOBAL_SCRIPT.client_injectScript(self, script)
 		return
 	end
 
+	---@cast g_script GlobalScript
 	if not self._GS_ATTACHED then
 		self._GS_ATTACHED = true
 

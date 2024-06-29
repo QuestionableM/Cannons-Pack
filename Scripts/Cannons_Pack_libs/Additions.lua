@@ -4,17 +4,49 @@
 ]]
 
 if _CP_gScript then return end
+
+---@class GlobalScript : GlobalScriptHandler
+---@field m_ref_count integer
+---@field sv_last_update integer
+---@field cl_last_update integer
+
+---@class ProjectileInstance
+---@field effect Effect
+---@field alive number
+---@field pos Vec3
+---@field dir Vec3
+
+---@class GlobalScriptStorage
+---@field CPProjectile CPProjectile
+---@field EMPProjectile EMPProjectile
+---@field FlareProjectile FlareProjectile
+---@field LaserProjectile LaserProjectile
+---@field RailgunProjectile RailgunProjectile
+---@field SmartRocket SmartRocket
+
+---@type GlobalScriptStorage
+---@diagnostic disable-next-line
 _CP_gScript = {}
 
+---@param interactable Interactable
+---@return boolean
 function _cp_isLogic(interactable)
 	return interactable:getConnectionOutputType() == _connectionType.logic
 end
 
 local number_or_logic = bit.bor(_connectionType.logic, _connectionType.power)
+
+---@param interactable Interactable
+---@return boolean
 function _cp_isNumberLogic(interactable)
 	return interactable:getConnectionOutputType() == number_or_logic
 end
 
+---@param pos Vec3
+---@param dir Vec3
+---@param target_pos Vec3
+---@param angle number
+---@return boolean
 function _cp_isObjectVisible(pos, dir, target_pos, angle)
 	local target_dir = (target_pos - pos):normalize()
 	local dot_value = dir:dot(target_dir) - 1
@@ -22,6 +54,9 @@ function _cp_isObjectVisible(pos, dir, target_pos, angle)
 	return (dot_value > angle)
 end
 
+---@param shape Shape
+---@param effect table|Effect
+---@param renderDistance number
 function _cp_spawnOptimizedEffect(shape, effect, renderDistance)
 	local render_distance = renderDistance or 40
 	local distance = (shape.worldPosition - _getCamPosition()):length()
@@ -35,6 +70,11 @@ function _cp_spawnOptimizedEffect(shape, effect, renderDistance)
 	end
 end
 
+---@param self ShapeClass
+---@param spread_degree number
+---@param velocity number
+---@param ignore_momentum? boolean
+---@return Vec3
 function _cp_calculateSpread(self, spread_degree, velocity, ignore_momentum)
 	if ignore_momentum then
 		local angle = _gunSpread(self.shape.up, spread_degree)
@@ -48,6 +88,12 @@ function _cp_calculateSpread(self, spread_degree, velocity, ignore_momentum)
 	end
 end
 
+---@param shape Shape
+---@param projectile Uuid
+---@param damage number
+---@param offset Vec3
+---@param direction Vec3
+---@param ignoreRotation boolean
 function _cp_shootProjectile(shape, projectile, damage, offset, direction, ignoreRotation)
 	if not ignoreRotation then
 		_shapeProjAttack(projectile, damage, offset, direction, shape)
@@ -56,6 +102,12 @@ function _cp_shootProjectile(shape, projectile, damage, offset, direction, ignor
 	end
 end
 
+---@param self ShapeClass
+---@param reloadTime? integer
+---@param callback string
+---@param data any
+---@param impulse? Vec3
+---@return integer|nil
 function _cp_Shoot(self, reloadTime, callback, data, impulse)
 	if callback then
 		self.network:sendToClients(callback, data)
@@ -70,17 +122,26 @@ function _cp_Shoot(self, reloadTime, callback, data, impulse)
 	end
 end
 
+---@param reload number
+---@param auto_reloading boolean
+---@param active boolean
+---@return number
 function _cp_calculateReload(reload, auto_reloading, active)
-	local reload_result = nil
+	local reload_result
 	if auto_reloading then
 		reload_result = (reload > 1 and reload - 1) or nil
 	else
 		reload_result = (reload > 1 and reload - 1) or (active and 0 or nil)
 	end
 
+	---@cast reload_result number
 	return reload_result
 end
 
+---@param sound string
+---@param globalSound boolean
+---@param text string
+---@param duration? number
 function _cp_infoOutput(sound, globalSound, text, duration)
 	_audioPlay(sound, not globalSound and _getCamPosition() or nil)
 
@@ -90,6 +151,12 @@ function _cp_infoOutput(sound, globalSound, text, duration)
 end
 
 ---@param position Vec3
+---@param expl_level number
+---@param expl_radius number
+---@param expl_impulse number
+---@param expl_magnitude number
+---@param effect? string
+---@param pushPlayers boolean
 function _cpProj_betterExplosion(position, expl_level, expl_radius, expl_impulse, expl_magnitude, effect, pushPlayers)
 	_physExplode(position, expl_level, expl_radius, 1, 1, effect)
 
@@ -125,6 +192,9 @@ function _cpProj_betterExplosion(position, expl_level, expl_radius, expl_impulse
 end
 
 local _cpProj_TPPos = _newVec(0, 0, 10000)
+
+---@param proj_effect Effect
+---@param keep_effect? boolean
 function _cpProj_cl_onProjHit(proj_effect, keep_effect)
 	if proj_effect == nil then return end
 
@@ -139,6 +209,9 @@ function _cpProj_cl_onProjHit(proj_effect, keep_effect)
 	end
 end
 
+---@param cannon_pos Vec3
+---@param proximityFuze number
+---@return Player[]
 function _cpProj_proxFuzeIgnore(cannon_pos, proximityFuze)
 	if cannon_pos == nil or proximityFuze <= 0 then return {} end
 
@@ -153,10 +226,13 @@ function _cpProj_proxFuzeIgnore(cannon_pos, proximityFuze)
 			end
 		end
 	end
-	
+
 	return players_to_ignore
 end
 
+
+---@param proj_table ProjectileInstance[]
+---@return integer
 function _cpProj_cl_destroyProjectiles(proj_table)
 	local deleted_projectiles = 0
 
@@ -174,6 +250,8 @@ function _cpProj_cl_destroyProjectiles(proj_table)
 	return deleted_projectiles
 end
 
+---@param player Player
+---@param whitelist? Player[]
 function _cpProj_cl_whitelistText(player, whitelist)
 	if type(whitelist) ~= "table" then return end
 
@@ -182,6 +260,9 @@ function _cpProj_cl_whitelistText(player, whitelist)
 	end
 end
 
+---@param proxFuze number
+---@param bulletPos Vec3
+---@param whitelist? Player[]
 function _cpProj_cl_proxFuze(proxFuze, bulletPos, whitelist)
 	if proxFuze <= 0 then return false end
 
@@ -196,6 +277,9 @@ function _cpProj_cl_proxFuze(proxFuze, bulletPos, whitelist)
 	end
 end
 
+---@param flare_table FlareProjectileInstance[]
+---@param rocket_pos Vec3
+---@param rocket_dir Vec3
 function _cpProj_getNearestVisibleFlare(flare_table, rocket_pos, rocket_dir)
 	if flare_table == nil then return end
 
@@ -216,6 +300,9 @@ function _cpProj_getNearestVisibleFlare(flare_table, rocket_pos, rocket_dir)
 	return ClosestFlare
 end
 
+---@param flare_table FlareProjectileInstance[]
+---@param rocket_pos Vec3
+---@param radius number
 function _cpProj_killNearestFlares(flare_table, rocket_pos, radius)
 	if flare_table == nil then return end
 
@@ -225,6 +312,9 @@ function _cpProj_killNearestFlares(flare_table, rocket_pos, radius)
 	end
 end
 
+---@param flare_table FlareProjectileInstance[]
+---@param rocket_pos Vec3
+---@param radius number
 function _cpProj_isFlareNear(flare_table, rocket_pos, radius)
 	if flare_table == nil then return end
 
@@ -234,6 +324,9 @@ function _cpProj_isFlareNear(flare_table, rocket_pos, radius)
 	end
 end
 
+---@param path string
+---@return GuiInterface
+---@diagnostic disable-next-line
 function _cpCreateGui(path) return nil end
 
 if sm.gui then

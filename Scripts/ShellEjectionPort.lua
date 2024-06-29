@@ -4,7 +4,10 @@
 ]]
 
 if ShellEjector then return end
+
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
+
+---@class ShellEjector : GlobalScriptHandler
 ShellEjector = class(GLOBAL_SCRIPT)
 ShellEjector.maxParentCount = 1
 ShellEjector.maxChildCount  = 0

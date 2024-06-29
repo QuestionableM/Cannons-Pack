@@ -4,7 +4,10 @@
 ]]
 
 if flare then return end
+
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
+
+---@class FlareLauncher : GlobalScriptHandler
 flare = class(GLOBAL_SCRIPT)
 flare.maxParentCount = 1
 flare.maxChildCount  = 0

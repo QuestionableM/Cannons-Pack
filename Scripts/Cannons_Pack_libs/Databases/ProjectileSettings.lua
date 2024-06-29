@@ -432,14 +432,19 @@ local ProjSettings = {
 	})
 }
 
+---@param name string
+---@return integer
 function _cpProj_getProjEnum(name)
 	return ProjEnum[name]
 end
 
+---@param name string
+---@return integer
 function _cpProj_getShellEjectorEnum(name)
 	return ShellEjectorEnum[name]
 end
 
+---@param id integer
 function _cpProj_GetProjectileSettings(id)
 	local cur_settings = ProjSettings[id]
 
@@ -455,6 +460,8 @@ function _cpProj_GetProjectileSettings(id)
 	end
 end
 
+---@param data table
+---@param id integer
 function _cpProj_ClearNetworkData(data, id)
 	local data_to_send = {}
 
@@ -472,6 +479,9 @@ function _cpProj_ClearNetworkData(data, id)
 	return data_to_send
 end
 
+---@param data table
+---@param id integer
+---@return table
 function _cpProj_CombineProjectileData(data, id)
 	local proj_settings = _cpProj_GetProjectileSettings(id) or {}
 

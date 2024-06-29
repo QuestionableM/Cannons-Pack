@@ -4,7 +4,10 @@
 ]]
 
 if SmartCannon then return end
+
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
+
+---@class SmartCannon : GlobalScriptHandler
 SmartCannon = class(GLOBAL_SCRIPT)
 SmartCannon.maxParentCount = -1
 SmartCannon.maxChildCount  = 1

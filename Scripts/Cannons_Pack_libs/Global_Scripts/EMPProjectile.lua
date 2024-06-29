@@ -4,6 +4,13 @@
 ]]
 
 if EMPProjectile then return end
+
+---@class EMPProjectileInstance : ProjectileInstance
+---@field hit? Vec3
+---@field disconnectRadius number
+
+---@class EMPProjectile : GlobalScript
+---@field projectiles EMPProjectileInstance[]
 EMPProjectile = class(GLOBAL_SCRIPT)
 EMPProjectile.projectiles = {}
 EMPProjectile.proj_queue = {}
@@ -71,6 +78,7 @@ function EMPProjectile.server_onScriptUpdate(self, dt)
 	end
 end
 
+---@param EMPProj EMPProjectileInstance
 local function EMPProj_UpdateEffect(EMPProj)
 	local emp_effect = EMPProj.effect
 

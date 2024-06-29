@@ -4,7 +4,10 @@
 ]]
 
 if RocketPod then return end
+
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
+
+---@class RocketPod : GlobalScriptHandler
 RocketPod = class(GLOBAL_SCRIPT)
 RocketPod.maxParentCount = 1
 RocketPod.maxChildCount  = 0

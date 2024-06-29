@@ -4,6 +4,23 @@
 ]]
 
 if RailgunProjectile then return end
+
+---@class RailgunProjHitResult
+---@field result Vec3
+---@field type string
+
+---@class RailgunProjectileInstance : ProjectileInstance
+---@field hit? RailgunProjHitResult
+---@field explLvl number
+---@field explRad number
+---@field explImpStr number
+---@field explImpRad number
+---@field explEff string
+---@field count integer
+---@field proj_id integer
+
+---@class RailgunProjectile : GlobalScript
+---@field projectiles RailgunProjectileInstance[]
 RailgunProjectile = class(GLOBAL_SCRIPT)
 RailgunProjectile.projectiles = {}
 RailgunProjectile.proj_queue = {}

@@ -4,7 +4,10 @@
 ]]
 
 if BasicCannon then return end
+
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
+
+---@class BasicCannon : GlobalScriptHandler
 BasicCannon = class(GLOBAL_SCRIPT)
 BasicCannon.maxParentCount = 1
 BasicCannon.maxChildCount  = 1
