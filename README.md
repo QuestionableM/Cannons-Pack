@@ -2,6 +2,8 @@
 
 [Steam Workshop Link](https://steamcommunity.com/sharedfiles/filedetails/?id=1904783067)
 
+![Steam Downloads](https://img.shields.io/steam/downloads/1904783067)
+
 ## Description
 This mods contains 21 awesome cannons with shooting animations and custom projectiles.
 
