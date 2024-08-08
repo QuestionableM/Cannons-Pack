@@ -1,7 +1,7 @@
 What are u doing here? you little thief
 
-Cannons Pack version 4.88 changelog:
-1. Fixed a RocketLauncher script crash that happens when a shell ejector is attached
+Cannons Pack version 4.89 changelog:
+1. Lowered the explosion impulse for all the rocket launchers
 
 Made by:
 Questionable Mark - creator of all the textures, UV maps and also some scripts and cannon models.

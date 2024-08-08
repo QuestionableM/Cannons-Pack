@@ -85,7 +85,7 @@ function SmartRocket.server_onScriptUpdate(self, dt)
 
 	for b, proj in pairs(SmartRocket.projectiles) do
 		if proj and proj.hit then
-			_cpProj_betterExplosion(proj.hit, 60, 0.7, 7000, 30, "ExplBig", true)
+			_cpProj_betterExplosion(proj.hit, 60, 0.7, 700, 30, "ExplBig", true)
 		end
 	end
 end

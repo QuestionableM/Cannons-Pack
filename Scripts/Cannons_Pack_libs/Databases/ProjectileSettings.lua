@@ -238,7 +238,7 @@ local ProjSettings = {
 		explosionLevel = 10,
 		explosionRadius = 0.7,
 		explosionImpulseRadius = 30,
-		explosionImpulseStrength = 8000,
+		explosionImpulseStrength = 1000,
 		syncEffect = true
 	}),
 	[ProjEnum.SchwererGustavCannon] = TranslateSettings({
@@ -412,7 +412,7 @@ local ProjSettings = {
 		explosionLevel = 10,
 		explosionRadius = 0.4,
 		explosionImpulseRadius = 25,
-		explosionImpulseStrength = 6000,
+		explosionImpulseStrength = 500,
 		syncEffect = true
 	}),
 	[ProjEnum.SmallRocketPod] = TranslateSettings({
@@ -427,7 +427,7 @@ local ProjSettings = {
 		explosionLevel = 10,
 		explosionRadius = 0.3,
 		explosionImpulseRadius = 25,
-		explosionImpulseStrength = 6000,
+		explosionImpulseStrength = 400,
 		syncEffect = true
 	})
 }
