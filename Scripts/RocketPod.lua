@@ -1,5 +1,5 @@
 --[[
-	Copyright (c) 2022 Cannons Pack Team
+	Copyright (c) 2025 Cannons Pack Team
 	Questionable Mark
 ]]
 
@@ -8,6 +8,7 @@ if RocketPod then return end
 dofile("Cannons_Pack_libs/ScriptLoader.lua")
 
 ---@class RocketPod : GlobalScriptHandler
+---@field reload integer|nil
 RocketPod = class(GLOBAL_SCRIPT)
 RocketPod.maxParentCount = 1
 RocketPod.maxChildCount  = 0
@@ -94,6 +95,15 @@ function RocketPod:client_onShoot(id)
 	local sht_eff = self.effects[EffectEnum.sht]
 	sht_eff:setOffsetPosition(cur_shoot_pos)
 	sht_eff:start()
+
+	local shape = self.shape
+	local halfLength = (shape:getBoundingBox().z * 0.5) - 0.1
+	local rayBegin = shape.worldPosition - shape.up * halfLength
+	local rayEnd = rayBegin - self.shape.up * 0.15
+	local hit, result = sm.physics.raycast(rayBegin, rayEnd, shape)
+	if hit and result.type == "body" then
+		return
+	end
 
 	self.effects[EffectEnum.fms]:start()
 end

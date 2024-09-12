@@ -15,8 +15,8 @@
 			"qualityLevel": 5,
 			"color": "375000",
 			"density": 500.0,
-			"rotationSet": "PropYX",
-			"sticky": "-X+X-Y+Y"
+			"rotationSet": "PropYZ",
+			"sticky": "-X+X-Y+Y-Z"
 		},
 		{
 			"uuid": "51356e94-23be-488e-af0c-5ef1d0129854",
@@ -33,8 +33,8 @@
 			"qualityLevel": 5,
 			"color": "375000",
 			"density": 500.0,
-			"rotationSet": "PropYX",
-			"sticky": "-X+X-Y+Y"
+			"rotationSet": "PropYZ",
+			"sticky": "-X+X-Y+Y-Z"
 		}
 	]
 }

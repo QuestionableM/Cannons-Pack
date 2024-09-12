@@ -1,5 +1,5 @@
 --[[
-	Copyright (c) 2022 Cannons Pack Team
+	Copyright (c) 2025 Cannons Pack Team
 	Questionable Mark
 ]]
 

@@ -1,12 +1,12 @@
 --[[
-	Copyright (c) 2022 Cannons Pack Team
+	Copyright (c) 2025 Cannons Pack Team
 	Questionable Mark
 ]]
 
 if CP_SCRIPTLOADER_SCRIPTS_LOADED then return end
 CP_SCRIPTLOADER_SCRIPTS_LOADED = true
 
-print("[CannonsPack] Version: 4.89")
+print("[CannonsPack] Version: 4.90")
 print("[CannonsPack] Loading libraries...")
 
 dofile("FunctionReferences.lua")

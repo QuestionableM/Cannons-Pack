@@ -1,7 +1,7 @@
 What are u doing here? you little thief
 
-Cannons Pack version 4.89 changelog:
-1. Lowered the explosion impulse for all the rocket launchers
+Cannons Pack version 4.90 changelog:
+1. The back size of rocket pods is attachable now
 
 Made by:
 Questionable Mark - creator of all the textures, UV maps and also some scripts and cannon models.
