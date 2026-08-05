@@ -73,25 +73,28 @@ local OtherTrTable = {sound = 1, muzzle_flash = 2, reload_sound = 3, explosion_e
 
 local projectile_type_table =
 {
-	[1]  = { name = "Potato"         , uuid = _uuidNew("5e8eeaae-b5c1-4992-bb21-dec5254ce722") },
-	[2]  = { name = "Small Potato"   , uuid = _uuidNew("132c44d3-7436-419d-ac6b-fc178336dcb7") },
-	[3]  = { name = "Fries"          , uuid = _uuidNew("9b6b4c56-fba1-400f-94fa-23f9613c0423") },
-	[4]  = { name = "Tomato"         , uuid = _uuidNew("b72b01a5-59ad-4882-bbd3-3cbc9f357823") },
-	[5]  = { name = "Carrot"         , uuid = _uuidNew("69fc1a2b-77d2-40da-9a82-03fbe3c35a18") },
-	[6]  = { name = "Redbeet"        , uuid = _uuidNew("358700c1-7555-41dc-90d1-92374051f985") },
-	[7]  = { name = "Broccoli"       , uuid = _uuidNew("b6f296d0-bc03-4098-85b5-52546daad1d7") },
-	[8]  = { name = "Pineapple"      , uuid = _uuidNew("65d509b9-09f8-4e32-8b1a-0a6aa11f8660") },
-	[9]  = { name = "Orange"         , uuid = _uuidNew("9963fbc0-1314-4db4-8866-1237ace867c3") },
-	[10] = { name = "Blueberry"      , uuid = _uuidNew("599b112d-2ff9-4f14-9051-0f58bebb2c94") },
-	[11] = { name = "Banana"         , uuid = _uuidNew("4e259125-d1c0-4678-ae41-2652cf224692") },
-	[12] = { name = "Tape"           , uuid = _uuidNew("1a981b70-dc08-4105-89b1-79819511a2fb") },
-	[13] = { name = "Water"          , uuid = _uuidNew("2c3fc640-1a2e-4328-a872-f6d3f92d0fea") },
-	[14] = { name = "Fertilizer"     , uuid = _uuidNew("5610b246-774e-4c1c-9adc-f87b4d993c43") },
-	[15] = { name = "Chemical"       , uuid = _uuidNew("46292783-af41-49a5-91ef-092f22dfae91") },
-	[16] = { name = "Pesticide"      , uuid = _uuidNew("68029b35-2028-42a5-8509-286d78656561") },
-	[17] = { name = "Seed"           , uuid = _uuidNew("9512029a-3f1d-4aa2-92bf-cb876d5c8cb0") },
-	[18] = { name = "Powerful Potato", uuid = _uuidNew("cb1c0aec-2f37-41b3-92b6-72a2bca5eb02") },
-	[19] = { name = "Powerful Tracer Potato", uuid = _uuidNew("6d77bdd9-1136-40c2-9e90-c4fbb09e34e8") }
+	[1]  = { name = "Potato"                , uuid = _uuidNew("5e8eeaae-b5c1-4992-bb21-dec5254ce722") },
+	[2]  = { name = "Small Potato"          , uuid = _uuidNew("132c44d3-7436-419d-ac6b-fc178336dcb7") },
+	[3]  = { name = "Fries"                 , uuid = _uuidNew("9b6b4c56-fba1-400f-94fa-23f9613c0423") },
+	[4]  = { name = "Tomato"                , uuid = _uuidNew("b72b01a5-59ad-4882-bbd3-3cbc9f357823") },
+	[5]  = { name = "Carrot"                , uuid = _uuidNew("69fc1a2b-77d2-40da-9a82-03fbe3c35a18") },
+	[6]  = { name = "Redbeet"               , uuid = _uuidNew("358700c1-7555-41dc-90d1-92374051f985") },
+	[7]  = { name = "Broccoli"              , uuid = _uuidNew("b6f296d0-bc03-4098-85b5-52546daad1d7") },
+	[8]  = { name = "Pineapple"             , uuid = _uuidNew("65d509b9-09f8-4e32-8b1a-0a6aa11f8660") },
+	[9]  = { name = "Orange"                , uuid = _uuidNew("9963fbc0-1314-4db4-8866-1237ace867c3") },
+	[10] = { name = "Blueberry"             , uuid = _uuidNew("599b112d-2ff9-4f14-9051-0f58bebb2c94") },
+	[11] = { name = "Banana"                , uuid = _uuidNew("4e259125-d1c0-4678-ae41-2652cf224692") },
+	[12] = { name = "Tape"                  , uuid = _uuidNew("1a981b70-dc08-4105-89b1-79819511a2fb") },
+	[13] = { name = "Water"                 , uuid = _uuidNew("2c3fc640-1a2e-4328-a872-f6d3f92d0fea") },
+	[14] = { name = "Fertilizer"            , uuid = _uuidNew("5610b246-774e-4c1c-9adc-f87b4d993c43") },
+	[15] = { name = "Chemical"              , uuid = _uuidNew("46292783-af41-49a5-91ef-092f22dfae91") },
+	[16] = { name = "Pesticide"             , uuid = _uuidNew("68029b35-2028-42a5-8509-286d78656561") },
+	[17] = { name = "Seed"                  , uuid = _uuidNew("9512029a-3f1d-4aa2-92bf-cb876d5c8cb0") },
+	[18] = { name = "Powerful Potato"       , uuid = _uuidNew("cb1c0aec-2f37-41b3-92b6-72a2bca5eb02") },
+	[19] = { name = "Powerful Tracer Potato", uuid = _uuidNew("6d77bdd9-1136-40c2-9e90-c4fbb09e34e8") },
+	[20] = { name = "Fireball"              , uuid = _uuidNew("d71c5ce2-7c7a-4ebc-8560-b88390c3fcc4") },
+	[21] = { name = "Small Explosive"       , uuid = _uuidNew("a413e82d-9ff1-4b03-9ffe-653499588854") },
+	[22] = { name = "Clay"                  , uuid = _uuidNew("0ab670bb-5969-4ab4-87a3-435795392d5a") }
 }
 
 local projectile_type_count = #projectile_type_table - 1
@@ -760,10 +763,12 @@ function SmartCannon:client_GUI_CreateTempValTable()
 		[3] = {name = "Reload Sound", value = 0, default = 0, max = 1, type = sc_gui_list_val, id = OtherTrTable.reload_sound, list = { --3 reloading effect
 			[1] = { name = "Default" }, [2] = { name = "Heavy Realoading" }
 		}},
-		[4] = {name = "Shooting Sound", value = 0, default = 0, max = 4, type = sc_gui_list_val, id = OtherTrTable.sound, list = { --4 shooting sound
+		[4] = {name = "Shooting Sound", value = 0, default = 0, max = 8, type = sc_gui_list_val, id = OtherTrTable.sound, list = { --4 shooting sound
 			[1] = { name = "Default"        }, [2] = { name = "Sound 1"      },
 			[3] = { name = "Potato Shotgun" }, [4] = { name = "Spudling Gun" },
-			[5] = { name = "Explosion"      }
+			[5] = { name = "Explosion"      }, [6] = { name = "Spawner"      },
+			[7] = { name = "Smelter Send"   }, [8] = { name = "Firework Launch" },
+			[9] = { name = "Launcher"       }
 		}},
 		[5] = {name = "Ejector Shell Model", value = 0, default = self:getDefaultProjectileId(), max = 3, type = sc_gui_list_val, id = OtherTrTable.ejected_shell_id, list = { --5 ejected shell model
 			[1] = { name = "Small Shell" }, [2] = { name = "Medium Shell" },

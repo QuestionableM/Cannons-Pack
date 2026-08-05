@@ -249,24 +249,68 @@
 			{"type":"particle","name":"p_spudgun_basic_muzzel","attached":true}
 		]
 	},
+	"FarmbotShoot":{
+		"maxInstances":128,
+		"effectList":[
+			{"type":"audio","name":"event:/char/npc/bots/enemies/farmbot/farmbot_shoot","duration":0.3}
+		]
+	},
 	"NumberLogicCannon - Shoot":{
 		"maxInstances":128,"parameterList":{"sound":0},
 		"effectList":[
 			{
 				"type":"audio",
-				"name":"",
-				"parameters":{
-					"sound":[
-						{"condition":"equal","value":1,"name":"PotatoRifle - Shoot"},
-						{"condition":"equal","value":2,"name":"event:/char/npc/bots/enemies/farmbot/farmbot_shoot"},
-						{"condition":"equal","value":3,"name":"event:/weapons/spudgun/frier_fire"},
-						{"condition":"equal","value":4,"name":"event:/weapons/spudgun/spinner_fire"},
-						{"condition":"equal","value":5,"name":"Gas Explosion"}
-					]
-				},
 				"offset":{"x":0.0,"y":0.0,"z":0.3},
-				"duration":0.5,
-				"delay":0.0
+				"duration":0.4,
+				"parameters":{"sound":[{"condition":"equal","value":1,"name":"PotatoRifle - Shoot"}]}
+			},
+			{
+				"type":"audio",
+				"offset":{"x":0.0,"y":0.0,"z":0.3},
+				"duration":0.4,
+				"parameters":{"sound":[{"condition":"equal","value":2,"name":"event:/char/npc/bots/enemies/farmbot/farmbot_shoot"}]}
+			},
+			{
+				"type":"audio",
+				"offset":{"x":0.0,"y":0.0,"z":0.3},
+				"duration":0.4,
+				"parameters":{"sound":[{"condition":"equal","value":3,"name":"event:/weapons/spudgun/frier_fire"}]}
+			},
+			{
+				"type":"audio",
+				"offset":{"x":0.0,"y":0.0,"z":0.3},
+				"duration":0.4,
+				"parameters":{"sound":[{"condition":"equal","value":4,"name":"event:/weapons/spudgun/spinner_fire"}]}
+			},
+			{
+				"type":"audio",
+				"offset":{"x":0.0,"y":0.0,"z":0.3},
+				"duration":0.4,
+				"parameters":{"sound":[{"condition":"equal","value":5,"name":"Gas Explosion"}]}
+			},
+			{
+				"type":"audio",
+				"offset":{"x":0.0,"y":0.0,"z":0.3},
+				"duration":1.2,
+				"parameters":{"sound":[{"condition":"equal","value":6,"name":"event:/char/npc/bots/enemies/spawner/explode"}]}
+			},
+			{
+				"type":"audio",
+				"offset":{"x":0.0,"y":0.0,"z":0.3},
+				"duration":0.4,
+				"parameters":{"sound":[{"condition":"equal","value":7,"name":"event:/props/installations/smelter/send"}]}
+			},
+			{
+				"type":"audio",
+				"offset":{"x":0.0,"y":0.0,"z":0.3},
+				"duration":0.8,
+				"parameters":{"sound":[{"condition":"equal","value":8,"name":"event:/props/firework/launch"}]}
+			},
+			{
+				"type":"audio",
+				"offset":{"x":0.0,"y":0.0,"z":0.3},
+				"duration":0.8,
+				"parameters":{"sound":[{"condition":"equal","value":9,"name":"event:/weapons/spudgun/launcher_fire"}]}
 			}
 		]
 	},
