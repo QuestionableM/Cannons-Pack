@@ -291,7 +291,7 @@
 			{
 				"type":"audio",
 				"offset":{"x":0.0,"y":0.0,"z":0.3},
-				"duration":1.2,
+				"duration":1.5,
 				"parameters":{"sound":[{"condition":"equal","value":6,"name":"event:/char/npc/bots/enemies/spawner/explode"}]}
 			},
 			{

@@ -94,7 +94,8 @@ local projectile_type_table =
 	[19] = { name = "Powerful Tracer Potato", uuid = _uuidNew("6d77bdd9-1136-40c2-9e90-c4fbb09e34e8") },
 	[20] = { name = "Fireball"              , uuid = _uuidNew("d71c5ce2-7c7a-4ebc-8560-b88390c3fcc4") },
 	[21] = { name = "Small Explosive"       , uuid = _uuidNew("a413e82d-9ff1-4b03-9ffe-653499588854") },
-	[22] = { name = "Clay"                  , uuid = _uuidNew("0ab670bb-5969-4ab4-87a3-435795392d5a") }
+	[22] = { name = "Clay"                  , uuid = _uuidNew("0ab670bb-5969-4ab4-87a3-435795392d5a") },
+	[23] = { name = "Foam"                  , uuid = _uuidNew("d8cf518c-0c4b-4db8-972a-10f05d4eaaaf") }
 }
 
 local projectile_type_count = #projectile_type_table - 1
